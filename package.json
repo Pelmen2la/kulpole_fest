@@ -1,0 +1,49 @@
+{
+  "name": "qsim-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "startapp": "node app.js",
+    "webpackwatch": "webpack --progress --colors --watch --mode=development",
+    "webpackprod": "webpack --progress --colors --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pelmen2la/kulpole_fest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/Pelmen2la/kulpole_fest",
+  "dependencies": {
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.55",
+    "autoprefixer": "^9.0.2",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "css-loader": "^1.0.0",
+    "cssnext": "^1.8.4",
+    "express": "^4.16.3",
+    "global-request-context": "^0.4.0",
+    "node-fetch": "^2.2.0",
+    "node-sass": "^4.9.4",
+    "request": "^2.88.0",
+    "require-tree": "^1.1.1",
+    "reset-css": "^4.0.1",
+    "reset-css-extended": "^1.0.1",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.21.0",
+    "vue": "^2.5.16",
+    "vue-loader": "^15.2.6",
+    "vue-material": "^1.0.0-beta-10.2",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.16",
+    "vuex": "^3.0.1",
+    "webpack": "^4.16.3",
+    "webpack-cli": "^3.1.0",
+    "zone.js": "^0.8.26"
+  }
+}

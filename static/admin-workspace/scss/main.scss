@@ -1,0 +1,66 @@
+@import './../../common/scss/reset.scss';
+
+$main-green-color: #30C366;
+$main-green-border-color: #39A265;
+$main-background-color: #3A414D;
+$main-gray-color: #CCC;
+$error-color: #CD0505;
+$main-font-size: 16px;
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-size: $main-font-size;
+}
+
+* {
+    outline-width: 0;
+    &[disabled] {
+        opacity: 0.5;
+    }
+}
+
+.modal-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+b {
+    font-weight: 900;
+    font-size: 1.25em;
+}
+
+.md-list-item {
+    &.junior .md-list-item-text {
+        color: #64DD17
+    }
+    &.regular .md-list-item-text {
+        color: #FFD800;
+    }
+    &.senior .md-list-item-text {
+        color: red;
+    }
+}
+
+.link-like-button {
+    color: blue;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: "Times New Roman";
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.progress-bar-spacer {
+    width: 100%;
+    height: 5px;
+}
+
+.invisible-link {
+    display: none;
+}

@@ -1,0 +1,69 @@
+@import './../../common/scss/reset.scss';
+
+body {
+    font-size: 18px;
+    font-family: Arial;
+}
+
+
+.auth-form {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    max-width: 1024px;
+    max-height: 16em;
+    overflow: hidden;
+    padding: 2em;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+
+    .input-wrapper {
+        padding: 1em 0;
+        position: relative;
+        input {
+            width: 100%;
+            border: none;
+            font-size: inherit;
+            border-bottom: 1px solid black;
+            &:focus,
+            &.not-empty {
+                + label {
+                    top: 0;
+                    font-size: 0.7em;
+                }
+            }
+        }
+        label {
+            position: absolute;
+            top: 1em;
+            color: #CCCCCC;
+            transition: font-size 0.3s, top 0.3s;
+        }
+    }
+
+    .error {
+        display: inline-block;
+        color: red;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0.5em;
+    }
+
+    button {
+        margin: 0 auto;
+        text-align: center;
+        font-size: inherit;
+        color: white;
+        background: black;
+        border-radius: 5px;
+        text-align: center;
+        padding: 14px;
+
+        &[disabled] {
+            opacity: 0.5;
+        }
+    }
+}
+

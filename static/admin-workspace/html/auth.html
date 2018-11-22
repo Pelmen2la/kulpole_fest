@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Страница логина</title>
+        <script>
+            window.onload = function() {
+                document.getElementsByName('hash')[0].value = location.hash;
+            };
+        </script>
+    </head>
+
+    <body>
+        <form action="/admin/auth" method="post" class="auth-form">
+            <input type="hidden" name="hash">
+            <div class="input-wrapper">
+                <input id="LoginInput" type="text" name="login" required autofocus>
+                <label for="LoginInput">Логин</label>
+            </div>
+            <div class="input-wrapper">
+                <input id="PasswordInput" class="form-control" type="password" name="password" required>
+                 <label for="PasswordInput">Пароль</label>
+            </div>
+            <span id="ErrorSpan" class="error">{{error_text}}</span>
+            <button id="SubmitButton" type="submit" disabled>ВОЙТИ</button>
+        </form>
+    </body>
+
+    <script src="/dist/js/admin-workspace-auth-index.js"></script>
+</html>
