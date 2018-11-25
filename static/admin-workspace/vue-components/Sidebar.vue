@@ -25,7 +25,7 @@
             return {
                 menuItemsCfg: [
                     {
-                        text: 'Кандидаты',
+                        text: 'Пользователи',
                         url: '/main/users',
                         iconName: 'candidate'
                     }

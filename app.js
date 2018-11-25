@@ -29,5 +29,6 @@ fs.readFile(path.join(global.appRoot, appConfigFilePath), 'utf8', function(err, 
     global.adminPassword = data.adminData.password;
 
     require('./server/config/express')(app);
+    require('./server/config/mongoose')(app);
     require('./server/routes/index')(app);
 });

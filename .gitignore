@@ -4,3 +4,4 @@ static/dist/*
 package-lock.json
 server/config/app-config.json
 resources/bug-gifs/*
+db/*

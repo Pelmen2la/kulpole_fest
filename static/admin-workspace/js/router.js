@@ -2,6 +2,7 @@ import VueRouter from 'vue-router';
 import App from './../vue-components/App'
 import Main from './../vue-components/Main.vue'
 import UsersList from '../vue-components/users/UserList.vue'
+import UserForm from '../vue-components/users/UserForm.vue'
 
 const router = new VueRouter({
     routes: [
@@ -21,6 +22,17 @@ const router = new VueRouter({
                             path: '/main/users',
                             component: UsersList,
                             name: 'Список пользователей'
+                        },
+                        {
+                            path: '/main/users/edit/:userId',
+                            component: UserForm,
+                            props: true,
+                            name: 'Редактирование пользователя'
+                        },
+                        {
+                            path: '/main/users/create',
+                            component: UserForm,
+                            name: 'Создание пользователя'
                         }
                     ]
                 }
@@ -29,14 +41,6 @@ const router = new VueRouter({
         {
             path: '/main/users*',
             redirect: '/main/users'
-        },
-        {
-            path: '/main/tasks*',
-            redirect: '/main/tasks'
-        },
-        {
-            path: '/main/checkers*',
-            redirect: '/main/checkers'
         }
     ]
 });
