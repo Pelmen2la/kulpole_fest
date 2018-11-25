@@ -27,7 +27,7 @@
                     {
                         text: 'Пользователи',
                         url: '/main/users',
-                        iconName: 'candidate'
+                        iconName: 'knight-head-2'
                     }
                 ]
             }

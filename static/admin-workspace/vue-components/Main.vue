@@ -6,7 +6,7 @@
                 <h1>{{this.$route.name}}</h1>
                 <md-menu md-size="auto" md-align-trigger class="user-menu">
                     <md-button md-menu-trigger>
-                        <img src="/resources/icons/user.svg"/>
+                        <img src="/resources/icons/knight-head-1-black.svg"/>
                     </md-button>
                     <md-menu-content class="admin-workspace-user-menu-content">
                         <md-menu-item>
@@ -121,7 +121,7 @@
                     .md-button {
                         min-width: 32px;
                         img {
-                            height: 24px;
+                            height: 32px;
                         }
                     }
                 }
