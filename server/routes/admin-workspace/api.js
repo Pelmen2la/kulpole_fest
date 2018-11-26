@@ -9,7 +9,7 @@ function createCRUD(app, mnemonic) {
         idParamName = mnemonic + 'Id',
         multMnemonic = mnemonic + 's';
     app.get('/admin/workspace/get_' + multMnemonic, function(req, res, next) {
-        dataHelper['get' + capMnemonic + 'List']((result) => res.json(result));
+        dataHelper['get' + capMnemonic + 'List'](req.query, (result) => res.json(result));
     });
     app.get('/admin/workspace/' + mnemonic + '/:' + idParamName, function(req, res, next) {
        dataHelper['get' + capMnemonic](req.params[idParamName], (result) =>  res.json(result));

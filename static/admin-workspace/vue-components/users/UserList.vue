@@ -2,12 +2,14 @@
     <div>
         <md-button class="md-raised md-primary" href="#/main/users/create">Создать</md-button>
         <MaterialGrid
-                :columnConfig="columnConfig"
+                :columnConfig="getGridColumnCfg()"
                 :data="gridData"
                 :hasEdit="true"
                 :hasDelete="true"
+                :pagingProps="gridPagingProps"
                 @editBtnClick="onGridEditBtnClick"
                 @deleteBtnClick="onGridDeleteBtnClick"
+                @pagerPageIndexChange="onGridPagerPageIndexChange"
         />
     </div>
 </template>
@@ -23,7 +25,25 @@
         },
         data() {
             return {
-                columnConfig: [
+                gridPagingProps: {
+                    pageIndex: 0,
+                    pagesCount: 0
+                },
+                gridData: [
+                ]
+            }
+        },
+        methods: {
+            loadData: function() {
+                this.$emit('startLoading', { text: 'Загрузка списка пользователей' });
+                utils.doRequest('/admin/workspace/get_users?pageIndex=' + this.gridPagingProps.pageIndex, {}, function(data) {
+                    this.gridData = data.content;
+                    this.gridPagingProps.pagesCount = data.totalPages;
+                    this.$emit('endLoading');
+                }.bind(this));
+            },
+            getGridColumnCfg: function() {
+                return [
                     {
                         text: 'Имя',
                         dataIndex: 'name',
@@ -33,18 +53,7 @@
                     },
                     { text: 'Email', dataIndex: 'email'},
                     { text: 'Телефон', dataIndex: 'phone'}
-                ],
-                gridData: [
-                ]
-            }
-        },
-        methods: {
-            loadData: function() {
-                this.$emit('startLoading', { text: 'Загрузка списка пользователей' });
-                utils.doRequest('/admin/workspace/get_users', {}, function(data) {
-                    this.gridData = data;
-                    this.$emit('endLoading');
-                }.bind(this));
+                ];
             },
             onGridEditBtnClick: function(rec) {
                 this.$router.push('/main/users/edit/' + rec._id);
@@ -56,9 +65,16 @@
                     this.gridData.splice(this.gridData.indexOf(user), 1);
                 }.bind(this));
             },
+            onGridPagerPageIndexChange: function(pageIndex) {
+                this.loadPageByIndex(pageIndex);
+            },
+            loadPageByIndex: function(index) {
+                this.gridPagingProps.pageIndex = index;
+                this.loadData();
+            }
         },
         mounted: function() {
-            this.loadData();
+           this.loadPageByIndex(0);
         }
     }
 </script>

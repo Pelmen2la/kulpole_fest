@@ -27,7 +27,7 @@
 
 <script>
     export default {
-        name: 'qsim-grid',
+        name: 'grid',
         props: ['columnConfig', 'data', 'hasEdit', 'hasDelete'],
         methods: {
             onEditBtnClick: function(rec) {

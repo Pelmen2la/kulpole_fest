@@ -1,31 +1,44 @@
 <template>
-    <md-table class="qsim-material-grid">
-        <md-table-row>
-            <md-table-head v-for="(col, thIndex) in columnConfig" :key="thIndex">{{ col.text }}</md-table-head>
-            <md-table-head v-if="hasEdit" class="icon-cell-th"></md-table-head>
-            <md-table-head v-if="hasDelete" class="icon-cell-th"></md-table-head>
-        </md-table-row>
-        <md-table-row v-for="(rec , trIndex) in data" @click="onRowClick(trIndex, rec)" :key="trIndex"
-                      :class="{ 'md-selected-single' : trIndex == selectedRowIndex }">
-            <md-table-cell v-for="(colCfg, tdIndex) in columnConfig" :key="tdIndex"
-                           :class="colCfg.tdClass">
-            <div v-html="getCellInnerHtml(colCfg, rec)"
-                @click="colCfg.onCellClick && colCfg.onCellClick(rec, $event)"/>
-            </md-table-cell>
-            <md-table-cell v-if="hasEdit" class="icon-cell">
-                <img src="/resources/icons/edit.svg" @click="onEditBtnClick(rec)"/>
-            </md-table-cell>
-            <md-table-cell v-if="hasDelete" class="icon-cell">
-                <img src="/resources/icons/delete.svg" @click="onDeleteBtnClick(rec)"/>
-            </md-table-cell>
-        </md-table-row>
-    </md-table>
+    <div>
+        <md-table class="qsim-material-grid">
+            <md-table-row>
+                <md-table-head v-for="(col, thIndex) in columnConfig" :key="thIndex">{{ col.text }}</md-table-head>
+                <md-table-head v-if="hasEdit" class="icon-cell-th"></md-table-head>
+                <md-table-head v-if="hasDelete" class="icon-cell-th"></md-table-head>
+            </md-table-row>
+            <md-table-row v-for="(rec , trIndex) in data" @click="onRowClick(trIndex, rec)" :key="trIndex"
+                          :class="{ 'md-selected-single' : trIndex == selectedRowIndex }">
+                <md-table-cell v-for="(colCfg, tdIndex) in columnConfig" :key="tdIndex"
+                               :class="colCfg.tdClass">
+                    <div v-html="getCellInnerHtml(colCfg, rec)"
+                         @click="colCfg.onCellClick && colCfg.onCellClick(rec, $event)"/>
+                </md-table-cell>
+                <md-table-cell v-if="hasEdit" class="icon-cell">
+                    <img src="/resources/icons/edit.svg" @click="onEditBtnClick(rec)"/>
+                </md-table-cell>
+                <md-table-cell v-if="hasDelete" class="icon-cell">
+                    <img src="/resources/icons/delete.svg" @click="onDeleteBtnClick(rec)"/>
+                </md-table-cell>
+            </md-table-row>
+        </md-table>
+        <Pager
+                v-if="pagingProps"
+                :pagesCount="pagingProps.pagesCount"
+                :pageIndex="pagingProps.pageIndex"
+                @pageIndexChange="onPagerPageIndexChange"
+        />
+    </div>
 </template>
 
 <script>
+    import Pager from "./../Pager"
+
     export default {
-        name: 'qsim-grid',
-        props: ['columnConfig', 'data', 'hasEdit', 'hasDelete', 'onRowSelect'],
+        name: 'material-grid',
+        components: {
+            Pager
+        },
+        props: ['columnConfig', 'data', 'hasEdit', 'hasDelete', 'onRowSelect', 'pagingProps'],
         data() {
             return {
                 selectedRowIndex: null
@@ -51,6 +64,9 @@
                     this.selectedRowIndex = index;
                     this.onRowSelect(index, rec);
                 }
+            },
+            onPagerPageIndexChange: function(index) {
+                this.$emit('pagerPageIndexChange', index);
             }
         },
     }

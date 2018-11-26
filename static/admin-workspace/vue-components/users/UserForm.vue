@@ -7,7 +7,7 @@
         </md-field>
         <md-field>
             <label>Фамилия</label>
-            <md-input v-model="userData.soname"/>
+            <md-input v-model="userData.surname"/>
         </md-field>
         <EmailTextfield v-model="userData.email" @validityChange="(isValid) => isEmailValid = isValid"/>
         <md-field>

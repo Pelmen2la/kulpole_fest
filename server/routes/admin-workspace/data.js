@@ -1,10 +1,17 @@
 const mongoose = require('mongoose');
 const UserModel = mongoose.model('user');
 
+const ROWS_ON_PAGE = 20;
+
 module.exports = {
-    getUserList: function(clb) {
-        UserModel.find({}, (err, data) => {
-            clb(err ? [] : data);
+    getUserList: function(params, clb) {
+        UserModel.find({}, null, getListQueryOptions(params), (err, data) => {
+            UserModel.countDocuments({}, function (err, totalData) {
+                clb({
+                    content: data,
+                    totalPages: Math.ceil(totalData / ROWS_ON_PAGE)
+                });
+            });
         });
     },
     addUser: function(data, clb) {
@@ -18,7 +25,8 @@ module.exports = {
         });
     },
     updateUser: function(id, data, clb) {
-        UserModel.findOneAndUpdate(id, data, (err, userData) => {
+        delete data._id;
+        UserModel.findOneAndUpdate({ _id: id }, data, (err, userData) => {
             clb(err ? null : userData);
         });
     },
@@ -27,4 +35,11 @@ module.exports = {
             clb(err ? null : userData);
         });
     }
+};
+
+function getListQueryOptions(params) {
+    return {
+        skip: ROWS_ON_PAGE * params.pageIndex,
+        limit: ROWS_ON_PAGE
+    };
 };

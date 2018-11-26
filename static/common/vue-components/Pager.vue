@@ -1,5 +1,5 @@
 <template>
-    <ul class="qsim-pager" v-if="pagesCount > 1" @click="onItemClick">
+    <ul class="kulpole-pager" v-if="pagesCount > 1" @click="onItemClick">
         <li v-for="i in pagesCount" :data-index="i - 1" :class="getItemClass(i)">
             {{ i }}
         </li>
@@ -8,7 +8,7 @@
 
 <script>
     export default {
-        name: 'qsim-pager',
+        name: 'pager',
         props: ['pagesCount', 'pageIndex'],
         data() {
             return {
@@ -33,7 +33,7 @@
 </script>
 
 <style lang="scss">
-    .qsim-pager {
+    .kulpole-pager {
         width: 100%;
         text-align: left;
         margin: 10px 0;
