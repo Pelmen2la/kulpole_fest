@@ -14,8 +14,8 @@
 </template>
 
 <script>
-    import QsimTextfield from './../../common/vue-components/Textfield.vue'
-    import QsimButton from './../../common/vue-components/Button.vue'
+    import QsimTextfield from '../../common/vue-components/field/Textfield.vue'
+    import QsimButton from '../../common/vue-components/button/Button.vue'
     import utils from './../../common/js/utils'
 
     export default {

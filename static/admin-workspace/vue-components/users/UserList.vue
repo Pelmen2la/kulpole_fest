@@ -14,7 +14,7 @@
 
 <script>
     import utils from './../../../common/js/utils'
-    import MaterialGrid from './../../../common/vue-components/MaterialGrid.vue'
+    import MaterialGrid from '../../../common/vue-components/grid/MaterialGrid.vue'
 
     export default {
         name: 'users-list',

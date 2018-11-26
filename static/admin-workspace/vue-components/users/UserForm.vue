@@ -24,8 +24,8 @@
 
 <script>
     import utils from './../../../common/js/utils'
-    import ButtonWithDisabledTooltip from './../../../common/vue-components/ButtonWithDisabledTooltip'
-    import EmailTextfield from './../../../common/vue-components/EmailTextfield'
+    import ButtonWithDisabledTooltip from '../../../common/vue-components/button/ButtonWithDisabledTooltip'
+    import EmailTextfield from '../../../common/vue-components/field/EmailTextfield'
 
     export default {
         name: 'user-form',
