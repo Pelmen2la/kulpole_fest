@@ -38,7 +38,7 @@
 
 <script>
     import Sidebar from './Sidebar.vue'
-    import QsimModalPopup from './../../common/vue-components/ModalPopup.vue'
+    import QsimModalPopup from '../../../common/vue-components/ModalPopup.vue'
 
     export default {
         name: 'admin-workspace-main-container',

@@ -1,5 +1,5 @@
 export default {
-    doRequest: doRequest,
+    doRequest,
     doDataRequest: function(url, method, data, clb) {
         var opts = {
             method: method,
@@ -10,7 +10,8 @@ export default {
             }
         };
         doRequest(url, opts, clb);
-    }
+    },
+    stringFormat
 }
 
 function doRequest(url, opts, clb) {
@@ -19,4 +20,12 @@ function doRequest(url, opts, clb) {
     }).then(function(data) {
         clb(data)
     });
+};
+
+function stringFormat(tpl) {
+    for(var i = 1; i < arguments.length; i++) {
+        var regexp = new RegExp('{' + (i - 1) + '\\}', 'g');
+        tpl = tpl.replace(regexp, arguments[i]);
+    }
+    return tpl;
 };

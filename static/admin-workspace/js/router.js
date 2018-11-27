@@ -1,6 +1,6 @@
 import VueRouter from 'vue-router';
 import App from './../vue-components/App'
-import Main from './../vue-components/Main.vue'
+import Main from '../vue-components/common/Main.vue'
 import UsersList from '../vue-components/users/UserList.vue'
 import UserForm from '../vue-components/users/UserForm.vue'
 
