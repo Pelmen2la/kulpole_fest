@@ -1,41 +1,76 @@
 const mongoose = require('mongoose');
 const UserModel = mongoose.model('user');
 
-const ROWS_ON_PAGE = 20;
+const ROWS_ON_PAGE = 1;
 
 module.exports = {
-    getUserList: function(params, clb) {
-        UserModel.find({}, null, getListQueryOptions(params), (err, data) => {
-            UserModel.countDocuments({}, function (err, totalData) {
+};
+
+['user'].forEach(createCRUD);
+
+function createCRUD(dataModelName) {
+    const capName = dataModelName[0].toUpperCase() + dataModelName.substring(1),
+        model = getDataModel(dataModelName);
+    
+    module.exports[`get${capName}List`] = function(params, clb) {
+        var filters = getDataModelSpecificFilters(dataModelName, params);
+        model.find(filters, null, getListQueryOptions(params), (err, data) => {
+            model.countDocuments(filters, function (err, totalData) {
                 clb({
                     content: data,
                     totalPages: Math.ceil(totalData / ROWS_ON_PAGE)
                 });
             });
         });
-    },
-    addUser: function(data, clb) {
-        (new UserModel(data)).save((err, userData) => {
+    };
+    
+    module.exports[`add${capName}`] = function(data, clb) {
+        (new model(data)).save((err, userData) => {
             clb(err ? null : userData);
         });
-    },
-    getUser: function(id, clb) {
-        UserModel.findById(id, (err, userData) => {
-            clb(err ? null : userData);
+    };
+    
+    module.exports[`get${capName}`] = function(id, clb) {
+        model.findById(id, (err, data) => {
+            clb(err ? null : data);
         });
     },
-    updateUser: function(id, data, clb) {
+    module.exports[`update${capName}`] = function(id, data, clb) {
         delete data._id;
-        UserModel.findOneAndUpdate({ _id: id }, data, (err, userData) => {
-            clb(err ? null : userData);
+        model.findOneAndUpdate({ _id: id }, data, (err, data) => {
+            clb(err ? null : data);
         });
-    },
-    deleteUser: function(id, clb) {
-        UserModel.findOneAndDelete(id, (err, userData) => {
-            clb(err ? null : userData);
+    };
+    
+    module.exports[`delete${capName}`] = function(id, clb) {
+        model.findOneAndDelete(id, (err, data) => {
+            clb(err ? null : data);
         });
-    }
+    };
 };
+
+function getDataModel(name) {
+    return {
+        user: UserModel
+    }[name]
+};
+
+function getDataModelSpecificFilters(modelName, params) {
+    var filters = {};
+    if(modelName == 'user') {
+        filters = getSearchFilterConditions(['name', 'surname', 'club', 'email', 'phone'], params.searchText);
+    }
+    return filters;
+};
+
+function getSearchFilterConditions(searchFields, searchText) {
+    var searchFilter = searchFields.map(function(field) {
+        var filter = {};
+        filter[field] = {"$regex": searchText, "$options": "i"};
+        return filter;
+    });
+    return {$or: searchFilter};
+}
 
 function getListQueryOptions(params) {
     return {

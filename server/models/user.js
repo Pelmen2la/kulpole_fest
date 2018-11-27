@@ -6,7 +6,7 @@ const User = new mongoose.Schema({
     email: String,
     phone: String,
     password: String,
-    team: String,
+    club: String,
     registrationDate: { type: Date, default: Date.now }
 });
 

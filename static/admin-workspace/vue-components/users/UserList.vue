@@ -1,10 +1,16 @@
 <template>
     <ListPage
-        dataTypeName="user"
-        dataTypeMultipleText="пользователей"
-        :getLoadDataExtraParams="getLoadDataExtraParams"
-        :gridColumnsCfg="getGridColumnCfg()"
-    >
+            ref="ListPage"
+            dataTypeName="user"
+            dataTypeMultipleText="пользователей"
+            :getLoadDataExtraParams="getLoadDataExtraParams"
+            :gridColumnsCfg="getGridColumnCfg()">
+        <template slot="filters_container">
+            <md-field>
+                <label>Поиск</label>
+                <md-input @keyup="onSearchTextChange" v-model="searchText"/>
+            </md-field>
+        </template>
     </ListPage>
 </template>
 
@@ -17,11 +23,15 @@
             ListPage
         },
         data() {
-            return {}
+            return {
+                searchText: ''
+            }
         },
         methods: {
             getLoadDataExtraParams: function() {
-                return {};
+                return {
+                    searchText: this.searchText
+                };
             },
             getGridColumnCfg: function() {
                 return [
@@ -35,6 +45,13 @@
                     {text: 'Email', dataIndex: 'email'},
                     {text: 'Телефон', dataIndex: 'phone'}
                 ];
+            },
+            onSearchTextChange: function() {
+                window.clearTimeout(this.loadDataTimeoutId);
+                this.loadDataTimeoutId = window.setTimeout(this.loadData.bind(this), 300);
+            },
+            loadData: function() {
+                this.$refs.ListPage.loadPageByIndex(0);
             }
         }
     }

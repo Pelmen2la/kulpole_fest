@@ -16,7 +16,7 @@
         </md-field>
         <md-field>
             <label>Команда</label>
-            <md-input v-model="userData.team"/>
+            <md-input v-model="userData.club"/>
         </md-field>
         <ButtonWithDisabledTooltip :disabledText="saveButtonDisabledText" :onClick="onSaveBtnClick" text="Сохранить"/>
     </div>
@@ -45,13 +45,13 @@
                     email: '',
                     phone: '',
                     password: '',
-                    team: ''
+                    club: ''
                 }
             }
         },
         methods: {
             loadUserData: function(userId) {
-                var url = '/admin/workspace/user/' + userId;
+                var url = '/admin/workspace/users/' + userId;
                 this.$emit('startLoading', {text: 'Загрузка данных пользователя'});
                 utils.doRequest(url, {}, function(data) {
                     this.userData = data;
@@ -59,11 +59,11 @@
                 }.bind(this));
             },
             onSaveBtnClick: function() {
-                var url = '/admin/workspace/user/' + (this.userId || '');
+                var url = '/admin/workspace/users/' + (this.userId || '');
                 this.isSaveInProgress = true;
                 utils.doDataRequest(url, this.userId ? 'PUT' : 'POST', this.userData, function(res) {
                     this.isSaveInProgress = false;
-                    this.$router.push(this.backUrl);
+                    this.$router.push(this.backUrl)
                 }.bind(this));
             }
         },
