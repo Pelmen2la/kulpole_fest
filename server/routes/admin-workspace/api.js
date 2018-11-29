@@ -1,4 +1,4 @@
-var dataHelper = require('./data');
+var dataHelper = require('../../helpers/admin-workspace/data');
 
 module.exports = function(app) {
     for(var key in dataHelper.dataModelsCfg) {

@@ -17,6 +17,7 @@
   "homepage": "https://github.com/Pelmen2la/kulpole_fest",
   "dependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.55",
+    "@ckeditor/ckeditor5-build-classic": "^11.1.1",
     "autoprefixer": "^9.0.2",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
@@ -28,7 +29,9 @@
     "cssnext": "^1.8.4",
     "express": "^4.16.3",
     "global-request-context": "^0.4.0",
+    "jimp": "^0.6.0",
     "mongoose": "^5.3.13",
+    "multer": "^1.4.1",
     "node-fetch": "^2.2.0",
     "node-sass": "^4.9.4",
     "request": "^2.88.0",
@@ -42,7 +45,6 @@
     "vue-material": "^1.0.0-beta-10.2",
     "vue-router": "^3.0.1",
     "vue-template-compiler": "^2.5.16",
-    "vuex": "^3.0.1",
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",
     "zone.js": "^0.8.26"

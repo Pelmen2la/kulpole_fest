@@ -4,7 +4,7 @@
             <md-list class="nav">
                 <md-list-item>
                     <a class="logo-cnt" href="/">
-                        <img src="/resources/logo.png"/>
+                        <img src="/resources/images/logo.png"/>
                     </a>
                 </md-list-item>
                 <md-list-item v-for="(itemCfg, itemIndex) in menuItemsCfg" :key="itemIndex">

@@ -12,7 +12,8 @@ module.exports = {
     getRandomFloat,
     getListAverage,
     getArrayAverage,
-    getArrayRandom
+    getArrayRandom,
+    getUid
 };
 
 function getRandomInt(min, max) {
@@ -35,4 +36,12 @@ function getArrayAverage(arr) {
 
 function getArrayRandom(arr) {
     return arr[getRandomInt(0, arr.length - 1)];
+};
+
+function getUid() {
+    function getPart() {
+        var part = (Math.random() * 46656) | 0;
+        return ("000" + part.toString(36)).slice(-3);
+    }
+    return getPart() + getPart();
 };

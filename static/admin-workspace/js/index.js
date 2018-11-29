@@ -12,5 +12,5 @@ new Vue({
     el: '#MainAppContainer',
     router: router,
     template: '<router-view></router-view>',
-    components: { App }
+    components: {App}
 });

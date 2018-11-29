@@ -42,7 +42,7 @@ const router = new VueRouter({
                             name: 'Список новостей'
                         },
                         {
-                            path: '/main/news/edit/:userId',
+                            path: '/main/news/edit/:newsId',
                             component: NewsForm,
                             props: true,
                             name: 'Редактирование новости'

@@ -5,3 +5,6 @@ package-lock.json
 server/config/app-config.json
 resources/bug-gifs/*
 db/*
+upload/*
+static/resources/images/news/*
+!static/resources/images/news/_init.png

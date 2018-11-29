@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-button class="md-raised md-primary" href="#/main/users/create">Создать</md-button>
+        <md-button class="md-raised md-primary" :href="'#/main/' + dataTypeMultipleName + '/create'">Создать</md-button>
         <slot name="filters_container"></slot>
         <MaterialGrid
                 :columnConfig="gridColumnsCfg"
