@@ -8,3 +8,5 @@ db/*
 upload/*
 static/resources/images/news/*
 !static/resources/images/news/_init.png
+static/resources/images/temp/*
+!static/resources/images/temp/_init.png

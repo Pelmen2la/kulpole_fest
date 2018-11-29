@@ -3,7 +3,7 @@ const path = require('path');
 const jimp = require('jimp');
 const utils = require('./../common/utils');
 
-const IMAGES_FOLDER_PATH = '/static/resources/images';
+const IMAGES_FOLDER_PATH = global.appRoot + '/static/resources/images';
 
 module.exports = {
     tryUploadFile
@@ -19,7 +19,7 @@ function tryUploadFile(relativeTargetPath, req, clb) {
             return [name.slice(0, dotPos), suffix, name.slice(dotPos)].join('');
         },
         getTargetFolderPath = function() {
-            return path.join(IMAGES_FOLDER_PATH, relativeTargetPath, (new Date()).getFullYear());
+            return path.join(IMAGES_FOLDER_PATH, relativeTargetPath, (new Date()).getFullYear().toString());
         },
         getTargetPath = function() {
             return path.join(getTargetFolderPath(), getImageName())
@@ -41,8 +41,8 @@ function tryUploadFile(relativeTargetPath, req, clb) {
         jimp.read(tempFilePath, function(err, image) {
             var isAutoHeight = image.bitmap.height < image.bitmap.width;
             image.resize(isAutoHeight ? 1000 : jimp.AUTO, isAutoHeight ? jimp.AUTO : 1000).quality(60).write(finalTargetPath);
-            fs.unlink(tempFilePath);
-            clb(getTargetPath().split('static/')[1]);
+            fs.unlink(tempFilePath, () => {});
+            clb(getTargetPath().split('static')[1].replace(/\\/g, '/'));
         });
     });
 };

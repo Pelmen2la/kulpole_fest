@@ -5,6 +5,11 @@
             <label>Заголовок</label>
             <md-input v-model="newsData.title"/>
         </md-field>
+        <vue-editor
+                v-model="newsData.html"
+                useCustomImageHandler
+                @imageAdded="handleHtmlEditorImageAdded"
+        />
         <ButtonWithDisabledTooltip :disabledText="saveButtonDisabledText" :onClick="onSaveBtnClick" text="Сохранить"/>
     </div>
 </template>
@@ -13,12 +18,14 @@
     import utils from './../../../common/js/utils'
     import ButtonWithDisabledTooltip from '../../../common/vue-components/button/ButtonWithDisabledTooltip'
     import EmailTextfield from '../../../common/vue-components/field/EmailTextfield'
+    import { VueEditor } from 'vue2-editor'
 
     export default {
         name: 'news-form',
         components: {
             ButtonWithDisabledTooltip,
-            EmailTextfield
+            EmailTextfield,
+            VueEditor
         },
         data() {
             return {
@@ -44,12 +51,26 @@
             },
             onSaveBtnClick: function() {
                 var url = '/admin/workspace/news/' + (this.newsId || '');
-                this.newsData.html = this.getHtmlEditor().getContent();
                 this.isSaveInProgress = true;
                 utils.doDataRequest(url, this.newsId ? 'PUT' : 'POST', this.newsData, function(res) {
                     this.isSaveInProgress = false;
                     this.$router.push(this.backUrl)
                 }.bind(this));
+            },
+            handleHtmlEditorImageAdded: function(file, editor, cursorLocation, resetUploader) {
+                let formData = new FormData();
+                let xhr = new XMLHttpRequest();
+                formData.append('file', file);
+                xhr.open('POST', '/admin/workspace/news/upload_image/');
+                xhr.send(formData);
+                xhr.onload = function() {
+                    var imageUrl = xhr.responseText;
+                    editor.insertEmbed(cursorLocation, 'image', imageUrl);
+                    resetUploader();
+                };
+                xhr.onerror = function(err) {
+                    resetUploader();
+                }
             }
         },
         computed: {
