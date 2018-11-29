@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const jimp = require('jimp');
+const sharp = require('sharp');
 const utils = require('./../common/utils');
 
 const IMAGES_FOLDER_PATH = global.appRoot + '/static/resources/images';
@@ -38,11 +39,20 @@ function tryUploadFile(relativeTargetPath, req, clb) {
         }
 
         var finalTargetPath = getTargetPath();
-        jimp.read(tempFilePath, function(err, image) {
-            var isAutoHeight = image.bitmap.height < image.bitmap.width;
-            image.resize(isAutoHeight ? 1000 : jimp.AUTO, isAutoHeight ? jimp.AUTO : 1000).quality(60).write(finalTargetPath);
-            fs.unlink(tempFilePath, () => {});
-            clb(getTargetPath().split('static')[1].replace(/\\/g, '/'));
+        var image = sharp(tempFilePath);
+        image.metadata().then(function(metadata) {
+            var sizeLimit = 1000,
+                needToResize = metadata.height > sizeLimit || metadata.width > sizeLimit;
+            if(needToResize) {
+                var isAutoHeight = metadata.height < metadata.width;
+                image = image.resize(isAutoHeight ? sizeLimit : null, isAutoHeight ? null : sizeLimit)
+            }
+
+            image.toFile(finalTargetPath, () => {
+                fs.unlink(tempFilePath, () => {
+                });
+                clb(getTargetPath().split('static')[1].replace(/\\/g, '/'));
+            });
         });
     });
 };
