@@ -1,13 +1,16 @@
 var dataHelper = require('./data');
 
 module.exports = function(app) {
-    createCRUD(app, 'user');
+    for(var key in dataHelper.dataModelsCfg) {
+        var cfg = dataHelper.dataModelsCfg[key],
+            multName = cfg.hasMultipleName ? key + 's' : key;
+        createCRUD(app, key, multName);
+    }
 };
 
-function createCRUD(app, mnemonic) {
+function createCRUD(app, mnemonic, multMnemonic) {
     const capMnemonic = mnemonic[0].toUpperCase() + mnemonic.substring(1),
-        idParamName = mnemonic + 'Id',
-        multMnemonic = mnemonic + 's';
+        idParamName = mnemonic + 'Id';
     app.get('/admin/workspace/' + multMnemonic, function(req, res, next) {
         dataHelper['get' + capMnemonic + 'List'](req.query, (result) => res.json(result));
     });

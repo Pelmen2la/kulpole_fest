@@ -3,6 +3,8 @@ import App from './../vue-components/App'
 import Main from '../vue-components/common/Main.vue'
 import UsersList from '../vue-components/users/UserList.vue'
 import UserForm from '../vue-components/users/UserForm.vue'
+import NewsList from '../vue-components/news/NewsList.vue'
+import NewsForm from '../vue-components/news/NewsForm.vue'
 
 const router = new VueRouter({
     routes: [
@@ -33,6 +35,22 @@ const router = new VueRouter({
                             path: '/main/users/create',
                             component: UserForm,
                             name: 'Создание пользователя'
+                        },
+                        {
+                            path: '/main/news',
+                            component: NewsList,
+                            name: 'Список новостей'
+                        },
+                        {
+                            path: '/main/news/edit/:userId',
+                            component: NewsForm,
+                            props: true,
+                            name: 'Редактирование новости'
+                        },
+                        {
+                            path: '/main/news/create',
+                            component: NewsForm,
+                            name: 'Создание новости'
                         }
                     ]
                 }
@@ -41,6 +59,10 @@ const router = new VueRouter({
         {
             path: '/main/users*',
             redirect: '/main/users'
+        },
+        {
+            path: '/main/news*',
+            redirect: '/main/news'
         }
     ]
 });

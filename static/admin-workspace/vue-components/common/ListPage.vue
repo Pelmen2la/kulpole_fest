@@ -24,7 +24,7 @@
         components: {
             MaterialGrid
         },
-        props: ['dataTypeName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg'],
+        props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg'],
         data() {
             return {
                 gridPagingProps: {
@@ -37,7 +37,7 @@
         methods: {
             loadData: function() {
                 var url = utils.stringFormat('/admin/workspace/{0}?{1}',
-                    this.multipleDataTypeName, this.buildLoadDataParamsString());
+                    this.dataTypeMultipleName, this.buildLoadDataParamsString());
                 this.$emit('startLoading', {text: 'Загрузка списка ' + this.dataTypeMultipleText});
                 utils.doRequest(url, {}, function(data) {
                     this.gridData = data.content;
@@ -56,11 +56,11 @@
                 return paramsString;
             },
             onGridEditBtnClick: function(rec) {
-                this.$router.push(utils.stringFormat('/main/{0}/edit/{1}', this.multipleDataTypeName, rec._id));
+                this.$router.push(utils.stringFormat('/main/{0}/edit/{1}', this.dataTypeMultipleName, rec._id));
             },
             onGridDeleteBtnClick: function(rec) {
                 var recId = rec._id,
-                    url = utils.stringFormat('/admin/workspace/{0}/{1}', this.multipleDataTypeName, recId);
+                    url = utils.stringFormat('/admin/workspace/{0}/{1}', this.dataTypeMultipleName, recId);
                 utils.doRequest(url, {method: 'DELETE'}, function(data) {
                     var entry = this.gridData.find((entry) => entry._id == recId);
                     this.gridData.splice(this.gridData.indexOf(entry), 1);
@@ -75,7 +75,6 @@
             }
         },
         mounted: function() {
-            this.multipleDataTypeName = this.dataTypeName + 's';
             this.loadPageByIndex(0);
         }
     }

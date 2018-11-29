@@ -1,12 +1,25 @@
 const mongoose = require('mongoose');
 const UserModel = mongoose.model('user');
+const NewsModel = mongoose.model('news');
 
 const ROWS_ON_PAGE = 1;
 
-module.exports = {
+const dataModelsCfg = {
+    user: {
+        model:  mongoose.model('user'),
+        hasMultipleName: true
+    },
+    news: {
+        model:  mongoose.model('news'),
+        hasMultipleName: false
+    }
 };
 
-['user'].forEach(createCRUD);
+module.exports = {
+    dataModelsCfg
+};
+
+['user', 'news'].forEach(createCRUD);
 
 function createCRUD(dataModelName) {
     const capName = dataModelName[0].toUpperCase() + dataModelName.substring(1),
@@ -51,7 +64,8 @@ function createCRUD(dataModelName) {
 
 function getDataModel(name) {
     return {
-        user: UserModel
+        user: UserModel,
+        news: NewsModel
     }[name]
 };
 

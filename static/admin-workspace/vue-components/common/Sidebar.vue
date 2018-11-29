@@ -28,6 +28,11 @@
                         text: 'Пользователи',
                         url: '/main/users',
                         iconName: 'knight-head-2'
+                    },
+                    {
+                        text: 'Новости',
+                        url: '/main/news',
+                        iconName: 'parchment'
                     }
                 ]
             }

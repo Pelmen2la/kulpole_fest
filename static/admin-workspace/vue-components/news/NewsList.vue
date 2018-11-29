@@ -1,8 +1,8 @@
 <template>
     <ListPage
             ref="ListPage"
-            dataTypeMultipleName="users"
-            dataTypeMultipleText="пользователей"
+            dataTypeMultipleName="news"
+            dataTypeMultipleText="новостей"
             :getLoadDataExtraParams="getLoadDataExtraParams"
             :gridColumnsCfg="getGridColumnCfg()">
         <template slot="filters_container">
@@ -18,7 +18,7 @@
     import ListPage from './../common/ListPage.vue'
 
     export default {
-        name: 'users-list-page',
+        name: 'news-list-page',
         components: {
             ListPage
         },
@@ -35,15 +35,8 @@
             },
             getGridColumnCfg: function() {
                 return [
-                    {
-                        text: 'Имя',
-                        dataIndex: 'name',
-                        renderer: function(rec, val) {
-                            return rec.name + ' ' + rec.surname;
-                        }
-                    },
-                    {text: 'Email', dataIndex: 'email'},
-                    {text: 'Телефон', dataIndex: 'phone'}
+                    {text: 'Заголовок', dataIndex: 'title'},
+                    {text: 'Дата', dataIndex: 'date'}
                 ];
             },
             onSearchTextChange: function() {
