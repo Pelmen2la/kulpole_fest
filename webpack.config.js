@@ -5,7 +5,8 @@ module.exports = {
     context: __dirname + '/static/',
     entry: {
         "admin-workspace-index": './admin-workspace/js/index.js',
-        "admin-workspace-auth-index": './admin-workspace/js/auth-index.js'
+        "admin-workspace-auth-index": './admin-workspace/js/auth-index.js',
+        "landing-index":  './landing/js/index.js'
     },
     output: { path: __dirname + '/static/dist/js/', filename: '[name].js'},
     module: {

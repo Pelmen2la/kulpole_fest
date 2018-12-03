@@ -1,0 +1,34 @@
+doctype html
+html(ng-app='jeweleryApp')
+  head
+    title
+      block title
+        | Официальный сайт вестиваля Куликово поле
+  body
+    div.page-content
+      div.header
+        div.top-panel
+          a.logo(href="/")
+            span
+              | Официальный сайт исторического фестиваля
+            br
+            b.fest-name
+              | КУЛИКОВО ПОЛЕ
+
+          div.auth-container
+            a(href="/auth")
+              | Войти
+            div.separator
+            a(href="/registration")
+              | Зарегистрироваться
+        ul.top-menu
+          li
+            a(href='/news/')
+
+      div.main-content-wrapper
+        block main-content
+
+      div.footer
+
+  script(src='/dist/js/landing-index.js')
+  block after-index-script

@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const jimp = require('jimp');
 const sharp = require('sharp');
 const utils = require('./../common/utils');
 

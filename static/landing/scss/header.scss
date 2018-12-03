@@ -1,0 +1,32 @@
+@import './variables.scss';
+
+.header {
+    background: $main-light-blue-color;
+    color: white;
+    padding: $standard-paddings;
+
+    .top-panel {
+        overflow: auto;
+        padding: 0.5em 0;
+
+        .logo {
+            display: inline-block;
+
+            .fest-name {
+                font-size: calc(1em + 7px);
+            }
+        }
+
+        .auth-container {
+            display: inline-block;
+            float: right;
+            line-height: 1em;
+
+            .separator {
+                height: 2px;
+                margin: 5px 0;
+                background: white;
+            }
+        }
+    }
+}
