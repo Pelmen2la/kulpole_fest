@@ -1,13 +1,14 @@
-var utils = require('./../../common/utils'),
-    path = require('path'),
-    pug = require('pug');
+const auth = require('./auth');
+const utils = require('./../../helpers/landing/utils');
 
 module.exports = function(app) {
+    auth(app);
+
     app.get('/', function(req, res, next) {
-        res.send(getPageHtml('main', {}));
+        res.send(utils.getPageHtml('main', req, {}));
     });
 
-    function getPageHtml(pageName, opts) {
-        return pug.renderFile(path.join(global.appRoot, '/static/views/pages', pageName + '.pug'), opts);
-    };
+    app.get('*', function(req, res, next) {
+        res.redirect('/');
+    });
 };

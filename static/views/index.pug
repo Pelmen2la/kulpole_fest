@@ -3,7 +3,7 @@ html(ng-app='jeweleryApp')
   head
     title
       block title
-        | Официальный сайт вестиваля Куликово поле
+        | Официальный сайт фестиваля Куликово поле
   body
     div.page-content
       div.header
@@ -16,11 +16,18 @@ html(ng-app='jeweleryApp')
               | КУЛИКОВО ПОЛЕ
 
           div.auth-container
-            a(href="/auth")
-              | Войти
-            div.separator
-            a(href="/registration")
-              | Зарегистрироваться
+            if logedInUserData
+              a(href='/profile')= logedInUserData.fullName
+              div.separator
+              a(href="/logout")
+                | Выйти
+            else
+              a(href="/auth")
+                | Войти
+              div.separator
+              a(href="/registration")
+                | Зарегистрироваться
+
         ul.top-menu
           li
             a(href='/news/')

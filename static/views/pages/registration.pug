@@ -1,0 +1,50 @@
+extends ./../index.pug
+
+block main-content
+  div.registration-page-wrapper
+    if registrationComplete
+        h1
+          | Регистрация завершена
+        p= 'Авторизация выполнена автоматически.'
+        p= 'В дальнейшем для входа в качестве логина используйте свой email: ' + (registrationUserData ? registrationUserData.email : '') + '.'
+        a.main-page-link(href='/')
+          | Нажмите на ссылку для перехода на главную страницу.
+    else
+      form#RegistrationForm.registration-form(action="/registration" method="POST")
+        h1
+          | Регистрация пользователя
+
+        div.input-container.with-fly-label
+          input(type="text" id="NameInput" required name="name" value=registrationUserData ? registrationUserData.name : '')
+          label(for="NameInput")
+            | Имя *
+
+        div.input-container.with-fly-label
+          input(type="text" id="SurnameInput" name="surname" value=registrationUserData ? registrationUserData.surname : '')
+          label(for="SurnameInput")
+            | Фамилия
+
+        div.input-container.with-fly-label
+          input(type="text" id="EmailInput" name="email" value=registrationUserData ? registrationUserData.email : '')
+          label(for="EmailInput")
+            | Email *
+
+        div.input-container.with-fly-label
+          input(type="password" id="PasswordInput" name="password")
+          label(for="PasswordInput")
+            | Пароль *
+
+        div.input-container.with-fly-label
+          input(type="password" id="RepeatPasswordInput" name="repeat-password")
+          label(for="RepeatPasswordInput")
+            | Повторите пароль *
+
+        if errorText
+          b.error-text= errorText
+
+
+        button(id="RegistrationSubmitButton" disabled type="submit")
+          | Зарегистрироваться *
+
+block after-index-script
+  script(src='/dist/js/landing-registration.js')

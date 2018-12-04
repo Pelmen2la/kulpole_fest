@@ -1,0 +1,79 @@
+@import './variables.scss';
+
+a {
+    color: $main-dark-blue-color;
+    cursor: pointer;
+}
+
+b {
+    font-weight: bold;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 1.4em;
+}
+
+p {
+    line-height: 1.5em;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.input-container.with-fly-label {
+    padding: 1em 0;
+    position: relative;
+
+    input {
+        width: 100%;
+        border: none;
+        font-size: inherit;
+        border-bottom: 1px solid black;
+
+        &:focus,
+        &.not-empty {
+            + label {
+                top: 0;
+                font-size: 0.8em;
+            }
+        }
+        &:focus {
+            border-bottom: 1px solid $main-dark-blue-color;
+
+            + label {
+                color: $main-dark-blue-color;
+            }
+        }
+        &.invalid:not(:focus) {
+            border-color: $invalid-red-color;
+
+            + label {
+                color: $invalid-red-color;
+            }
+        }
+    }
+
+    label {
+        position: absolute;
+        top: 1em;
+        left: 0;
+        color: $gray-blue-color;
+        transition: font-size 0.3s, top 0.3s;
+    }
+}
+
+button {
+    padding: 0.5em;
+    border-radius: 5px;
+    text-align: center;
+    background: $main-light-blue-color;
+    border: 1px solid transparent;
+    font-weight: bold;
+
+    &:focus,
+    &:hover {
+        border-color: $main-dark-blue-color;
+    }
+}

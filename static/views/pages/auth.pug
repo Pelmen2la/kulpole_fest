@@ -1,0 +1,32 @@
+extends ./../index.pug
+
+block main-content
+  div.auth-page-wrapper
+    if logedInUserData
+      h1
+        | Авторизация пройдена.
+      a.main-page-link(href='/')
+        | Нажмите на ссылку для перехода на главную страницу.
+    else
+      form#AuthForm.auth-form(action="/auth" method="POST")
+        h1
+          | Авторизация
+
+        div.input-container.with-fly-label
+          input(type="text" id="EmailInput" name="email")
+          label(for="EmailInput")
+            | Email
+
+        div.input-container.with-fly-label
+          input(type="password" id="PasswordInput" name="password")
+          label(for="PasswordInput")
+            | Пароль
+
+        if errorText
+          b.error-text= errorText
+
+        button(id="AuthSubmitButton" disabled type="submit")
+          | Зарегистрироваться *
+
+block after-index-script
+  script(src='/dist/js/landing-auth.js')
