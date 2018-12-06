@@ -13,5 +13,5 @@ function getPageHtml(pageName, req, params = {}) {
             id: userData._id
         }
     }
-    return pug.renderFile(path.join(global.appRoot, '/static/views/pages', pageName + '.pug'), params);
+    return pug.renderFile(path.join(global.appRoot, '/static/landing/views/pages', pageName + '.pug'), params);
 };
