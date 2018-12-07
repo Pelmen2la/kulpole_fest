@@ -1,4 +1,4 @@
-extends ./../index.pug
+extends ../index
 
 block main-content
   div.registration-page-wrapper
@@ -23,6 +23,11 @@ block main-content
           input(type="text" id="SurnameInput" name="surname" value=registrationUserData ? registrationUserData.surname : '')
           label(for="SurnameInput")
             | Фамилия
+
+        div.input-container.with-fly-label
+          input(type="text" id="ClubInput" name="club" value=registrationUserData ? registrationUserData.club : '')
+          label(for="ClubInput")
+            | Название клуба
 
         div.input-container.with-fly-label
           input(type="text" id="EmailInput" name="email" value=registrationUserData ? registrationUserData.email : '')

@@ -11,11 +11,7 @@
         </md-field>
         <EmailTextfield v-model="userData.email" @validityChange="(isValid) => isEmailValid = isValid"/>
         <md-field>
-            <label>Телефон</label>
-            <md-input v-model="userData.phone"/>
-        </md-field>
-        <md-field>
-            <label>Команда</label>
+            <label>Название клуба</label>
             <md-input v-model="userData.club"/>
         </md-field>
         <ButtonWithDisabledTooltip :disabledText="saveButtonDisabledText" :onClick="onSaveBtnClick" text="Сохранить"/>
