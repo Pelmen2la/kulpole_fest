@@ -1,4 +1,10 @@
 extends ../index
 
 block main-content
-  div
+  div.main-page-wrapper
+    h2
+      | Недавние новости
+    include ../partials/news-list
+
+block after-index-script
+  script(src='/dist/js/landing-main.js')

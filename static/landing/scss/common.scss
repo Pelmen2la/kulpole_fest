@@ -12,7 +12,13 @@ b {
 h1 {
     font-weight: bold;
     font-size: 1.4em;
-    margin-bottom: $standard-h1-bottom-margin;
+    margin-bottom: $standard-header-tag-bottom-margin;
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 1.3em;
+    margin-bottom: $standard-header-tag-bottom-margin;
 }
 
 p {
@@ -124,8 +130,6 @@ button {
 }
 
 .pager {
-    padding: $standard-paddings;
-
     li {
         font-size: 1.4em;
         display: inline-block;

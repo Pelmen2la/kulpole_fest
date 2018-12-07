@@ -18,9 +18,9 @@ module.exports = function(app) {
             newsData.forEach((news) => news.dateString = commonUtils.formatDbDateToWeb(news.date));
             NewsModel.countDocuments({}, function(err, totalCount) {
                 res.send(utils.getPageHtml('news-list-page', req, {
-                    newsData: newsData,
+                    newsData: newsData || [],
                     pagingParams: {
-                        pageIndex: pageIndex,
+                        pageIndex,
                         pagesCount: Math.ceil(totalCount / NEWS_PAGE_SIZE)
                     }
                 }));
