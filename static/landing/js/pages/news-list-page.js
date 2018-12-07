@@ -1,0 +1,1 @@
+import '../../scss/pages/news-list-page.scss'

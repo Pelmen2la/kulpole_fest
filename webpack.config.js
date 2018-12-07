@@ -9,7 +9,8 @@ module.exports = {
         "landing-index":  './landing/js/index.js',
         "landing-registration":  './landing/js/pages/registration.js',
         "landing-auth":  './landing/js/pages/auth.js',
-        "landing-news":  './landing/js/pages/news.js'
+        "landing-news-list-page":  './landing/js/pages/news-list-page.js',
+        "landing-news-page":  './landing/js/pages/news-page.js',
     },
     output: { path: __dirname + '/static/dist/js/', filename: '[name].js'},
     module: {

@@ -20,3 +20,34 @@ body {
     min-height: 100%;
     background: white;
 }
+
+.top-menu {
+    padding: $standard-paddings;
+
+    li {
+        font-size: 1.3em;
+        margin: 0.3em 1em 0.3em 0;
+        display: inline-block;
+        position: relative;
+
+        &:before {
+            display: inline-block;
+            width: 0px;
+            height: 3px;
+            left: 50%;
+            top: 100%;
+            content: ' ';
+            transition: left 0.5s, width 0.5s;
+            position: absolute;
+        }
+
+        &:hover,
+        &.active {
+            &:before {
+                width: 100%;
+                left: 0;
+                background: $main-dark-blue-color;
+            }
+        }
+    }
+}

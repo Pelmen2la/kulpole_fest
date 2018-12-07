@@ -122,3 +122,27 @@ button {
         }
     }
 }
+
+.pager {
+    padding: $standard-paddings;
+
+    li {
+        font-size: 1.4em;
+        display: inline-block;
+        margin-right: 0.5em;
+        border: 1px solid $main-dark-blue-color;
+
+        a {
+            padding: 0.15em 0.3em;
+        }
+        &.active {
+            background: $main-dark-blue-color;
+            a {
+                color: white;
+            }
+        }
+        &:hover {
+            background: $gray-background-color;
+        }
+    }
+}

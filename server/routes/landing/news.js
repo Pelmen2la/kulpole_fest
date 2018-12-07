@@ -16,13 +16,28 @@ module.exports = function(app) {
 
         NewsModel.find({}, null, dataQueryOptions, function (err, newsData) {
             newsData.forEach((news) => news.dateString = commonUtils.formatDbDateToWeb(news.date));
-            NewsModel.count({}, function(err, totalCount) {
-                res.send(utils.getPageHtml('news', req, {
+            NewsModel.countDocuments({}, function(err, totalCount) {
+                res.send(utils.getPageHtml('news-list-page', req, {
                     newsData: newsData,
-                    pageIndex: pageIndex,
-                    pagesCount: Math.ceil(totalCount / NEWS_PAGE_SIZE)
+                    pagingParams: {
+                        pageIndex: pageIndex,
+                        pagesCount: Math.ceil(totalCount / NEWS_PAGE_SIZE)
+                    }
                 }));
             });
+        });
+    });
+
+    app.get('/news/:newsId', function(req, res, next) {
+        const newsId = req.params.newsId;
+        NewsModel.findOne({ $or: [{ seoUrl: newsId }, { uid: newsId }]}, function(err, newsData) {
+            if(err || !newsData) {
+                res.redirect('/news');
+            } else {
+                res.send(utils.getPageHtml('news-page', req, {
+                    newsData: newsData || {}
+                }));
+            }
         });
     });
 };

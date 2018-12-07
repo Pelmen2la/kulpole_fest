@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const utils = require('./../common/utils');
 
 const User = new mongoose.Schema({
+    uid: { type: String, default: utils.getUid() },
     name: String,
     surname: String,
     email: String,

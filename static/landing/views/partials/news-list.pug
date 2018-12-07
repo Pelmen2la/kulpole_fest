@@ -3,7 +3,7 @@ if newsData.length
   ul.news-list-container
     each news, index in newsData
       li
-        a(href='/news/' + (news.seoUrl || news._id))
+        a(href='/news/' + (news.seoUrl || news.uid))
           div.news-header
             b.title= news.title
             span.date= news.dateString

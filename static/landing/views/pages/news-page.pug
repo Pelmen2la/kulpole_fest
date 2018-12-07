@@ -1,0 +1,9 @@
+extends ./../index.pug
+
+block main-content
+  div.news-page-wrapper
+    h1= newsData.title
+    div!= newsData.html
+
+block after-index-script
+  script(src='/dist/js/landing-news-page.js')
