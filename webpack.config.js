@@ -8,7 +8,8 @@ module.exports = {
         "admin-workspace-auth-index": './admin-workspace/js/auth-index.js',
         "landing-index":  './landing/js/index.js',
         "landing-registration":  './landing/js/pages/registration.js',
-        "landing-auth":  './landing/js/pages/auth.js'
+        "landing-auth":  './landing/js/pages/auth.js',
+        "landing-news":  './landing/js/pages/news.js'
     },
     output: { path: __dirname + '/static/dist/js/', filename: '[name].js'},
     module: {

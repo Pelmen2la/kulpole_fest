@@ -29,6 +29,7 @@
     "cssnext": "^1.8.4",
     "express": "^4.16.3",
     "global-request-context": "^0.4.0",
+    "moment": "^2.22.2",
     "mongoose": "^5.3.13",
     "multer": "^1.4.1",
     "node-fetch": "^2.2.0",

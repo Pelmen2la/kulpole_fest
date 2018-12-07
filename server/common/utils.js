@@ -1,5 +1,6 @@
-var fs = require('fs'),
-    path = require('path');
+const fs = require('fs');
+const path = require('path');
+const moment = require('moment');
 
 module.exports = {
     sendHtmlFileResponse: function(res, fileUrl, prepareHtmlFn) {
@@ -8,34 +9,8 @@ module.exports = {
             res.send(pageHtml);
         });
     },
-    getRandomInt,
-    getRandomFloat,
-    getListAverage,
-    getArrayAverage,
-    getArrayRandom,
-    getUid
-};
-
-function getRandomInt(min, max) {
-    return Math.round(getRandomFloat(min, max));
-};
-
-function getRandomFloat(min, max) {
-    return Math.random() * (max - min) + min;
-};
-
-function getListAverage(list) {
-    return getArrayAverage(list.toJS());
-};
-
-function getArrayAverage(arr) {
-    var sum = 0;
-    arr.forEach((e) => sum += e);
-    return arr.length ? sum / arr.length : 0;
-};
-
-function getArrayRandom(arr) {
-    return arr[getRandomInt(0, arr.length - 1)];
+    getUid,
+    formatDbDateToWeb
 };
 
 function getUid() {
@@ -44,4 +19,8 @@ function getUid() {
         return ("000" + part.toString(36)).slice(-3);
     }
     return getPart() + getPart();
+};
+
+function formatDbDateToWeb(date) {
+    return moment(date).format('DD.MM.YYYY');
 };

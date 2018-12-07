@@ -5,6 +5,14 @@
             <label>Заголовок</label>
             <md-input v-model="newsData.title"/>
         </md-field>
+        <md-field>
+            <label>Ссылка</label>
+            <md-input v-model="newsData.seoUrl"/>
+        </md-field>
+        <md-field>
+            <label>Краткое описание</label>
+            <md-textarea v-model="newsData.shortDescription"></md-textarea>
+        </md-field>
         <vue-editor
                 v-model="newsData.html"
                 useCustomImageHandler
@@ -36,6 +44,7 @@
                 htmlEditorCfg: {},
                 newsData: {
                     title: '',
+                    seoUrl: '',
                     html: ''
                 }
             }
