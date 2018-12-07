@@ -33,6 +33,11 @@
                         text: 'Новости',
                         url: '/main/news',
                         iconName: 'parchment'
+                    },
+                    {
+                        text: 'События',
+                        url: '/main/events',
+                        iconName: 'swords-cross'
                     }
                 ]
             }

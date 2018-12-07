@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
-const UserModel = mongoose.model('user');
-const NewsModel = mongoose.model('news');
 
 const ROWS_ON_PAGE = 1;
 
 const dataModelsCfg = {
     user: {
-        model:  mongoose.model('user'),
+        model: mongoose.model('user'),
         hasMultipleName: true
     },
     news: {
-        model:  mongoose.model('news'),
+        model: mongoose.model('news'),
         hasMultipleName: false
+    },
+    event: {
+        model: mongoose.model('event'),
+        hasMultipleName: true
     }
 };
 
@@ -19,7 +21,9 @@ module.exports = {
     dataModelsCfg
 };
 
-['user', 'news'].forEach(createCRUD);
+for(var key in dataModelsCfg) {
+    createCRUD(key);
+}
 
 function createCRUD(dataModelName) {
     const capName = dataModelName[0].toUpperCase() + dataModelName.substring(1),
@@ -63,10 +67,7 @@ function createCRUD(dataModelName) {
 };
 
 function getDataModel(name) {
-    return {
-        user: UserModel,
-        news: NewsModel
-    }[name]
+    return dataModelsCfg[name].model;
 };
 
 function getDataModelSpecificFilters(modelName, params) {

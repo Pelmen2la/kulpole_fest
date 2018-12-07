@@ -1,20 +1,15 @@
 <template>
-    <div class="news-form-main-container">
+    <div class="event-form-main-container">
         <md-button class="md-raised" :href="'#' + backUrl">Назад</md-button>
         <md-field>
             <label>Заголовок</label>
-            <md-input v-model="newsData.title"/>
+            <md-input v-model="eventData.title"/>
         </md-field>
-        <md-field>
-            <label>Ссылка</label>
-            <md-input v-model="newsData.seoUrl"/>
-        </md-field>
-        <md-field>
-            <label>Краткое описание</label>
-            <md-textarea v-model="newsData.shortDescription"></md-textarea>
-        </md-field>
+        <md-datepicker v-model="eventData.date">
+            <label>Дата события</label>
+        </md-datepicker>
         <vue-editor
-                v-model="newsData.html"
+                v-model="eventData.html"
                 useCustomImageHandler
                 @imageAdded="handleHtmlEditorImageAdded"
         />
@@ -29,7 +24,7 @@
     import { VueEditor } from 'vue2-editor'
 
     export default {
-        name: 'news-form',
+        name: 'event-form',
         components: {
             ButtonWithDisabledTooltip,
             EmailTextfield,
@@ -37,32 +32,31 @@
         },
         data() {
             return {
-                newsId: null,
+                eventId: null,
                 isSaveInProgress: false,
-                backUrl: '/main/news',
+                backUrl: '/main/events',
                 editor: null,
                 htmlEditorCfg: {},
-                newsData: {
+                eventData: {
                     title: '',
-                    seoUrl: '',
-                    shortDescription: '',
+                    date: new Date,
                     html: ''
                 }
             }
         },
         methods: {
-            loadNewsData: function(newsId) {
-                var url = '/admin/workspace/news/' + newsId;
-                this.$emit('startLoading', {text: 'Загрузка данных новости'});
+            loadEventData: function(eventId) {
+                var url = '/admin/workspace/events/' + eventId;
+                this.$emit('startLoading', {text: 'Загрузка данных события'});
                 utils.doRequest(url, {}, function(data) {
-                    this.newsData = data;
+                    this.eventData = data;
                     this.$emit('endLoading');
                 }.bind(this));
             },
             onSaveBtnClick: function() {
-                var url = '/admin/workspace/news/' + (this.newsId || '');
+                var url = '/admin/workspace/events/' + (this.eventId || '');
                 this.isSaveInProgress = true;
-                utils.doDataRequest(url, this.newsId ? 'PUT' : 'POST', this.newsData, function(res) {
+                utils.doDataRequest(url, this.eventId ? 'PUT' : 'POST', this.eventData, function(res) {
                     this.isSaveInProgress = false;
                     this.$router.push(this.backUrl)
                 }.bind(this));
@@ -71,7 +65,7 @@
                 let formData = new FormData();
                 let xhr = new XMLHttpRequest();
                 formData.append('file', file);
-                xhr.open('POST', '/admin/workspace/news/upload_image/');
+                xhr.open('POST', '/admin/workspace/events/upload_image/');
                 xhr.send(formData);
                 xhr.onload = function() {
                     var imageUrl = xhr.responseText;
@@ -86,25 +80,25 @@
         computed: {
             saveButtonDisabledText() {
                 if(this.isSaveInProgress) {
-                    return 'Сохранение новости в процессе.';
+                    return 'Сохранение события в процессе.';
                 }
-                if(!this.newsData.title) {
+                if(!this.eventData.title) {
                     return 'Необходимо заполнить заголовок.'
                 }
                 return '';
             }
         },
         mounted: function() {
-            this.newsId = this.$route.params.newsId;
-            if(this.newsId) {
-                this.loadNewsData(this.newsId);
+            this.eventId = this.$route.params.eventId;
+            if(this.eventId) {
+                this.loadEventData(this.eventId);
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .news-form-main-container {
+    .event-form-main-container {
         padding: 1.5em;
     }
 </style>

@@ -109,13 +109,19 @@
                 box-sizing: border-box;
                 border-bottom: 1px solid #EEE;
                 padding: 8px 20px;
+                h1 {
+                    font-size: 1.5em;
+                    color: #3c4858;
+                    display: inline-block;
+                    margin-top: 5px;
+                }
 
                 .user-menu {
                     float: right;
                     .md-button {
                         min-width: 32px;
                         img {
-                            height: 32px;
+                            height: 24px;
                         }
                     }
                 }
