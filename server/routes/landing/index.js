@@ -5,6 +5,7 @@ const NewsModel = mongoose.model('news');
 module.exports = function(app) {
     require('./auth')(app);
     require('./news')(app);
+    require('./events')(app);
 
     app.get('/', function(req, res, next) {
         NewsModel.find({}, null, { sort: { 'date': -1 }, limit: 3 }, function(err, newsData) {

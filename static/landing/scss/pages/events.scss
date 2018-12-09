@@ -1,0 +1,22 @@
+@import './../variables.scss';
+
+.events-page-wrapper {
+    .event-header {
+        overflow: hidden;
+
+        .event-header-bottom-container {
+            .date {
+                display: inline-block;
+                float: left;
+                color: $main-dark-blue-color;
+            }
+            .request-info {
+            }
+        }
+    }
+    .event-html-wrapper {
+        border-bottom: 1px solid $main-dark-blue-color;
+        padding: 0.5em 0;
+        margin: 0.5em 0 2em;
+    }
+}

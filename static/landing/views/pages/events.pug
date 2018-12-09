@@ -1,0 +1,16 @@
+extends ./../index.pug
+
+block main-content
+  div.events-page-wrapper
+    h1
+      | Фестивали
+    if eventsData.length
+      each eventData, index in eventsData
+        div.event-header
+          h2= eventData.title
+          div.event-header-bottom-container
+            b.date= eventData.dateString
+        div.event-html-wrapper!= eventData.html
+
+block after-index-script
+  script(src='/dist/js/landing-events.js')
