@@ -14,6 +14,10 @@
             <label>Название клуба</label>
             <md-input v-model="userData.club"/>
         </md-field>
+        <md-field>
+            <label>Пароль</label>
+            <md-input v-model="userData.password"/>
+        </md-field>
         <ButtonWithDisabledTooltip :disabledText="saveButtonDisabledText" :onClick="onSaveBtnClick" text="Сохранить"/>
     </div>
 </template>
