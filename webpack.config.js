@@ -13,6 +13,7 @@ module.exports = {
         "landing-news-page":  './landing/js/pages/news-page.js',
         "landing-main":  './landing/js/pages/main.js',
         "landing-events":  './landing/js/pages/events.js',
+        "landing-add-event-request":  './landing/js/pages/add-event-request.js',
     },
     output: { path: __dirname + '/static/dist/js/', filename: '[name].js'},
     module: {

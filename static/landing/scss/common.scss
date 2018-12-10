@@ -29,45 +29,66 @@ p {
     opacity: 0.5;
 }
 
-.input-container.with-fly-label {
-    padding: 1em 0;
-    position: relative;
+textarea {
+    padding: 0.4em;
+    box-sizing: border-box;
+}
 
-    input {
-        width: 100%;
-        border: none;
-        font-size: inherit;
-        border-bottom: 1px solid black;
+.input-container,
+.textarea-container {
+    &.with-fly-label {
+        padding: 1em 0;
+        position: relative;
 
-        &:focus,
-        &.not-empty {
-            + label {
-                top: 0;
-                font-size: 0.8em;
+        input,
+        textarea {
+            width: 100%;
+            border: none;
+            font-size: inherit;
+            border-bottom: 1px solid black;
+
+            &:focus,
+            &.not-empty {
+                + label {
+                    top: 0;
+                    font-size: 0.8em;
+                }
+            }
+            &:focus {
+                border-bottom: 1px solid $main-dark-blue-color;
+
+                + label {
+                    color: $main-dark-blue-color;
+                }
+            }
+            &.invalid:not(:focus) {
+                border-color: $invalid-red-color;
+
+                + label {
+                    color: $invalid-red-color;
+                }
             }
         }
-        &:focus {
-            border-bottom: 1px solid $main-dark-blue-color;
-
+        textarea {
+            border: 1px solid black;
             + label {
-                color: $main-dark-blue-color;
+                top: 1.4em;
+                left: 0.4em;
+            }
+            &:focus,
+            &.not-empty {
+                + label {
+                    left: 0;
+                }
             }
         }
-        &.invalid:not(:focus) {
-            border-color: $invalid-red-color;
-
-            + label {
-                color: $invalid-red-color;
-            }
+        label {
+            position: absolute;
+            top: 1em;
+            left: 0;
+            color: $gray-blue-color;
+            transition: font-size 0.3s, top 0.3s;
         }
-    }
-
-    label {
-        position: absolute;
-        top: 1em;
-        left: 0;
-        color: $gray-blue-color;
-        transition: font-size 0.3s, top 0.3s;
     }
 }
 

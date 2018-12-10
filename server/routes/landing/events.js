@@ -24,6 +24,18 @@ module.exports = function(app) {
             });
         });
     });
+
+    app.get('/events/:eventUid/request/new', function(req, res, next) {
+        if(!req.session.logedInUserData) {
+            res.redirect('/');
+            return;
+        }
+        EventModel.findOne({ uid: req.params.eventUid }, function(err, eventData) {
+            res.send(utils.getPageHtml('add-event-request', req, {
+                eventData: eventData || []
+            }));
+        });
+    });
 };
 
 function addRequestsStatesToEvents(logedInUserData, eventsData) {

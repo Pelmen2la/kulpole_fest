@@ -5,6 +5,7 @@ const EventRequest = new mongoose.Schema({
     uid: { type: String, default: utils.getUid() },
     userId: String,
     eventId: String,
+    role: String,
     text: String,
     photoUrls: [String],
     date: {type: Date, default: Date.now}

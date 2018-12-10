@@ -1,0 +1,32 @@
+extends ../index
+
+block main-content
+  div.add-event-request-page-wrapper
+    form#AuthForm.vent-request-form(action='/events/' + eventData.uid + '/request/new' method="POST")
+      h1= 'Заявка на ' + eventData.title
+
+      div.input-container.with-fly-label
+        input(type="text" id="RoleInput" name="role")
+        label(for="RoleInput")
+          | Роль
+
+      div.textarea-container.with-fly-label
+        textarea(rows=5 id="RequestTextTextarea" name="text")
+        label(for="RequestTextTextarea")
+          | Описание
+
+      b
+        | Фотографии (3-5 шт.)
+      div.file-input-wrapper
+        input(type="file" name="photo" accept=".jpg, .jpeg, .png" multiple)
+        button(type="button")
+          | Загрузить фотографии
+
+      if errorText
+        b.error-text= errorText
+
+      button(id="RequestSubmitButton" disabled type="submit")
+        | Создать заявку
+
+block after-index-script
+  script(src='/dist/js/landing-add-event-request.js')

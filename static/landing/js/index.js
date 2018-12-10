@@ -7,8 +7,8 @@ import './../scss/index.scss'
     };
     function prepareTextInputs() {
         var ensureNotEmptyClsFn = (input) => input.classList[input.value ? 'add' : 'remove']('not-empty');
-        ['text', 'password'].forEach((eType) => {
-            const inputes = document.querySelectorAll(`input[type=${eType}]`);
+        ['text', 'password', 'textarea'].forEach((iType) => {
+            const inputes = document.querySelectorAll(iType === 'textarea' ? iType : `input[type=${iType}]`);
             inputes.forEach((i) => ['keyup', 'change'].forEach((event) => {
                 i.addEventListener(event, () => ensureNotEmptyClsFn(i));
                 ensureNotEmptyClsFn(i);
