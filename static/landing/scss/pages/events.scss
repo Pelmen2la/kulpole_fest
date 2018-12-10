@@ -10,7 +10,9 @@
                 float: left;
                 color: $main-dark-blue-color;
             }
-            .request-info {
+            .request-link {
+                display: inline-block;
+                float: right;
             }
         }
     }

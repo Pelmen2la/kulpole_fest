@@ -11,7 +11,12 @@ module.exports = function(app) {
     app.get('/events', function(req, res, next) {
         const nowYear = (new Date).getFullYear();
         EventModel.find(getYearFilter(nowYear), function(err, eventsData) {
-            eventsData.forEach((event) => event.dateString = commonUtils.formatDbDateToWeb(event.date));
+            eventsData.forEach((event) => {
+                event.dateString = commonUtils.formatDbDateToWeb(event.date);
+                if(event.date < new Date) {
+                    event.set('hasPassed', true);
+                }
+            });
             addRequestsStatesToEvents(req.session.logedInUserData, eventsData).then(() => {
                 res.send(utils.getPageHtml('events', req, {
                     eventsData: eventsData || []
@@ -30,10 +35,10 @@ function addRequestsStatesToEvents(logedInUserData, eventsData) {
         const eventIds = eventsData.map((e) => e.get('id'));
         const filters = { $and: [{ userId: logedInUserData._id }, { eventId: { $in: eventIds }}]};
         EventRequest.find(filters, (err, eventRequestData) => {
-            eventRequestData.forEach(function(eventRequest) {
-                var event = eventsData.find((e) => e.get('id') === eventRequest.eventId);
-                if(event) {
-                    event.set('hasRequest', true);
+            eventsData.forEach(function(event) {
+                var eventRequest = eventRequestData.find((r) => r.get('eventId') === event.get('id'));
+                if(eventRequest) {
+                    event.set('requestData', eventRequest);
                 }
             });
             resolve(eventsData);

@@ -10,6 +10,11 @@ block main-content
           h2= eventData.title
           div.event-header-bottom-container
             b.date= eventData.dateString
+            if logedInUserData
+              - var linkText = requestData ? 'Открыть вашу заявку' : 'Подать заявку'
+              - var linkSrc = requestData ? '/events/request/' + requestData.uid : '/events/' + eventData.uid + '/' + 'add_request'
+              a.request-link(href=linkSrc)= linkText
+
         div.event-html-wrapper!= eventData.html
 
 block after-index-script
