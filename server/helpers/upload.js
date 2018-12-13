@@ -6,23 +6,42 @@ const utils = require('./../common/utils');
 const IMAGES_FOLDER_PATH = global.appRoot + '/static/resources/images';
 
 module.exports = {
-    tryUploadFile
+    tryUploadFiles
 };
 
-function tryUploadFile(relativeTargetPath, req, clb) {
-    var tmp_path = req.file.path,
+function tryUploadFiles(relativeTargetPath, req, clb) {
+    if(req.file) {
+        tryUploadFileCore(relativeTargetPath, req.file, clb);
+    } if(req.files) {
+        var index = 0,
+            fileUrls = [],
+            uploadFn = function() {
+                tryUploadFileCore(relativeTargetPath, req.files[index], function(fileUrl) {
+                    fileUrls.push(fileUrl);
+                    index++;
+                    index < req.files.length ? uploadFn() : clb(fileUrls);
+                });
+            };
+        uploadFn();
+    } else {
+        clb('');
+    }
+};
+
+function tryUploadFileCore(relativeTargetPath, file, clb) {
+    var tmp_path = file.path,
         suffix = '',
         tempFilePath = path.join(IMAGES_FOLDER_PATH, 'temp', utils.getUid() + '.jpg'),
-        getImageName = function() {
-            var name = req.file.originalname,
+        getFileName = function() {
+            var name = file.originalname,
                 dotPos = name.lastIndexOf('.');
             return [name.slice(0, dotPos), suffix, name.slice(dotPos)].join('');
         },
         getTargetFolderPath = function() {
-            return path.join(IMAGES_FOLDER_PATH, relativeTargetPath, (new Date()).getFullYear().toString());
+            return path.join(IMAGES_FOLDER_PATH, relativeTargetPath);
         },
         getTargetPath = function() {
-            return path.join(getTargetFolderPath(), getImageName())
+            return path.join(getTargetFolderPath(), getFileName())
         };
 
     var src = fs.createReadStream(tmp_path),
@@ -30,9 +49,9 @@ function tryUploadFile(relativeTargetPath, req, clb) {
     src.pipe(dest);
 
     src.on('end', function() {
-        if(!fs.existsSync(getTargetFolderPath())) {
-            fs.mkdirSync(getTargetFolderPath());
-        }
+        const relativePath = relativeTargetPath;
+
+        ensureDirExists(IMAGES_FOLDER_PATH, relativeTargetPath);
         while(fs.existsSync(getTargetPath())) {
             suffix = parseInt(suffix + 1);
         }
@@ -55,3 +74,14 @@ function tryUploadFile(relativeTargetPath, req, clb) {
         });
     });
 };
+
+function ensureDirExists(startFolderPath, relativePath) {
+    const parts = relativePath.split('\\');
+    var targetPath = startFolderPath;
+    for(var part, i = 0; part = parts[i]; i++) {
+        targetPath = path.join(targetPath, part);
+        if(!fs.existsSync(targetPath)) {
+            fs.mkdirSync(targetPath);
+        }
+    }
+}

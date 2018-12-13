@@ -8,6 +8,7 @@ const EventRequest = new mongoose.Schema({
     role: String,
     text: String,
     photoUrls: [String],
+    status: {type: String, default: 'new'},
     date: {type: Date, default: Date.now}
 });
 

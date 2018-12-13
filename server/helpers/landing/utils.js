@@ -2,7 +2,8 @@ const pug = require('pug');
 const path = require('path');
 
 module.exports = {
-    getPageHtml
+    getPageHtml,
+    checkAuth
 };
 
 function getPageHtml(pageName, req, params = {}) {
@@ -14,4 +15,13 @@ function getPageHtml(pageName, req, params = {}) {
         }
     }
     return pug.renderFile(path.join(global.appRoot, '/static/landing/views/pages', pageName + '.pug'), params);
+};
+
+function checkAuth(req, res) {
+    if(!req.session.logedInUserData) {
+        res.redirect('/');
+        return false;
+    } else {
+        return true;
+    }
 };

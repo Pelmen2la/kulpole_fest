@@ -1,0 +1,22 @@
+extends ../index
+
+block main-content
+  div.event-request-page-wrapper
+    h1= 'Заявка на ' + eventData.title
+    if eventRequestData.role
+      b
+        | Роль
+      span= eventRequestData.role
+    b
+      | Текст заявки
+    p= eventRequestData.text
+    b
+      | Фотографии
+    ul.photo-list
+      li
+        each photoUrl in eventRequestData.photoUrls
+          img(src=photoUrl)
+
+
+block after-index-script
+  script(src='/dist/js/landing-event-request.js')

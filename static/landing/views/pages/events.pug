@@ -7,15 +7,15 @@ block main-content
     if eventsData.length
       each eventData, index in eventsData
         div.event-header
-          h2= eventData.title
+          h2= eventData.event.title
           div.event-header-bottom-container
-            b.date= eventData.dateString
+            b.date= eventData.event.dateString
             if logedInUserData
-              - var linkText = requestData ? 'Открыть вашу заявку' : 'Подать заявку'
-              - var linkSrc = requestData ? '/events/request/' + requestData.uid : '/events/' + eventData.uid + '/request/new'
+              - var linkText = eventData.request ? 'Открыть вашу заявку' : 'Подать заявку'
+              - var linkSrc = eventData.request ? '/event_request/' + eventData.request.uid : '/events/' + eventData.request.uid + '/request/new'
               a.request-link(href=linkSrc)= linkText
 
-        div.event-html-wrapper!= eventData.html
+        div.event-html-wrapper!= eventData.event.html
 
 block after-index-script
   script(src='/dist/js/landing-events.js')

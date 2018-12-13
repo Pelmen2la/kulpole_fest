@@ -1,4 +1,5 @@
 import './../../scss/pages/auth-pages.scss'
+import utils from './../utils'
 
 (window.registrationAppModule = function() {
     function init() {
@@ -13,11 +14,6 @@ import './../../scss/pages/auth-pages.scss'
     };
     function getInputValue(inputName) {
         return qn(inputName).value;
-    };
-    function addInputOnChangeListeners(input, fn) {
-        ['keyup', 'change'].forEach((event) => {
-            input.addEventListener(event, fn)
-        });
     };
     function ensureInputInvalidState(input, invalidText) {
         input.classList[invalidText ? 'add' : 'remove']('invalid');
@@ -73,7 +69,7 @@ import './../../scss/pages/auth-pages.scss'
     };
     function prepareTextInputs() {
         const addValidationOnChangeListeners = (input, getInvalidTextFn, extraFn) => {
-                addInputOnChangeListeners(input, (e) => {
+                utils.addInputOnChangeListeners(input, (e) => {
                     ensureInputInvalidState(input, getInvalidTextFn());
                     ensureRegistrationButtonState();
                     extraFn && extraFn();
