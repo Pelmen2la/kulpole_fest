@@ -14,6 +14,10 @@ const dataModelsCfg = {
     event: {
         model: mongoose.model('event'),
         hasMultipleName: true
+    },
+    'eventRequest': {
+        model: mongoose.model('event_request'),
+        hasMultipleName: true
     }
 };
 

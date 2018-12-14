@@ -7,6 +7,8 @@ import NewsList from '../vue-components/news/NewsList.vue'
 import NewsForm from '../vue-components/news/NewsForm.vue'
 import EventList from '../vue-components/events/EventList.vue'
 import EventForm from '../vue-components/events/EventForm.vue'
+import EventRequestList from '../vue-components/event-requests/EventRequestList.vue'
+import EventRequestForm from '../vue-components/event-requests/EventRequestForm.vue'
 
 const router = new VueRouter({
     routes: [
@@ -69,6 +71,17 @@ const router = new VueRouter({
                             path: '/main/events/create',
                             component: EventForm,
                             name: 'Создание события'
+                        },
+                        {
+                            path: '/main/event_requests',
+                            component: EventRequestList,
+                            name: 'Список новостей'
+                        },
+                        {
+                            path: '/main/events/edit/:eventRequestId',
+                            component: EventRequestForm,
+                            props: true,
+                            name: 'Просмотр заявки'
                         }
                     ]
                 }

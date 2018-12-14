@@ -38,6 +38,11 @@
                         text: 'События',
                         url: '/main/events',
                         iconName: 'swords-cross'
+                    },
+                    {
+                        text: 'Заявки',
+                        url: '/main/event_requests',
+                        iconName: 'sword-with-shield'
                     }
                 ]
             }
