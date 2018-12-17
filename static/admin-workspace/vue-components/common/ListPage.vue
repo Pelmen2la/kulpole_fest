@@ -1,6 +1,8 @@
 <template>
     <div>
-        <md-button class="md-raised md-primary" :href="'#/main/' + dataTypeMultipleName + '/create'">Создать</md-button>
+        <md-button class="md-raised md-primary" :href="'#/main/' + dataTypeMultipleName + '/create'" v-if="!hideAddButton">
+            Создать
+        </md-button>
         <slot name="filters_container"></slot>
         <MaterialGrid
                 :columnConfig="gridColumnsCfg"
@@ -24,7 +26,7 @@
         components: {
             MaterialGrid
         },
-        props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg'],
+        props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg', 'hideAddButton'],
         data() {
             return {
                 gridPagingProps: {

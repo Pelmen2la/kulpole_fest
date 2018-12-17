@@ -3,6 +3,7 @@
             ref="ListPage"
             dataTypeMultipleName="eventRequests"
             dataTypeMultipleText="заявок"
+            :hideAddButton="true"
             :gridColumnsCfg="getGridColumnCfg()">
     </ListPage>
 </template>
