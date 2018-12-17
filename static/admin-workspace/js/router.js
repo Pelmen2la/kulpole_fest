@@ -73,12 +73,12 @@ const router = new VueRouter({
                             name: 'Создание события'
                         },
                         {
-                            path: '/main/event_requests',
+                            path: '/main/eventRequests',
                             component: EventRequestList,
-                            name: 'Список новостей'
+                            name: 'Список заявок'
                         },
                         {
-                            path: '/main/events/edit/:eventRequestId',
+                            path: '/main/eventRequests/edit/:eventRequestId',
                             component: EventRequestForm,
                             props: true,
                             name: 'Просмотр заявки'

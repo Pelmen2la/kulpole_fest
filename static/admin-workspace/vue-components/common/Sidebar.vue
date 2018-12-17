@@ -41,7 +41,7 @@
                     },
                     {
                         text: 'Заявки',
-                        url: '/main/event_requests',
+                        url: '/main/eventRequests',
                         iconName: 'sword-with-shield'
                     }
                 ]

@@ -2,103 +2,76 @@
     <div class="event-form-main-container">
         <md-button class="md-raised" :href="'#' + backUrl">Назад</md-button>
         <md-field>
-            <label>Заголовок</label>
-            <md-input v-model="eventData.title"/>
+            <label>Роль</label>
+            <md-input v-model="eventRequestData.role" readonly></md-input>
         </md-field>
-        <md-datepicker v-model="eventData.date">
-            <label>Дата события</label>
-        </md-datepicker>
-        <vue-editor
-                v-model="eventData.html"
-                useCustomImageHandler
-                @imageAdded="handleHtmlEditorImageAdded"
-        />
-        <ButtonWithDisabledTooltip :disabledText="saveButtonDisabledText" :onClick="onSaveBtnClick" text="Сохранить"/>
+        <md-field>
+            <label>Текст заявки</label>
+            <md-textarea v-model="eventRequestData.text" readonly></md-textarea>
+        </md-field>
+        <div v-if="eventRequestData.photoUrls && eventRequestData.photoUrls.length">
+            <b>Фотографии</b>
+            <ul class="photo-list">
+                <li v-for="photoUrl in eventRequestData.photoUrls">
+                    <img :src="photoUrl" @click="openedImageUrl = photoUrl"/>
+                </li>
+            </ul>
+        </div>
+        <FullscreenImage v-if="openedImageUrl" :imageUrl="openedImageUrl" @onMaskClick="() => openedImageUrl = ''"/>
     </div>
 </template>
 
 <script>
     import utils from './../../../common/js/utils'
     import ButtonWithDisabledTooltip from '../../../common/vue-components/button/ButtonWithDisabledTooltip'
-    import EmailTextfield from '../../../common/vue-components/field/EmailTextfield'
-    import { VueEditor } from 'vue2-editor'
+    import FullscreenImage from './FullscreenImage'
 
     export default {
-        name: 'event-form',
+        name: 'event-request-form',
         components: {
             ButtonWithDisabledTooltip,
-            EmailTextfield,
-            VueEditor
+            FullscreenImage
         },
         data() {
             return {
                 eventId: null,
                 isSaveInProgress: false,
-                backUrl: '/main/events',
-                editor: null,
-                htmlEditorCfg: {},
-                eventData: {
-                    title: '',
-                    date: new Date,
-                    html: ''
-                }
+                backUrl: '/main/eventRequests',
+                eventRequestData: {},
+                openedImageUrl: ''
             }
         },
         methods: {
-            loadEventData: function(eventId) {
-                var url = '/admin/workspace/events/' + eventId;
-                this.$emit('startLoading', {text: 'Загрузка данных события'});
+            loadEventRequestData: function(eventRequestId) {
+                var url = '/admin/workspace/eventRequests/' + eventRequestId;
+                this.$emit('startLoading', {text: 'Загрузка данных заявки'});
                 utils.doRequest(url, {}, function(data) {
-                    this.eventData = data;
+                    this.eventRequestData = data;
                     this.$emit('endLoading');
                 }.bind(this));
-            },
-            onSaveBtnClick: function() {
-                var url = '/admin/workspace/events/' + (this.eventId || '');
-                this.isSaveInProgress = true;
-                utils.doDataRequest(url, this.eventId ? 'PUT' : 'POST', this.eventData, function(res) {
-                    this.isSaveInProgress = false;
-                    this.$router.push(this.backUrl)
-                }.bind(this));
-            },
-            handleHtmlEditorImageAdded: function(file, editor, cursorLocation, resetUploader) {
-                let formData = new FormData();
-                let xhr = new XMLHttpRequest();
-                formData.append('file', file);
-                xhr.open('POST', '/admin/workspace/events/upload_image/');
-                xhr.send(formData);
-                xhr.onload = function() {
-                    var imageUrl = xhr.responseText;
-                    editor.insertEmbed(cursorLocation, 'image', imageUrl);
-                    resetUploader();
-                };
-                xhr.onerror = function(err) {
-                    resetUploader();
-                }
             }
         },
-        computed: {
-            saveButtonDisabledText() {
-                if(this.isSaveInProgress) {
-                    return 'Сохранение события в процессе.';
-                }
-                if(!this.eventData.title) {
-                    return 'Необходимо заполнить заголовок.'
-                }
-                return '';
-            }
-        },
+        computed: {},
         mounted: function() {
-            this.eventId = this.$route.params.eventId;
-            if(this.eventId) {
-                this.loadEventData(this.eventId);
-            }
+            this.eventRequestId = this.$route.params.eventRequestId;
+            this.loadEventRequestData(this.eventRequestId);
         }
     }
 </script>
 
 <style lang="scss" scoped>
     .event-form-main-container {
-        padding: 1.5em;
+        .photo-list {
+            margin-top: 1em;
+            li {
+                display: inline-block;
+                margin-right: 1em;
+
+                img {
+                    height: 150px;
+                    cursor: pointer;
+                }
+            }
+        }
     }
 </style>
