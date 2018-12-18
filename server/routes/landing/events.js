@@ -87,7 +87,7 @@ module.exports = function(app) {
 function addRequestsStatesToEvents(logedInUserData, eventsData) {
     return new Promise((resolve) => {
         if(!logedInUserData) {
-            resolve(eventsData);
+            resolve(eventsData.map((event) => { return { event };}));
             return;
         }
         const eventIds = eventsData.map((e) => e.get('id'));
