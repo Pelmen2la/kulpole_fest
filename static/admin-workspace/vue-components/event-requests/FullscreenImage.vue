@@ -24,6 +24,7 @@
         height: 100%;
         left: 0;
         top: 0;
+        z-index: 100;
 
         .mask {
             position: absolute;
