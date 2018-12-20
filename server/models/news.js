@@ -10,4 +10,4 @@ const News = new mongoose.Schema({
     date: {type: Date, default: Date.now},
 });
 
-mongoose.model('news', News);
+module.exports = mongoose.model('news', News);

@@ -12,7 +12,7 @@ block main-content
             b.date= eventData.event.dateString
             if logedInUserData
               - var linkText = eventData.request ? 'Открыть вашу заявку' : 'Подать заявку'
-              - var linkSrc = eventData.request ? '/event_request/' + eventData.request.uid : '/events/' + eventData.uid + '/request/new'
+              - var linkSrc = eventData.request ? '/event_request/' + eventData.request.uid : '/events/' + eventData.event.uid + '/request/new'
               a.request-link(href=linkSrc)= linkText
 
         div.event-html-wrapper!= eventData.event.html

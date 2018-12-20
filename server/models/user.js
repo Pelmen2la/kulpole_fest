@@ -12,4 +12,4 @@ const User = new mongoose.Schema({
     registrationDate: { type: Date, default: Date.now }
 });
 
-mongoose.model('user', User);
+module.exports = mongoose.model('user', User);

@@ -55,7 +55,7 @@ module.exports = function(app) {
       res.send(utils.getPageHtml('registration', req, params));
     };
     function addAuthUserInfoToSession(req, userData) {
-        req.session.logedInUserData = userData.toObject();
+        req.session.logedInUserData = userData;
     };
 };
 

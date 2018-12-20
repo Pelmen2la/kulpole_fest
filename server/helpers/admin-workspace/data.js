@@ -1,22 +1,25 @@
-const mongoose = require('mongoose');
+const userModel = require('./../../models/user');
+const eventModel = require('./../../models/event');
+const eventRequestModel = require('./../../models/event-request');
+const newsModel = require('./../../models/news');
 
 const ROWS_ON_PAGE = 1;
 
 const dataModelsCfg = {
     user: {
-        model: mongoose.model('user'),
+        model: userModel,
         hasMultipleName: true
     },
     news: {
-        model: mongoose.model('news'),
+        model: newsModel,
         hasMultipleName: false
     },
     event: {
-        model: mongoose.model('event'),
+        model: eventModel,
         hasMultipleName: true
     },
-    'eventRequest': {
-        model: mongoose.model('event_request'),
+    eventRequest: {
+        model: eventRequestModel,
         hasMultipleName: true
     }
 };
@@ -34,8 +37,11 @@ function createCRUD(dataModelName) {
         model = getDataModel(dataModelName);
     
     module.exports[`get${capName}List`] = function(params, clb) {
-        var filters = getDataModelSpecificFilters(dataModelName, params);
-        model.find(filters, null, getListQueryOptions(params), (err, data) => {
+        const filters = getDataModelSpecificFilters(dataModelName, params),
+            queryOpts = getListQueryOptions(params),
+            lookupArgs = getDataModelLookupArgs(dataModelName),
+            aggArgs = lookupArgs.concat([{ $skip: queryOpts.skip }, { $limit: queryOpts.limit }, { $match: filters }]);
+        model.aggregate(aggArgs).exec().then(function(data) {
             model.countDocuments(filters, function (err, totalData) {
                 clb({
                     content: data,
@@ -80,6 +86,27 @@ function getDataModelSpecificFilters(modelName, params) {
         filters = getSearchFilterConditions(['name', 'surname', 'club', 'email', 'phone'], params.searchText);
     }
     return filters;
+};
+
+function getDataModelLookupArgs(modelName) {
+    if(modelName == 'eventRequest') {
+        return [{
+            $lookup: {
+                from: eventModel.collection.collectionName,
+                localField: 'eventId',
+                foreignField: '_id',
+                as: 'eventData'
+            }
+        }, {
+            $lookup: {
+                from: userModel.collection.collectionName,
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'userData'
+            }
+        }]
+    }
+    return [];
 };
 
 function getSearchFilterConditions(searchFields, searchText) {

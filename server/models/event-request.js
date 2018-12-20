@@ -3,8 +3,8 @@ const utils = require('./../common/utils');
 
 const EventRequest = new mongoose.Schema({
     uid: { type: String, default: utils.getUid() },
-    userId: String,
-    eventId: String,
+    userId: mongoose.Schema.ObjectId,
+    eventId: mongoose.Schema.ObjectId,
     role: String,
     text: String,
     photoUrls: [String],
@@ -12,4 +12,5 @@ const EventRequest = new mongoose.Schema({
     date: {type: Date, default: Date.now}
 });
 
-mongoose.model('event_request', EventRequest);
+module.exports = mongoose.model('event_request', EventRequest);
+

@@ -55,8 +55,8 @@ module.exports = function(app) {
                     Object.assign(eventRequestData, {
                         uid: eventRequestUid,
                         photoUrls,
-                        eventId: eventData.get('id'),
-                        userId: req.session.logedInUserData._id
+                        eventId: eventData.get('_id'),
+                        userId: new mongoose.Types.ObjectId(req.session.logedInUserData._id)
                     });
                     (new EventRequestModel(eventRequestData)).save((err, data) => {
                         res.redirect('/')
