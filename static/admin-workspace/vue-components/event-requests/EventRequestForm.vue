@@ -2,6 +2,14 @@
     <div class="event-form-main-container">
         <md-button class="md-raised" :href="'#' + backUrl">Назад</md-button>
         <md-field>
+            <label>Название мероприятия</label>
+            <md-input v-model="eventRequestData.eventTitle" readonly></md-input>
+        </md-field>
+        <md-field>
+            <label>Имя участника</label>
+            <md-input v-model="eventRequestData.userFullName" readonly></md-input>
+        </md-field>
+        <md-field>
             <label>Роль</label>
             <md-input v-model="eventRequestData.role" readonly></md-input>
         </md-field>
@@ -46,7 +54,10 @@
                 var url = '/admin/workspace/eventRequests/' + eventRequestId;
                 this.$emit('startLoading', {text: 'Загрузка данных заявки'});
                 utils.doRequest(url, {}, function(data) {
-                    this.eventRequestData = data;
+                    this.eventRequestData = Object.assign(data, {
+                        eventTitle: data.eventData.length ? data.eventData[0].title : 'Мероприятие удалено',
+                        userFullName: data.userData.length ? (data.userData[0].name + ' ' + data.userData[0].surname) : 'Пользователь удален'
+                    });
                     this.$emit('endLoading');
                 }.bind(this));
             }

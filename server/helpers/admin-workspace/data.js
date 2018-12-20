@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const userModel = require('./../../models/user');
 const eventModel = require('./../../models/event');
 const eventRequestModel = require('./../../models/event-request');
@@ -61,10 +62,13 @@ function createCRUD(dataModelName) {
     };
     
     module.exports[`get${capName}`] = function(id, clb) {
-        model.findById(id, (err, data) => {
-            clb(err ? null : data);
+        const lookupArgs = getDataModelLookupArgs(dataModelName);
+        const objectId = mongoose.Types.ObjectId(id);
+        model.aggregate(lookupArgs.concat([{ $match: { _id: objectId }}])).exec().then((data) => {
+            clb(data.length ? data[0] : {});
         });
-    },
+    };
+
     module.exports[`update${capName}`] = function(id, data, clb) {
         delete data._id;
         model.findOneAndUpdate({ _id: id }, data, (err, data) => {
