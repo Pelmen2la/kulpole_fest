@@ -4,7 +4,14 @@
             dataTypeMultipleName="eventRequests"
             dataTypeMultipleText="заявок"
             :hideAddButton="true"
+            :getLoadDataExtraParams="getLoadDataExtraParams"
             :gridColumnsCfg="getGridColumnCfg()">
+        <template slot="filters_container">
+            <md-field>
+                <label>Поиск</label>
+                <md-input @keyup="onSearchTextChange" v-model="searchText"/>
+            </md-field>
+        </template>
     </ListPage>
 </template>
 
@@ -18,10 +25,16 @@
         },
         data() {
             return {
-                searchText: ''
+                searchText: '',
+                loadDataTimeoutId: null
             }
         },
         methods: {
+            getLoadDataExtraParams: function() {
+                return {
+                    searchText: this.searchText
+                };
+            },
             getGridColumnCfg: function() {
                 return [
                     {
@@ -37,6 +50,13 @@
                     {text: 'Статус', dataIndex: 'status'},
                     {text: 'Дата', dataIndex: 'date'}
                 ];
+            },
+            onSearchTextChange: function() {
+                window.clearTimeout(this.loadDataTimeoutId);
+                this.loadDataTimeoutId = window.setTimeout(this.loadData.bind(this), 300);
+            },
+            loadData: function() {
+                this.$refs.ListPage.loadPageByIndex(0);
             }
         }
     }

@@ -24,7 +24,8 @@
         },
         data() {
             return {
-                searchText: ''
+                searchText: '',
+                loadDataTimeoutId: null
             }
         },
         methods: {

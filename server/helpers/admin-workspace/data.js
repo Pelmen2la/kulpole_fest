@@ -40,12 +40,15 @@ function createCRUD(dataModelName) {
         const filters = getDataModelSpecificFilters(dataModelName, params),
             queryOpts = getListQueryOptions(params),
             lookupArgs = getDataModelLookupArgs(dataModelName),
-            aggArgs = lookupArgs.concat([{ $skip: queryOpts.skip }, { $limit: queryOpts.limit }, { $match: filters }]);
+            filterArg = { $match: filters },
+            aggArgs = lookupArgs.concat([{ $skip: queryOpts.skip }, { $limit: queryOpts.limit }, filterArg]),
+            countAggArgs = lookupArgs.concat([filterArg, { $group: { _id : null, count : {$sum : 1}}}]);
         model.aggregate(aggArgs).exec().then(function(data) {
-            model.countDocuments(filters, function (err, totalData) {
+            model.aggregate(countAggArgs).exec().then(function(countData) {
+                const total = countData.length ? countData[0].count : 0;
                 clb({
                     content: data,
-                    totalPages: Math.ceil(totalData / ROWS_ON_PAGE)
+                    totalPages: Math.ceil(total / ROWS_ON_PAGE)
                 });
             });
         });
@@ -84,6 +87,8 @@ function getDataModelSpecificFilters(modelName, params) {
     var filters = {};
     if(modelName == 'user') {
         filters = getSearchFilterConditions(['name', 'surname', 'club', 'email', 'phone'], params.searchText);
+    } else if(modelName == 'eventRequest') {
+        filters = getSearchFilterConditions(['eventData.title', 'userData.name', 'userData.surname'], params.searchText);
     }
     return filters;
 };
