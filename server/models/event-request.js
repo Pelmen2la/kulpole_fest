@@ -9,6 +9,8 @@ const EventRequest = new mongoose.Schema({
     text: String,
     photoUrls: [String],
     status: {type: String, default: 'new'},
+    isCostumeAccepted: { type: Boolean, default: false },
+    isArmorAccepted: { type: Boolean, default: false },
     date: {type: Date, default: Date.now}
 });
 

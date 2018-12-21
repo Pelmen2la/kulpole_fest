@@ -26,6 +26,12 @@
             </ul>
         </div>
         <FullscreenImage v-if="openedImageUrl" :imageUrl="openedImageUrl" @onMaskClick="() => openedImageUrl = ''"/>
+        <md-checkbox v-model="eventRequestData.isCostumeAccepted" @change="(val) => onAcceptedCheckboxChange('isCostumeAccepted', val)">
+            Костюм допущен
+        </md-checkbox>
+        <md-checkbox v-model="eventRequestData.isArmorAccepted" @change="(val) => onAcceptedCheckboxChange('isArmorAccepted', val)">
+            Доспех допущен
+        </md-checkbox>
     </div>
 </template>
 
@@ -44,6 +50,7 @@
             return {
                 eventId: null,
                 isSaveInProgress: false,
+                isDataLoadingInProcess: false,
                 backUrl: '/main/eventRequests',
                 eventRequestData: {},
                 openedImageUrl: ''
@@ -53,13 +60,23 @@
             loadEventRequestData: function(eventRequestId) {
                 var url = '/admin/workspace/eventRequests/' + eventRequestId;
                 this.$emit('startLoading', {text: 'Загрузка данных заявки'});
+                this.isDataLoadingInProcess = true;
                 utils.doRequest(url, {}, function(data) {
                     this.eventRequestData = Object.assign(data, {
                         eventTitle: data.eventData.length ? data.eventData[0].title : 'Мероприятие удалено',
                         userFullName: data.userData.length ? (data.userData[0].name + ' ' + data.userData[0].surname) : 'Пользователь удален'
                     });
                     this.$emit('endLoading');
+                    window.setTimeout(() => this.isDataLoadingInProcess = false, 0);
                 }.bind(this));
+            },
+            onAcceptedCheckboxChange: function(propName, val) {
+                if(this.isDataLoadingInProcess) {
+                    return;
+                }
+                var updateData = {};
+                updateData[propName] = val;
+                utils.doDataRequest('/admin/workspace/eventRequests/' + this.eventRequestId, 'PUT', updateData, () => null);
             }
         },
         computed: {},
