@@ -7,6 +7,7 @@ const EventRequestModel = mongoose.model('event_request');
 const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 const uploadHelper = require('./../../helpers/upload');
+const adminDataHelper = require('./../../helpers/admin-workspace/data');
 const path = require('path');
 
 const START_YEAR = 2018;
@@ -66,21 +67,28 @@ module.exports = function(app) {
         }
     });
 
-    app.get('/event_request/:requestUid', upload.array('photo', 5), function(req, res, next) {
-        if(utils.checkAuth(req, res)) {
-            EventRequestModel.findOne({ uid: req.params.requestUid }, function(err, eventRequestData) {
-                if(err || !eventRequestData || eventRequestData.get('userId') !== req.session.logedInUserData._id) {
-                    res.redirect('/');
-                    return;
-                }
-                EventModel.findById(eventRequestData.get('eventId'), function(err, eventData) {
-                    res.send(utils.getPageHtml('event-request', req, {
-                        eventRequestData,
-                        eventData
-                    }));
+    app.get('/event_request/:eventRequestUid', function(req, res, next) {
+        checkEventRequestAccess(req, res, req.params.eventRequestUid).then((result) => {
+            if(result.isHasAccess) {
+                res.send(utils.getPageHtml('event-request', req, {
+                    eventRequestData: result.eventRequestData
+                }));
+            } else {
+                res.redirect('/events');
+            }
+        });
+    });
+
+    app.post('/event_request/:eventRequestUid/send_msg', function(req, res, next) {
+        checkEventRequestAccess(req, res, req.params.eventRequestUid).then((result) => {
+            if(result.isHasAccess) {
+                adminDataHelper.addEventRequestMessage(result.eventRequestData._id, req.body.text, 'user', (result) => {
+                    res.send(result);
                 });
-            });
-        }
+            } else {
+                res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
+            }
+        });
     });
 };
 
@@ -94,7 +102,7 @@ function addRequestsStatesToEvents(logedInUserData, eventsData) {
         const filters = { $and: [{ userId: logedInUserData._id }, { eventId: { $in: eventIds }}]};
         EventRequestModel.find(filters, (err, eventRequestData) => {
             eventsData = eventsData.map((event) => {
-                var eventRequest = eventRequestData.find((r) => r.get('eventId') === event.get('id'));
+                var eventRequest = eventRequestData.find((r) => r.get('eventId') == event.get('id'));
                 return {
                     event,
                     request: eventRequest || null
@@ -103,6 +111,19 @@ function addRequestsStatesToEvents(logedInUserData, eventsData) {
 
             resolve(eventsData);
         });
+    });
+};
+
+function checkEventRequestAccess(req, res, eventRequestId) {
+    return new Promise((resolve) => {
+        if(utils.checkAuth(req, res)) {
+            adminDataHelper.getEventRequest(eventRequestId, (eventRequestData) => {
+                resolve({
+                    isHasAccess: eventRequestData && eventRequestData.userId == req.session.logedInUserData._id,
+                    eventRequestData
+                });
+            });
+        }
     });
 };
 

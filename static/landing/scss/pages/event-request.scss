@@ -7,4 +7,16 @@
         max-height: 300px;
         margin-right: 1em;
     }
+
+    .event-request-chat-container .textarea-container {
+        margin-top: 0.5em;
+        padding-bottom: 0;
+
+        .send-chat-message-btn {
+            display: none;
+        }
+        textarea.not-empty + label + .send-chat-message-btn {
+            display: initial;
+        }
+    }
 }

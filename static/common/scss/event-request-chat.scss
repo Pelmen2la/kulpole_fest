@@ -1,0 +1,56 @@
+.event-request-chat-container {
+    max-width: 1024px;
+    margin: 0 auto;
+    overflow: auto;
+
+    h2 {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin: 1em 0;
+    }
+    .chat-messages-container {
+        max-height: 600px;
+        overflow-y: auto;
+        border: 1px solid #919191;
+        padding: 0.5em;
+
+        .empty-chat-message {
+            text-align: center;
+            margin: 1em 0;
+        }
+        .chat-message {
+            overflow: auto;
+            padding: 0.3em;
+            width: calc(100% - 2em);
+            margin: 7px 1.5em 7px 0.5em;
+            border-radius: 5px;
+            background: #F0F4F8;
+
+            &.my {
+                margin-left: 1.5em;
+                margin-right: 0.5em;
+                background: #C7EDFC;
+            }
+        }
+    }
+    .textarea-container {
+        position: relative;
+        overflow: auto;
+    }
+    .textarea-container,
+    .md-has-textarea {
+        margin-top: 0;
+    }
+    .send-chat-message-btn {
+        position: absolute;
+        cursor: pointer;
+        height: 2em;
+        bottom: 5px;
+        right: 20px;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

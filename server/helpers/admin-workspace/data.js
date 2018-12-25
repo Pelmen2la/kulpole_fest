@@ -66,9 +66,12 @@ function createCRUD(dataModelName) {
 
     module.exports[`get${capName}`] = function(id, clb) {
         const lookupArgs = getDataModelLookupArgs(dataModelName);
-        const objectId = idToObj(id);
-        model.aggregate(lookupArgs.concat([{$match: {_id: objectId}}])).exec().then((data) => {
-            clb(data.length ? data[0] : {});
+        // GUID to object ID
+        if(id.length >= 24) {
+            id = idToObj(id);
+        }
+        model.aggregate(lookupArgs.concat([{$match: {$or: [{_id: id}, {uid: id}]}}])).exec().then((data) => {
+            clb(data.length ? data[0] : null);
         });
     };
 

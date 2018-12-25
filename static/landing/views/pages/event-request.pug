@@ -1,8 +1,8 @@
 extends ../index
 
 block main-content
-  div.event-request-page-wrapper
-    h1= 'Заявка на ' + eventData.title
+  div.event-request-page-wrapper(data-event-request-id=eventRequestData._id)
+    h1= 'Заявка на ' + eventRequestData.eventData[0].title
     if eventRequestData.role
       b
         | Роль
@@ -16,6 +16,19 @@ block main-content
       li
         each photoUrl in eventRequestData.photoUrls
           img(src=photoUrl)
+
+    div.event-request-chat-container
+      h2 Переписка
+      div.chat-messages-container()
+        if !eventRequestData.chatMessages.length
+          p.empty-chat-message Переписка пуста
+        each chatMessage in eventRequestData.chatMessages
+          div(class='chat-message ' + (chatMessage.owner === 'user' ? 'my' : ''))!= chatMessage.text.replace(/\n/g, '<br/>')
+      div.textarea-container.with-fly-label
+        textarea(maxlength="500" rows="5")#ChatMessageTextarea
+        label(for="ChatMessageTextarea") Текст сообщения
+        img.send-chat-message-btn(src='/resources/icons/scroll.svg', v-if='newMessageText.length', @click='trySendChatMessage')
+
 
 
 block after-index-script
