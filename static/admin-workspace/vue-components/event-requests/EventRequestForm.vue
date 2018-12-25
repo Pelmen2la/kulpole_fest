@@ -32,6 +32,23 @@
         <md-checkbox v-model="eventRequestData.isArmorAccepted" @change="(val) => onAcceptedCheckboxChange('isArmorAccepted', val)">
             Доспех допущен
         </md-checkbox>
+        <div class="chat-container">
+            <h2>Переписка</h2>
+            <div ref="ChatMessagesContainer" class="chat-messages-container">
+                <p class="empty-chat-message" v-if="!eventRequestData.chatMessages.length">Переписка пуста</p>
+                <div :class="'chat-message ' + message.owner" v-for="message in eventRequestData.chatMessages">
+                    {{ message.text }}
+                </div>
+            </div>
+            <md-field>
+                <label>Написать сообщение</label>
+                <md-textarea v-model="newMessageText" @keyup.ctrl.enter="trySendChatMessage"></md-textarea>
+                <img src="/resources/icons/scroll.svg" class="send-chat-message-btn" 
+                     v-if="newMessageText.length"
+                     @click="trySendChatMessage"
+                />
+            </md-field>
+        </div>
     </div>
 </template>
 
@@ -52,7 +69,10 @@
                 isSaveInProgress: false,
                 isDataLoadingInProcess: false,
                 backUrl: '/main/eventRequests',
-                eventRequestData: {},
+                eventRequestData: {
+                    chatMessages: []
+                },
+                newMessageText: '',
                 openedImageUrl: ''
             }
         },
@@ -77,6 +97,18 @@
                 var updateData = {};
                 updateData[propName] = val;
                 utils.doDataRequest('/admin/workspace/eventRequests/' + this.eventRequestId, 'PUT', updateData, () => null);
+            },
+            trySendChatMessage: function() {
+                if(!this.newMessageText) {
+                    return;
+                }
+                const postData = { text: this.newMessageText };
+                utils.doDataRequest('/admin/workspace/send_event_request_msg/' + this.eventRequestId, 'POST', postData, (res) => {
+                    if(res.success) {
+                        this.eventRequestData.chatMessages.push(res.messageData);
+                        this.newMessageText = '';
+                    }
+                });
             }
         },
         computed: {},
@@ -98,6 +130,57 @@
                 img {
                     height: 150px;
                     cursor: pointer;
+                }
+            }
+        }
+        .chat-container {
+            max-width: 1024px;
+            margin: 0 auto;
+            overflow: auto;
+
+            h2 {
+                font-size: 1.2em;
+                font-weight: bold;
+                margin: 1em 0;
+            }
+            .chat-messages-container {
+                max-height: 600px;
+                overflow-y: auto;
+                border: 1px solid #919191;
+                border-bottom: none;
+                padding: 0.5em;
+
+                .empty-chat-message {
+                    text-align: center;
+                    margin: 1em 0;
+                }
+                .chat-message {
+                    overflow: auto;
+                    padding: 0.3em;
+                    width: calc(100% - 2em);
+                    margin: 5px 0;
+                    border-radius: 5px;
+
+                    &.admin {
+                        margin-left: 1.5em;
+                        margin-right: 0.5em;
+                        background: #C7EDFC;
+                    }
+                }
+            }
+            .md-has-textarea {
+                margin-top: 0;
+            }
+            .send-chat-message-btn {
+                position: absolute;
+                cursor: pointer;
+                height: 2em;
+                bottom: 5px;
+                right: 20px;
+                opacity: 0.5;
+
+                &:hover {
+                    opacity: 1;
                 }
             }
         }

@@ -6,6 +6,10 @@ module.exports = function(app) {
             multName = cfg.hasMultipleName ? key + 's' : key;
         createCRUD(app, key, multName);
     }
+
+    app.post('/admin/workspace/send_event_request_msg/:eventRequestId', function(req, res, next) {
+        dataHelper.addEventRequestMessage(req.params.eventRequestId, req.body.text, 'admin', (result) => res.send(result));
+    });
 };
 
 function createCRUD(app, mnemonic, multMnemonic) {
