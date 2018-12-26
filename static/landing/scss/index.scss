@@ -27,6 +27,8 @@ body {
 
 .top-menu {
     padding: $standard-paddings;
+    margin-bottom: 1em;
+    border-bottom: 1px solid $main-dark-blue-color;
 
     li {
         font-size: 1.3em;
@@ -52,6 +54,9 @@ body {
                 left: 0;
                 background: $main-dark-blue-color;
             }
+        }
+        &:hover {
+            transform: scale(1.1);
         }
     }
 }
