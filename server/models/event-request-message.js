@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const utils = require('./../common/utils');
 
 const EventRequestMessage = new mongoose.Schema({
-    uid: { type: String, default: utils.getUid() },
+    uid: {type: String, default: utils.getUid},
     eventRequestId: mongoose.Schema.ObjectId,
     owner: String,
     date: {type: Date, default: Date.now},
