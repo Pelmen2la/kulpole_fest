@@ -3,24 +3,21 @@ import utils from './../utils'
 
 (window.addEventRequestModule = function() {
     function init() {
-        prepareFileInputs();
+        prepareFileInput();
         utils.addInputOnChangeListeners(document.getElementById('RequestTextTextarea'), ensureAuthButtonState);
     };
 
-    function prepareFileInputs() {
-        const inputWrappers = document.querySelectorAll('.file-input-wrapper');
-        inputWrappers.forEach((wrapper) => {
-            const fileInput = wrapper.querySelector('input[type=file]'),
-                notificationSpan = wrapper.querySelector('.notification-text'),
-                uploadedFilesTextSpan = wrapper.querySelector('.uploaded-files-text');
-            wrapper.querySelector('button').addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', () => {
-                const filesArr = Array.prototype.slice.call(fileInput.files),
-                    notificationText = getFileInputInvalidText();
-                uploadedFilesTextSpan.innerHTML = 'Загружены фотографии: ' + filesArr.map((f) => f.name).join(', ') + '.';
-                notificationSpan.innerHTML = notificationText;
-                ensureAuthButtonState();
-            });
+    function prepareFileInput() {
+        const wrapper = document.querySelector('.file-input-wrapper'),
+            fileInput = wrapper.querySelector('input[type=file]'),
+            notificationSpan = wrapper.querySelector('.notification-text'),
+            uploadedFilesTextSpan = wrapper.querySelector('.uploaded-files-text');
+        fileInput.addEventListener('change', () => {
+            const filesArr = Array.prototype.slice.call(fileInput.files),
+                notificationText = getFileInputInvalidText();
+            uploadedFilesTextSpan.innerHTML = 'Загружены фотографии: ' + filesArr.map((f) => f.name).join(', ') + '.';
+            notificationSpan.innerHTML = notificationText;
+            ensureAuthButtonState();
         });
     };
     function getFileInputInvalidText() {

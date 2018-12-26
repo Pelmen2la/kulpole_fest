@@ -12,7 +12,7 @@ module.exports = {
 function tryUploadFiles(relativeTargetPath, req, clb) {
     if(req.file) {
         tryUploadFileCore(relativeTargetPath, req.file, clb);
-    } if(req.files) {
+    } else if(req.files) {
         var index = 0,
             fileUrls = [],
             uploadFn = function() {
@@ -49,8 +49,6 @@ function tryUploadFileCore(relativeTargetPath, file, clb) {
     src.pipe(dest);
 
     src.on('end', function() {
-        const relativePath = relativeTargetPath;
-
         ensureDirExists(IMAGES_FOLDER_PATH, relativeTargetPath);
         while(fs.existsSync(getTargetPath())) {
             suffix = parseInt(suffix + 1);

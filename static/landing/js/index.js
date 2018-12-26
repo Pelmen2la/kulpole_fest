@@ -5,6 +5,7 @@ import './../scss/index.scss'
 
     function init() {
         prepareTextInputs();
+        prepareFileInputs();
     };
     function prepareTextInputs() {
         var ensureNotEmptyClsFn = (input) => input.classList[input.value ? 'add' : 'remove']('not-empty');
@@ -14,6 +15,13 @@ import './../scss/index.scss'
                 i.addEventListener(event, () => ensureNotEmptyClsFn(i));
                 ensureNotEmptyClsFn(i);
             })});
+        });
+    };
+    function prepareFileInputs() {
+        const inputWrappers = document.querySelectorAll('.file-input-wrapper');
+        inputWrappers.forEach((wrapper) => {
+            const fileInput = wrapper.querySelector('input[type=file]');
+            wrapper.querySelector('button').addEventListener('click', () => fileInput.click());
         });
     };
 

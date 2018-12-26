@@ -12,10 +12,19 @@ block main-content
     p= eventRequestData.text
     b
       | Фотографии
-    ul.photo-list
+    ul.photo-list#EventRequestPhotoList
       li
         each photoUrl in eventRequestData.photoUrls
           img(src=photoUrl)
+
+    div.file-input-wrapper
+      input(type="file" name="photo" accept=".jpg, .jpeg, .png")
+      button(type="button")
+        | Загрузить фотографию
+      p.text-container
+        span.uploaded-files-text
+        br
+        span.notification-text
 
     div.event-request-chat-container
       h2 Переписка

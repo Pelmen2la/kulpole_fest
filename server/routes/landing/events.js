@@ -44,13 +44,13 @@ module.exports = function(app) {
         if(utils.checkAuth(req, res)) {
             const eventRequestUid = commonUtils.getUid();
             const eventUid = req.params.eventUid;
-            const targetPath = path.join('event-requests', eventUid, eventRequestUid);
             EventModel.findOne({uid: eventUid}, function(err, eventData) {
                 if(err || !eventData) {
                     res.redirect('/');
                     return;
                 }
 
+                const targetPath = getEventRequestPhotoFolderPath(eventUid, eventRequestUid);
                 uploadHelper.tryUploadFiles(targetPath, req, (photoUrls) => {
                     var eventRequestData = req.body;
                     Object.assign(eventRequestData, {
@@ -90,6 +90,18 @@ module.exports = function(app) {
             }
         });
     });
+
+    app.post('/event_request/:eventRequestUid/add_photo', upload.single('photo'), function(req, res, next) {
+        var eventRequestId = req.params.eventRequestUid;
+        checkEventRequestAccess(req, res, eventRequestId).then((result) => {
+            const eventRequest = result.eventRequestData;
+            const targetPath = getEventRequestPhotoFolderPath(eventRequest.uid, eventRequest.eventData[0].uid);
+            uploadHelper.tryUploadFiles(targetPath, req, (photoUrl) => {
+                const photoUrls = (eventRequest.photoUrls || []).concat(photoUrl);
+                adminDataHelper.updateEventRequest(eventRequestId, { photoUrls }, () => res.send(photoUrl));
+            });
+        });
+    });
 };
 
 function addRequestsStatesToEvents(logedInUserData, eventsData) {
@@ -125,6 +137,10 @@ function checkEventRequestAccess(req, res, eventRequestId) {
             });
         }
     });
+};
+
+function getEventRequestPhotoFolderPath(eventUid, eventRequestUid) {
+    return path.join('event-requests', eventUid, eventRequestUid);
 };
 
 function getYearFilter(year) {

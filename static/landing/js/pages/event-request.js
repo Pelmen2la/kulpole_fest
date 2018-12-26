@@ -7,11 +7,20 @@ import './../../../common/scss/event-request-chat.scss'
 
     function init() {
         prepareChat();
+        preparePhotoFileInput();
+
     };
 
     const eventRequestId = document.querySelector('.event-request-page-wrapper').dataset.eventRequestId;
     const chatMessagesContainer = document.querySelector('.chat-messages-container');
     const chatTextarea = document.getElementById('ChatMessageTextarea');
+    const fileInputWrapper = document.querySelector('.file-input-wrapper');
+    const fileInput = fileInputWrapper.querySelector('input[type=file]');
+    const photoList = document.getElementById('EventRequestPhotoList');
+
+    function preparePhotoFileInput() {
+        fileInput.addEventListener('change', uploadFile);
+    };
 
     function prepareChat() {
         utils.addInputOnChangeListeners(chatTextarea, (e) => {
@@ -23,6 +32,32 @@ import './../../../common/scss/event-request-chat.scss'
         scrollChatMessagesContainerToEnd();
     };
 
+    function uploadFile() {
+        var xhr = new XMLHttpRequest();
+        var data = new FormData();
+        const file = fileInput.files[0];
+
+        xhr.onprogress = function (e) {
+        };
+
+        xhr.onload = function (e) {
+            const imageUrl = e.target.responseText;
+            if(imageUrl) {
+                photoList.innerHTML += `<li><img src="${imageUrl}"/></li>`;
+            }
+        };
+
+        xhr.onerror = function (e) {
+        };
+
+        xhr.open('post', `/event_request/${eventRequestId}/add_photo`, true);
+
+        xhr.setRequestHeader('X-File-Name', file.name);
+        xhr.setRequestHeader('X-File-Size', file.size);
+        xhr.setRequestHeader('X-File-Type', file.type);
+        data.append('photo', file, file.name);
+        xhr.send(data);
+    };
     function trySendChatMessage() {
         const text = chatTextarea.value;
         if(text) {

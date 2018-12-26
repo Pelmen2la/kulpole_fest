@@ -1,11 +1,1 @@
 @import './../variables.scss';
-
-.file-input-wrapper {
-    input[type=file] {
-        display: none;
-    }
-    .notification-text {
-        color: $main-error-red-color;
-    }
-    margin: 1em 0;
-}

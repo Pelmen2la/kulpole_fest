@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const utils = require('./../common/utils');
 
 const EventRequest = new mongoose.Schema({
-    uid: { type: String, default: utils.getUid() },
+    uid: {type: String, default: utils.getUid()},
     userId: mongoose.Schema.ObjectId,
     eventId: mongoose.Schema.ObjectId,
     role: String,
     text: String,
-    photoUrls: [String],
+    photoUrls: {type: [String], default: []},
     status: {type: String, default: 'new'},
-    isCostumeAccepted: { type: Boolean, default: false },
-    isArmorAccepted: { type: Boolean, default: false },
+    isCostumeAccepted: {type: Boolean, default: false},
+    isArmorAccepted: {type: Boolean, default: false},
     date: {type: Date, default: Date.now}
 });
 
