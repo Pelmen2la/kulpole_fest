@@ -26,7 +26,7 @@ module.exports = function(app) {
     });
 
     app.get('/registration', function(req, res, next) {
-        res.send(utils.getPageHtml('registration', req, {}));
+        utils.getPageHtml('registration', req, {}).then((pageHtml) => res.send(pageHtml));
     });
 
     app.post('/registration', function(req, res, next) {
@@ -49,10 +49,10 @@ module.exports = function(app) {
     });
 
     function sendAuthPage(req, res, params) {
-        res.send(utils.getPageHtml('auth', req, params));
+        utils.getPageHtml('auth', req, params).then((pageHtml) => res.send(pageHtml));
     };
     function sendRegistrationPage(req, res, params) {
-      res.send(utils.getPageHtml('registration', req, params));
+        utils.getPageHtml('registration', req, params).then((pageHtml) => res.send(pageHtml));
     };
     function addAuthUserInfoToSession(req, userData) {
         req.session.logedInUserData = userData;

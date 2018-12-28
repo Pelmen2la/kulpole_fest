@@ -17,13 +17,14 @@ module.exports = function(app) {
         NewsModel.find({}, null, dataQueryOptions, function (err, newsData) {
             newsData.forEach((news) => news.dateString = commonUtils.formatDbDateToWeb(news.date));
             NewsModel.countDocuments({}, function(err, totalCount) {
-                res.send(utils.getPageHtml('news-list-page', req, {
+                const params = {
                     newsData: newsData || [],
                     pagingParams: {
                         pageIndex,
                         pagesCount: Math.ceil(totalCount / NEWS_PAGE_SIZE)
                     }
-                }));
+                };
+                utils.getPageHtml('news-list-page', req, params).then((pageHtml) => res.send(pageHtml));
             });
         });
     });
@@ -34,9 +35,7 @@ module.exports = function(app) {
             if(err || !newsData) {
                 res.redirect('/news');
             } else {
-                res.send(utils.getPageHtml('news-page', req, {
-                    newsData: newsData || {}
-                }));
+                utils.getPageHtml('news-page', req, {newsData: newsData || {}}).then((pageHtml) => res.send(pageHtml));
             }
         });
     });

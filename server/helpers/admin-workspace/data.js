@@ -94,13 +94,16 @@ function getDataModel(name) {
 };
 
 function getDataModelSpecificFilters(modelName, params) {
-    var filters = {};
+    var filters = [];
     if(modelName == 'user') {
-        filters = getSearchFilterConditions(['name', 'surname', 'club', 'email', 'phone'], params.searchText);
+        filters.push(getSearchFilterConditions(['name', 'surname', 'club', 'email', 'phone'], params.searchText || ''));
     } else if(modelName == 'eventRequest') {
-        filters = getSearchFilterConditions(['eventData.title', 'userData.name', 'userData.surname'], params.searchText);
+        filters.push(getSearchFilterConditions(['eventData.title', 'userData.name', 'userData.surname'], params.searchText || ''));
+        if(params.userId) {
+            filters.push({userId: params.userId});
+        }
     }
-    return filters;
+    return filters.length ? {$and: filters} : {};
 };
 
 function getDataModelLookupArgs(modelName) {
@@ -142,8 +145,8 @@ function getSearchFilterConditions(searchFields, searchText) {
 
 function getListQueryOptions(params) {
     return {
-        skip: ROWS_ON_PAGE * params.pageIndex,
-        limit: ROWS_ON_PAGE
+        skip: params.pageIndex  ? ROWS_ON_PAGE * params.pageIndex : 0,
+        limit: params.pageIndex  ? ROWS_ON_PAGE : 999999999
     };
 };
 

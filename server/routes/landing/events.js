@@ -23,9 +23,7 @@ module.exports = function(app) {
                 }
             });
             addRequestsStatesToEvents(req.session.logedInUserData, eventsData).then((eventsData) => {
-                res.send(utils.getPageHtml('events', req, {
-                    eventsData: eventsData || []
-                }));
+                utils.getPageHtml('events', req, {eventsData: eventsData || []}).then((pageHtml) => res.send(pageHtml));
             });
         });
     });
@@ -33,9 +31,7 @@ module.exports = function(app) {
     app.get('/events/:eventUid/request/new', function(req, res) {
         if(utils.checkAuth(req, res)) {
             EventModel.findOne({uid: req.params.eventUid}, function(err, eventData) {
-                res.send(utils.getPageHtml('add-event-request', req, {
-                    eventData: eventData || []
-                }));
+                utils.getPageHtml('add-event-request', req, {eventData: eventData || []}).then((pageHtml) => res.send(pageHtml));
             });
         }
     });
@@ -70,9 +66,7 @@ module.exports = function(app) {
     app.get('/event_request/:eventRequestUid', function(req, res, next) {
         checkEventRequestAccess(req, res, req.params.eventRequestUid).then((result) => {
             if(result.isHasAccess) {
-                res.send(utils.getPageHtml('event-request', req, {
-                    eventRequestData: result.eventRequestData
-                }));
+                utils.getPageHtml('event-request', req, {eventRequestData: result.eventRequestData}).then((pageHtml) => res.send(pageHtml));
             } else {
                 res.redirect('/events');
             }

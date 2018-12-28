@@ -38,6 +38,11 @@ html(ng-app='jeweleryApp')
         li
           a(href='/events')
             | Фестивали
+        if hasEventRequests
+          li
+            a(href='/user_event_requests/')
+              | Ваши заявки
+
 
       div.main-content-wrapper
         block main-content

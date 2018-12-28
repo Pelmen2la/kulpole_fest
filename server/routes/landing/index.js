@@ -10,9 +10,7 @@ module.exports = function(app) {
 
     app.get('/', function(req, res, next) {
         NewsModel.find({}, null, { sort: { 'date': -1 }, limit: 3 }, function(err, newsData) {
-            res.send(utils.getPageHtml('main', req, {
-                newsData: newsData || []
-            }));
+            utils.getPageHtml('main', req, {newsData: newsData || []}).then((pageHtml) => res.send(pageHtml));
         });
     });
 
