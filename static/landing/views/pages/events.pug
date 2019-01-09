@@ -1,9 +1,16 @@
 extends ./../index.pug
 
 block main-content
+  h1
+    | Фестивали
+
   div.events-page-wrapper
-    h1
-      | Фестивали
+    if yearList.length
+      ul.year-list
+        each year in yearList
+          li(class=year == eventsYear ? 'selected': '')
+            a(href='/events/' + year)= year
+
     if eventsData.length
       each eventData, index in eventsData
         div.event-header

@@ -14,18 +14,11 @@ const START_YEAR = 2018;
 
 module.exports = function(app) {
     app.get('/events', function(req, res, next) {
-        const nowYear = (new Date).getFullYear();
-        EventModel.find(getYearFilter(nowYear), function(err, eventsData) {
-            eventsData.forEach((event) => {
-                event.dateString = commonUtils.formatDbDateToWeb(event.date);
-                if(event.date < new Date) {
-                    event.set('hasPassed', true);
-                }
-            });
-            addRequestsStatesToEvents(req.session.logedInUserData, eventsData).then((eventsData) => {
-                utils.getPageHtml('events', req, {eventsData: eventsData || []}).then((pageHtml) => res.send(pageHtml));
-            });
-        });
+        sendEventsPageHtml(req, res, (new Date).getFullYear());
+    });
+
+    app.get('/events/:year', function(req, res, next) {
+        sendEventsPageHtml(req, res, parseInt(req.params.year));
     });
 
     app.get('/events/:eventUid/request/new', function(req, res) {
@@ -111,6 +104,27 @@ module.exports = function(app) {
     });
 };
 
+function sendEventsPageHtml(req, res, eventsYear) {
+    getEventYears().then((yearList) => {
+        if(isNaN(eventsYear) || yearList.indexOf(eventsYear) === -1) {
+            res.redirect('/events');
+            return;
+        }
+        EventModel.find(getYearFilter(eventsYear), function(err, eventsData) {
+            eventsData.forEach((event) => {
+                event.dateString = commonUtils.formatDbDateToWeb(event.date);
+                if(event.date < new Date) {
+                    event.set('hasPassed', true);
+                }
+            });
+            addRequestsStatesToEvents(req.session.logedInUserData, eventsData).then((eventsData) => {
+                const params = {eventsYear, yearList, eventsData: eventsData || []};
+                utils.getPageHtml('events', req, params).then((pageHtml) => res.send(pageHtml));
+            });
+        });
+    });
+};
+
 function addRequestsStatesToEvents(logedInUserData, eventsData) {
     return new Promise((resolve) => {
         if(!logedInUserData) {
@@ -133,6 +147,18 @@ function addRequestsStatesToEvents(logedInUserData, eventsData) {
     });
 };
 
+function getEventYears() {
+    return new Promise((resolve) => {
+        EventModel.aggregate([
+            {$project: {year: {$year: '$date'}}},
+            {$sort: {year: 1}},
+            {$group: {_id: null, years: {$addToSet: "$year"}}}
+        ]).exec().then(function(data) {
+            resolve(data.length ? data[0].years : [(new Date).getFullYear()]);
+        });
+    });
+};
+
 function checkEventRequestAccess(req, res, eventRequestId) {
     return new Promise((resolve) => {
         if(utils.checkAuth(req, res)) {
@@ -151,7 +177,7 @@ function getEventRequestPhotoFolderPath(eventUid, eventRequestUid) {
 };
 
 function getYearFilter(year) {
-    const fromDate = moment(year + '-01-31T00:00:00');
+    const fromDate = moment(year + '-01-01T00:00:00');
     const toDate = moment(year + '-12-31T23:59:59');
     return { $and: [{ date : {$gt: fromDate}}, { date: {$lt: toDate}}]};
 };

@@ -1,6 +1,25 @@
 @import './../variables.scss';
 
 .events-page-wrapper {
+    .year-list {
+        text-align: left;
+        padding-bottom: 1em;
+        margin-bottom: 1em;
+        border-bottom: 1px solid $main-dark-blue-color;
+
+        li {
+            display: inline-block;
+            margin-right: 7px;
+
+            &:not(.selected):hover {
+                text-decoration: underline;
+            }
+            &.selected a {
+                font-size: 1.2em;
+                font-weight: bold;
+            }
+        }
+    }
     .event-header {
         overflow: hidden;
 
@@ -8,7 +27,6 @@
             .date {
                 display: inline-block;
                 float: left;
-                color: $main-dark-blue-color;
             }
             .request-link {
                 display: inline-block;
