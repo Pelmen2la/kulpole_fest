@@ -1,0 +1,30 @@
+@import './../variables.scss';
+
+.event-request-list {
+    overflow: auto;
+
+    li {
+        display: inline-block;
+        width: 25%;
+        padding: 0.5em;
+        box-sizing: border-box;
+
+        a {
+            display: block;
+            text-align: center;
+            padding: 0.5em;
+            border: 1px solid $main-light-blue-color;
+            color: black;
+
+            span {
+                display: block;
+            }
+        }
+
+        &:hover {
+            a {
+                border-color: $main-dark-blue-color;
+            }
+        }
+    }
+}

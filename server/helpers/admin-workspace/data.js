@@ -100,7 +100,7 @@ function getDataModelSpecificFilters(modelName, params) {
     } else if(modelName == 'eventRequest') {
         filters.push(getSearchFilterConditions(['eventData.title', 'userData.name', 'userData.surname'], params.searchText || ''));
         if(params.userId) {
-            filters.push({userId: params.userId});
+            filters.push({userId: idToObj(params.userId)});
         }
     }
     return filters.length ? {$and: filters} : {};

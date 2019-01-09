@@ -15,6 +15,7 @@ module.exports = {
         "landing-events":  './landing/js/pages/events.js',
         "landing-add-event-request":  './landing/js/pages/add-event-request.js',
         "landing-event-request":  './landing/js/pages/event-request.js',
+        "landing-event-requests":  './landing/js/pages/event-requests.js',
     },
     output: { path: __dirname + '/static/dist/js/', filename: '[name].js'},
     module: {

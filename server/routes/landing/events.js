@@ -96,6 +96,19 @@ module.exports = function(app) {
             });
         });
     });
+
+    app.get('/user_event_requests/', function(req, res, next) {
+        if(utils.checkAuth(req, res)) {
+            adminDataHelper.getEventRequestList({userId: req.session.logedInUserData._id}, (eventRequestList) => {
+                const params = {
+                    eventRequestList: eventRequestList.content,
+                    showEventName: true,
+                    showUserName: false
+                };
+                utils.getPageHtml('event-requests', req, params).then((pageHtml) => res.send(pageHtml));
+            });
+        }
+    });
 };
 
 function addRequestsStatesToEvents(logedInUserData, eventsData) {
