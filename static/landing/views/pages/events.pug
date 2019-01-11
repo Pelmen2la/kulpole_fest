@@ -13,11 +13,12 @@ block main-content
 
     if eventsData.length
       each eventData, index in eventsData
+        - var hasPassed = new Date > new Date(eventData.event.date)
         div.event-header
           h2= eventData.event.title
           div.event-header-bottom-container
             b.date= eventData.event.dateString
-            if logedInUserData
+            if logedInUserData && (!hasPassed || eventData.request)
               - var linkText = eventData.request ? 'Открыть вашу заявку' : 'Подать заявку'
               - var linkSrc = eventData.request ? '/event_request/' + eventData.request.uid : '/events/' + eventData.event.uid + '/request/new'
               a.request-link(href=linkSrc)= linkText

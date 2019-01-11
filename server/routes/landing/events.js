@@ -113,9 +113,6 @@ function sendEventsPageHtml(req, res, eventsYear) {
         EventModel.find(getYearFilter(eventsYear), function(err, eventsData) {
             eventsData.forEach((event) => {
                 event.dateString = commonUtils.formatDbDateToWeb(event.date);
-                if(event.date < new Date) {
-                    event.set('hasPassed', true);
-                }
             });
             addRequestsStatesToEvents(req.session.logedInUserData, eventsData).then((eventsData) => {
                 const params = {eventsYear, yearList, eventsData: eventsData || []};
