@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const moment = require('moment');
+const mongoose = require('mongoose');
 
 module.exports = {
     sendHtmlFileResponse: function(res, fileUrl, prepareHtmlFn) {
@@ -10,7 +11,8 @@ module.exports = {
         });
     },
     getUid,
-    formatDbDateToWeb
+    formatDbDateToWeb,
+    addModelKeysToObject
 };
 
 function getUid() {
@@ -23,4 +25,11 @@ function getUid() {
 
 function formatDbDateToWeb(date) {
     return moment(date).format('DD.MM.YYYY');
+};
+
+function addModelKeysToObject(obj, modelName) {
+    let eventRequestModelKeys = {};
+    mongoose.model(modelName).schema.eachPath((key) => eventRequestModelKeys[key] = 1);
+    Object.assign(obj, eventRequestModelKeys);
+    return obj;
 };

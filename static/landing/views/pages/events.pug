@@ -12,18 +12,18 @@ block main-content
             a(href='/events/' + year)= year
 
     if eventsData.length
-      each eventData, index in eventsData
-        - var hasPassed = new Date > new Date(eventData.event.date)
+      each eventData in eventsData
+        - var hasPassed = new Date > new Date(eventData.date)
         div.event-header
-          h2= eventData.event.title
+          h2= eventData.title
           div.event-header-bottom-container
-            b.date= eventData.event.dateString
-            if logedInUserData && (!hasPassed || eventData.request)
-              - var linkText = eventData.request ? 'Открыть вашу заявку' : 'Подать заявку'
-              - var linkSrc = eventData.request ? '/event_request/' + eventData.request.uid : '/events/' + eventData.event.uid + '/request/new'
+            b.date= formatFns.formatDbDateToWeb(eventData.date)
+            if logedInUserData && (!hasPassed || eventData.eventRequest)
+              - var linkText = eventData.eventRequest ? 'Открыть вашу заявку' : 'Подать заявку'
+              - var linkSrc = eventData.eventRequest ? '/event_request/' + eventData.eventRequest.uid : '/events/' + eventData.uid + '/request/new'
               a.request-link(href=linkSrc)= linkText
 
-        div.event-html-wrapper!= eventData.event.html
+        div.event-html-wrapper!= eventData.html
 
 block after-index-script
   script(src='/dist/js/landing-events.js')

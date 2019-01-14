@@ -1,6 +1,7 @@
 const pug = require('pug');
 const path = require('path');
 const adminDataHelper = require('./../admin-workspace/data');
+const commonUtils = require('./../../common/utils');
 
 module.exports = {
     getPageHtml,
@@ -10,6 +11,9 @@ module.exports = {
 function getPageHtml(pageName, req, params = {}) {
     return new Promise((resolve) => {
         new Promise((extendParamsResolve) => {
+            params.formatFns = {
+                formatDbDateToWeb: commonUtils.formatDbDateToWeb
+            };
             if(req.session.logedInUserData) {
                 const userData = req.session.logedInUserData;
                 params.logedInUserData = {

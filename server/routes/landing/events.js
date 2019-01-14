@@ -2,8 +2,8 @@ const utils = require('./../../helpers/landing/utils');
 const commonUtils = require('./../../common/utils');
 const moment = require('moment');
 const mongoose = require('mongoose');
-const EventModel = mongoose.model('event');
-const EventRequestModel = mongoose.model('event_request');
+const eventModel = mongoose.model('event');
+const eventRequestModel = mongoose.model('event_request');
 const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 const uploadHelper = require('./../../helpers/upload');
@@ -23,7 +23,7 @@ module.exports = function(app) {
 
     app.get('/events/:eventUid/request/new', function(req, res) {
         if(utils.checkAuth(req, res)) {
-            EventModel.findOne({uid: req.params.eventUid}, function(err, eventData) {
+            eventModel.findOne({uid: req.params.eventUid}, function(err, eventData) {
                 utils.getPageHtml('add-event-request', req, {eventData: eventData || []}).then((pageHtml) => res.send(pageHtml));
             });
         }
@@ -33,7 +33,7 @@ module.exports = function(app) {
         if(utils.checkAuth(req, res)) {
             const eventRequestUid = commonUtils.getUid();
             const eventUid = req.params.eventUid;
-            EventModel.findOne({uid: eventUid}, function(err, eventData) {
+            eventModel.findOne({uid: eventUid}, function(err, eventData) {
                 if(err || !eventData) {
                     res.redirect('/');
                     return;
@@ -48,7 +48,7 @@ module.exports = function(app) {
                         eventId: eventData.get('_id'),
                         userId: new mongoose.Types.ObjectId(req.session.logedInUserData._id)
                     });
-                    (new EventRequestModel(eventRequestData)).save((err, data) => {
+                    (new eventRequestModel(eventRequestData)).save((err, data) => {
                         res.redirect('/')
                     });
                 });
@@ -110,14 +110,45 @@ function sendEventsPageHtml(req, res, eventsYear) {
             res.redirect('/events');
             return;
         }
-        EventModel.find(getYearFilter(eventsYear), function(err, eventsData) {
-            eventsData.forEach((event) => {
-                event.dateString = commonUtils.formatDbDateToWeb(event.date);
-            });
-            addRequestsStatesToEvents(req.session.logedInUserData, eventsData).then((eventsData) => {
-                const params = {eventsYear, yearList, eventsData: eventsData || []};
-                utils.getPageHtml('events', req, params).then((pageHtml) => res.send(pageHtml));
-            });
+
+        getEventsData(req, eventsYear).then((eventsData) => {
+            const params = {eventsYear, yearList, eventsData: eventsData || []};
+            utils.getPageHtml('events', req, params).then((pageHtml) => res.send(pageHtml));
+        });
+    });
+};
+
+function getEventsData(req, eventsYear) {
+    return new Promise((resolve) => {
+        let aggArgs = [{$match: getYearFilter(eventsYear)}, {$sort: {date: -1}}];
+        if(req.session.logedInUserData) {
+            aggArgs = aggArgs.concat([{
+                $lookup: {
+                    from: eventRequestModel.collection.collectionName,
+                    localField: '_id',
+                    foreignField: 'eventId',
+                    as: 'eventRequests'
+                }
+            }, {
+                $project: commonUtils.addModelKeysToObject({
+                    eventRequests: {
+                        $filter: {
+                            input: '$eventRequests',
+                            as: 'er',
+                            cond: {
+                                $eq: ['$$er.userId', mongoose.Types.ObjectId(req.session.logedInUserData._id)]
+                            }
+                        }
+                    }
+                }, 'event')
+            }, {
+                $project: commonUtils.addModelKeysToObject({
+                    eventRequest: {$arrayElemAt: ["$eventRequests", 0]}
+                }, 'event')
+            }]);
+        }
+        eventModel.aggregate(aggArgs).exec().then(function(eventsData) {
+            resolve(eventsData)
         });
     });
 };
@@ -130,7 +161,7 @@ function addRequestsStatesToEvents(logedInUserData, eventsData) {
         }
         const eventIds = eventsData.map((e) => e.get('id'));
         const filters = { $and: [{ userId: logedInUserData._id }, { eventId: { $in: eventIds }}]};
-        EventRequestModel.find(filters, (err, eventRequestData) => {
+        eventRequestModel.find(filters, (err, eventRequestData) => {
             eventsData = eventsData.map((event) => {
                 var eventRequest = eventRequestData.find((r) => r.get('eventId') == event.get('id'));
                 return {
@@ -146,7 +177,7 @@ function addRequestsStatesToEvents(logedInUserData, eventsData) {
 
 function getEventYears() {
     return new Promise((resolve) => {
-        EventModel.aggregate([
+        eventModel.aggregate([
             {$project: {year: {$year: '$date'}}},
             {$sort: {year: 1}},
             {$group: {_id: null, years: {$addToSet: "$year"}}}
@@ -174,7 +205,7 @@ function getEventRequestPhotoFolderPath(eventUid, eventRequestUid) {
 };
 
 function getYearFilter(year) {
-    const fromDate = moment(year + '-01-01T00:00:00');
-    const toDate = moment(year + '-12-31T23:59:59');
+    const fromDate = moment(year + '-01-01T00:00:00').toDate();
+    const toDate = moment(year + '-12-31T23:59:59').toDate();
     return { $and: [{ date : {$gt: fromDate}}, { date: {$lt: toDate}}]};
 };
