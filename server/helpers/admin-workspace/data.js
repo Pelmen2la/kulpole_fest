@@ -6,7 +6,7 @@ const eventRequestMessageModel = require('./../../models/event-request-message')
 const newsModel = require('./../../models/news');
 
 
-const ROWS_ON_PAGE = 1;
+const ROWS_ON_PAGE = 20;
 
 const dataModelsCfg = {
     user: {
@@ -29,16 +29,17 @@ const dataModelsCfg = {
 
 module.exports = {
     dataModelsCfg,
-    addEventRequestMessage
+    addEventRequestMessage,
+    updateEventRequestLastActionDate,
+    updateEventRequestLastOpenDate
 };
 
 for(var key in dataModelsCfg) {
-    createCRUD(key);
+    createCRUD(key, dataModelsCfg[key].model);
 }
 
-function createCRUD(dataModelName) {
-    const capName = dataModelName[0].toUpperCase() + dataModelName.substring(1),
-        model = getDataModel(dataModelName);
+function createCRUD(dataModelName, model) {
+    const capName = dataModelName[0].toUpperCase() + dataModelName.substring(1);
 
     module.exports[`get${capName}List`] = function(params, clb) {
         const filters = getDataModelSpecificFilters(dataModelName, params),
@@ -160,12 +161,30 @@ function addEventRequestMessage(eventRequestId, text, owner, clb) {
             owner: owner,
             text
         };
-        (new eventRequestMessageModel(newMessageData)).save((err, messageData) => {
-            clb({success: true, messageData});
+        updateEventRequestLastActionDate(eventRequestId, owner).then(() => {
+            (new eventRequestMessageModel(newMessageData)).save((err, messageData) => {
+                clb({success: true, messageData});
+            });
         });
     });
 };
 
+function updateEventRequestLastActionDate(eventRequestId, actionOwner) {
+    return getUpdateEventRequestDatePromise(eventRequestId, actionOwner + 'LastActionDate');
+};
+
+function updateEventRequestLastOpenDate(eventRequestId, actionOwner) {
+    return getUpdateEventRequestDatePromise(eventRequestId, actionOwner + 'LastOpenDate');
+};
+
+function getUpdateEventRequestDatePromise(eventRequestId, dateType) {
+    return new Promise((resolve) => {
+        let updateData = {};
+        updateData[dateType] = new Date;
+        eventRequestModel.findOneAndUpdate({_id: idToObj(eventRequestId)}, updateData, resolve);
+    });
+};
+
 function idToObj(id) {
-    return mongoose.Types.ObjectId(id);
+    return id instanceof mongoose.Types.ObjectId ? id : mongoose.Types.ObjectId(id);
 };

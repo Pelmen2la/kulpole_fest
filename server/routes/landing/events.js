@@ -57,8 +57,9 @@ module.exports = function(app) {
     });
 
     app.get('/event_request/:eventRequestUid', function(req, res, next) {
-        checkEventRequestAccess(req, res, req.params.eventRequestUid).then((result) => {
-            if(result.isHasAccess) {
+        tryGetEventRequestData(req, res, req.params.eventRequestUid).then((result) => {
+            if(result.eventRequestData) {
+                adminDataHelper.updateEventRequestLastOpenDate(result.eventRequestData._id, 'user');
                 utils.getPageHtml('event-request', req, {eventRequestData: result.eventRequestData}).then((pageHtml) => res.send(pageHtml));
             } else {
                 res.redirect('/events');
@@ -67,8 +68,8 @@ module.exports = function(app) {
     });
 
     app.post('/event_request/:eventRequestUid/send_msg', function(req, res, next) {
-        checkEventRequestAccess(req, res, req.params.eventRequestUid).then((result) => {
-            if(result.isHasAccess) {
+        tryGetEventRequestData(req, res, req.params.eventRequestUid).then((result) => {
+            if(result.eventRequestData) {
                 adminDataHelper.addEventRequestMessage(result.eventRequestData._id, req.body.text, 'user', (result) => {
                     res.send(result);
                 });
@@ -80,13 +81,18 @@ module.exports = function(app) {
 
     app.post('/event_request/:eventRequestUid/add_photo', upload.single('photo'), function(req, res, next) {
         var eventRequestId = req.params.eventRequestUid;
-        checkEventRequestAccess(req, res, eventRequestId).then((result) => {
-            const eventRequest = result.eventRequestData;
-            const targetPath = getEventRequestPhotoFolderPath(eventRequest.uid, eventRequest.eventData[0].uid);
-            uploadHelper.tryUploadFiles(targetPath, req, (photoUrl) => {
-                const photoUrls = (eventRequest.photoUrls || []).concat(photoUrl);
-                adminDataHelper.updateEventRequest(eventRequestId, { photoUrls }, () => res.send(photoUrl));
-            });
+        tryGetEventRequestData(req, res, eventRequestId).then((result) => {
+            const eventRequestData = result.eventRequestData;
+            if(eventRequestData) {
+                const targetPath = getEventRequestPhotoFolderPath(eventRequestData.uid, eventRequestData.eventData[0].uid);
+                uploadHelper.tryUploadFiles(targetPath, req, (photoUrl) => {
+                    const photoUrls = (eventRequestData.photoUrls || []).concat(photoUrl);
+                    adminDataHelper.updateEventRequest(eventRequestId, {photoUrls}, () => res.send(photoUrl));
+                    adminDataHelper.updateEventRequestLastActionDate(eventRequestId, 'user');
+                });
+            } else {
+                res.send('');
+            }
         });
     });
 
@@ -187,12 +193,12 @@ function getEventYears() {
     });
 };
 
-function checkEventRequestAccess(req, res, eventRequestId) {
+function tryGetEventRequestData(req, res, eventRequestId) {
     return new Promise((resolve) => {
         if(utils.checkAuth(req, res)) {
             adminDataHelper.getEventRequest(eventRequestId, (eventRequestData) => {
                 resolve({
-                    isHasAccess: eventRequestData && eventRequestData.userId == req.session.logedInUserData._id,
+                    canEdit: eventRequestData && eventRequestData.userId == req.session.logedInUserData._id,
                     eventRequestData
                 });
             });

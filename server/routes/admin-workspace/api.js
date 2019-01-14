@@ -19,7 +19,10 @@ function createCRUD(app, mnemonic, multMnemonic) {
         dataHelper['get' + capMnemonic + 'List'](req.query, (result) => res.json(result));
     });
     app.get('/admin/workspace/' + multMnemonic + '/:' + idParamName, function(req, res, next) {
-       dataHelper['get' + capMnemonic](req.params[idParamName], (result) =>  res.json(result));
+        dataHelper['get' + capMnemonic](req.params[idParamName], (result) => {
+            res.json(result);
+            onOpen(mnemonic, result);
+        });
     });
     app.post('/admin/workspace/' + multMnemonic + '/', function(req, res, next) {
         dataHelper['add' + capMnemonic](req.body, (result) => {
@@ -28,6 +31,7 @@ function createCRUD(app, mnemonic, multMnemonic) {
     });
     app.put('/admin/workspace/' + multMnemonic + '/:' + idParamName, function(req, res, next) {
         dataHelper['update' + capMnemonic](req.params[idParamName], req.body, (result) => {
+            onUpdate(mnemonic, result);
             res.json({success: true, data: result});
         });
     });
@@ -36,4 +40,16 @@ function createCRUD(app, mnemonic, multMnemonic) {
             res.json({success: true});
         });
     });
-}
+};
+
+function onOpen(modelName, entryData) {
+    if(modelName === 'eventRequest') {
+        dataHelper.updateEventRequestLastOpenDate(entryData._id, 'admin');
+    }
+};
+
+function onUpdate(modelName, entryData) {
+    if(modelName === 'eventRequest') {
+        dataHelper.updateEventRequestLastActionDate(entryData.get('id'), 'admin');
+    }
+};
