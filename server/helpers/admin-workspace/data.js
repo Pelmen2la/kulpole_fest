@@ -98,6 +98,8 @@ function getDataModelSpecificFilters(modelName, params) {
     var filters = [];
     if(modelName == 'user') {
         filters.push(getSearchFilterConditions(['name', 'surname', 'club', 'email', 'phone'], params.searchText || ''));
+    } else if(modelName == 'news') {
+        filters.push(getSearchFilterConditions(['title', 'html'], params.searchText || ''));
     } else if(modelName == 'eventRequest') {
         filters.push(getSearchFilterConditions(['eventData.title', 'userData.name', 'userData.surname'], params.searchText || ''));
         if(params.userId) {

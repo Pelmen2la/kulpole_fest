@@ -1,7 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
-            pageStateName="newsPage"
+            :pageStateName="pageStateName"
             dataTypeMultipleName="news"
             dataTypeMultipleText="новостей"
             :getLoadDataExtraParams="getLoadDataExtraParams"
@@ -9,7 +9,7 @@
         <template slot="filters_container">
             <md-field>
                 <label>Поиск</label>
-                <md-input @keyup="onSearchTextChange" v-model="searchText"/>
+                <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
         </template>
     </ListPage>
@@ -25,13 +25,17 @@
         },
         data() {
             return {
-                searchText: ''
+                pageStateName: 'newsPage',
+                loadDataTimeoutId: null
             }
         },
         methods: {
+            getPageState: function() {
+                return this.$store.state[this.pageStateName];
+            },
             getLoadDataExtraParams: function() {
                 return {
-                    searchText: this.searchText
+                    searchText: this.getPageState().searchText
                 };
             },
             getGridColumnCfg: function() {

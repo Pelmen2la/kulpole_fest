@@ -1,7 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
-            pageStateName="usersPage"
+            :pageStateName="pageStateName"
             dataTypeMultipleName="users"
             dataTypeMultipleText="пользователей"
             :getLoadDataExtraParams="getLoadDataExtraParams"
@@ -9,7 +9,7 @@
         <template slot="filters_container">
             <md-field>
                 <label>Поиск</label>
-                <md-input @keyup="onSearchTextChange" v-model="searchText"/>
+                <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
         </template>
     </ListPage>
@@ -25,14 +25,17 @@
         },
         data() {
             return {
-                searchText: '',
+                pageStateName: 'usersPage',
                 loadDataTimeoutId: null
             }
         },
         methods: {
+            getPageState: function() {
+                return this.$store.state[this.pageStateName];
+            },
             getLoadDataExtraParams: function() {
                 return {
-                    searchText: this.searchText
+                    searchText: this.getPageState().searchText
                 };
             },
             getGridColumnCfg: function() {

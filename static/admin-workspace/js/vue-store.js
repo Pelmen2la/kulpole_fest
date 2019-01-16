@@ -6,16 +6,19 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         usersPage: {
-            grid: getGridInitialState()
+            grid: getGridInitialState(),
+            searchText: ''
         },
         newsPage: {
-            grid: getGridInitialState()
+            grid: getGridInitialState(),
+            searchText: ''
         },
         eventsPage: {
             grid: getGridInitialState()
         },
         eventRequestsPage: {
-            grid: getGridInitialState()
+            grid: getGridInitialState(),
+            searchText: ''
         },
     },
     mutations: {

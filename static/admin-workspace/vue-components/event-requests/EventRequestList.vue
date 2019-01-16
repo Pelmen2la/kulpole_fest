@@ -1,7 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
-            pageStateName="eventRequestsPage"
+            :pageStateName="eventRequestsPage"
             dataTypeMultipleName="eventRequests"
             dataTypeMultipleText="заявок"
             :hideAddButton="true"
@@ -26,14 +26,17 @@
         },
         data() {
             return {
-                searchText: '',
+                pageStateName: 'eventRequestsPage',
                 loadDataTimeoutId: null
             }
         },
         methods: {
+            getPageState: function() {
+                return this.$store.state[this.pageStateName];
+            },
             getLoadDataExtraParams: function() {
                 return {
-                    searchText: this.searchText
+                    searchText: this.getPageState().searchText
                 };
             },
             getGridColumnCfg: function() {

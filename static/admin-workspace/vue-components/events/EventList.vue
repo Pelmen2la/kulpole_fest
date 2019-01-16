@@ -1,7 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
-            pageStateName="eventsPage"
+            :pageStateName="pageStateName"
             dataTypeMultipleName="events"
             dataTypeMultipleText="событий"
             :gridColumnsCfg="getGridColumnCfg()">
@@ -18,7 +18,7 @@
         },
         data() {
             return {
-                searchText: ''
+                pageStateName: 'eventsPage'
             }
         },
         methods: {
