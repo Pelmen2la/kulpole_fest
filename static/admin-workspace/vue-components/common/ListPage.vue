@@ -6,10 +6,10 @@
         <slot name="filters_container"></slot>
         <MaterialGrid
                 :columnConfig="gridColumnsCfg"
-                :data="gridData"
+                :data="getGridState().data"
                 :hasEdit="true"
                 :hasDelete="true"
-                :pagingProps="gridPagingProps"
+                :pagingProps="getGridState()"
                 @editBtnClick="onGridEditBtnClick"
                 @deleteBtnClick="onGridDeleteBtnClick"
                 @pagerPageIndexChange="onGridPagerPageIndexChange"
@@ -26,29 +26,34 @@
         components: {
             MaterialGrid
         },
-        props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg', 'hideAddButton'],
-        data() {
-            return {
-                gridPagingProps: {
-                    pageIndex: 0,
-                    pagesCount: 0
-                },
-                gridData: []
-            }
-        },
+        props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg', 'hideAddButton', 'pageStateName'],
         methods: {
             loadData: function() {
                 var url = utils.stringFormat('/admin/workspace/{0}?{1}',
                     this.dataTypeMultipleName, this.buildLoadDataParamsString());
                 this.$emit('startLoading', {text: 'Загрузка списка ' + this.dataTypeMultipleText});
                 utils.doRequest(url, {}, function(data) {
-                    this.gridData = data.content;
-                    this.gridPagingProps.pagesCount = data.totalPages;
+                    this.updatePageState({
+                        data: data.content,
+                        pagesCount: data.totalPages
+                    });
                     this.$emit('endLoading');
                 }.bind(this));
             },
+            updatePageState: function(newState) {
+                this.$store.commit('changeGridState', {
+                    pageName: this.pageStateName,
+                    newState
+                });
+            },
+            getPageState: function() {
+                return this.$store.state[this.pageStateName];
+            },
+            getGridState: function() {
+                return this.getPageState().grid;
+            },
             buildLoadDataParamsString: function() {
-                var paramsString = 'pageIndex=' + this.gridPagingProps.pageIndex,
+                var paramsString = 'pageIndex=' + this.getGridState().pageIndex,
                     extraParams = this.getLoadDataExtraParams ? this.getLoadDataExtraParams() : null;
                 if(extraParams) {
                     for(var key in extraParams) {
@@ -72,7 +77,9 @@
                 this.loadPageByIndex(pageIndex);
             },
             loadPageByIndex: function(index) {
-                this.gridPagingProps.pageIndex = index;
+                this.updatePageState({
+                    pageIndex: index
+                });
                 this.loadData();
             }
         },

@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './../vue-components/App'
 import Main from '../vue-components/common/Main.vue'
@@ -9,6 +10,8 @@ import EventList from '../vue-components/events/EventList.vue'
 import EventForm from '../vue-components/events/EventForm.vue'
 import EventRequestList from '../vue-components/event-requests/EventRequestList.vue'
 import EventRequestForm from '../vue-components/event-requests/EventRequestForm.vue'
+
+Vue.use(VueRouter);
 
 const router = new VueRouter({
     routes: [

@@ -1,6 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
+            pageStateName="newsPage"
             dataTypeMultipleName="news"
             dataTypeMultipleText="новостей"
             :getLoadDataExtraParams="getLoadDataExtraParams"

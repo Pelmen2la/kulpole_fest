@@ -1,6 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
+            pageStateName="eventRequestsPage"
             dataTypeMultipleName="eventRequests"
             dataTypeMultipleText="заявок"
             :hideAddButton="true"

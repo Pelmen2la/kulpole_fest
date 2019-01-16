@@ -1,6 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
+            pageStateName="eventsPage"
             dataTypeMultipleName="events"
             dataTypeMultipleText="событий"
             :gridColumnsCfg="getGridColumnCfg()">

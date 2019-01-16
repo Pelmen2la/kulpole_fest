@@ -1,6 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
+            pageStateName="usersPage"
             dataTypeMultipleName="users"
             dataTypeMultipleText="пользователей"
             :getLoadDataExtraParams="getLoadDataExtraParams"
