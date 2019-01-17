@@ -4,6 +4,7 @@ const eventModel = require('./../../models/event');
 const eventRequestModel = require('./../../models/event-request');
 const eventRequestMessageModel = require('./../../models/event-request-message');
 const newsModel = require('./../../models/news');
+const commonUtils = require('./../../common/utils');
 
 
 const ROWS_ON_PAGE = 20;
@@ -44,7 +45,7 @@ function createCRUD(dataModelName, model) {
     module.exports[`get${capName}List`] = function(params, clb) {
         const filters = getDataModelSpecificFilters(dataModelName, params),
             queryOpts = getListQueryOptions(params),
-            lookupArgs = getDataModelLookupArgs(dataModelName),
+            lookupArgs = getListDataModelLookupArgs(dataModelName),
             filterArg = {$match: filters},
             aggArgs = lookupArgs.concat([{$skip: queryOpts.skip}, {$limit: queryOpts.limit}, filterArg]),
             countAggArgs = lookupArgs.concat([filterArg, {$group: {_id: null, count: {$sum: 1}}}]);
@@ -66,7 +67,7 @@ function createCRUD(dataModelName, model) {
     };
 
     module.exports[`get${capName}`] = function(id, clb) {
-        const lookupArgs = getDataModelLookupArgs(dataModelName);
+        const lookupArgs = getSingleRecordLookupArgs(dataModelName);
         // GUID to object ID
         if(id.length >= 24) {
             id = idToObj(id);
@@ -109,7 +110,35 @@ function getDataModelSpecificFilters(modelName, params) {
     return filters.length ? {$and: filters} : {};
 };
 
-function getDataModelLookupArgs(modelName) {
+function getListDataModelLookupArgs(modelName) {
+    if(modelName == 'eventRequest') {
+        return [{
+            $lookup: {
+                from: eventModel.collection.collectionName,
+                localField: 'eventId',
+                foreignField: '_id',
+                as: 'eventData'
+            }
+        }, {
+            $lookup: {
+                from: userModel.collection.collectionName,
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'userData'
+            }
+        }, {
+            $project: commonUtils.addModelKeysToObject({
+                dateDiff: { $subtract: ['$adminLastOpenDate', '$userLastActionDate'] },
+                chatMessages: '$chatMessages',
+                eventData: '$eventData',
+                userData: '$userData'
+            }, 'event_request')
+        }, {$sort: {'dateDiff': 1}}]
+    }
+    return [];
+};
+
+function getSingleRecordLookupArgs(modelName) {
     if(modelName == 'eventRequest') {
         return [{
             $lookup: {
@@ -132,6 +161,13 @@ function getDataModelLookupArgs(modelName) {
                 foreignField: 'eventRequestId',
                 as: 'chatMessages'
             }
+        }, {
+            $project: commonUtils.addModelKeysToObject({
+                dateDiff: {$subtract: ['$adminLastOpenDate', '$userLastActionDate']},
+                chatMessages: '$chatMessages',
+                eventData: '$eventData',
+                userData: '$userData'
+            }, 'event_request')
         }, {$sort: {'chatMessages.date': -1}}]
     }
     return [];

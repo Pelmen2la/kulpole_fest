@@ -1,7 +1,7 @@
 <template>
     <ListPage
             ref="ListPage"
-            :pageStateName="eventRequestsPage"
+            :pageStateName="pageStateName"
             dataTypeMultipleName="eventRequests"
             dataTypeMultipleText="заявок"
             :hideAddButton="true"
@@ -10,7 +10,7 @@
         <template slot="filters_container">
             <md-field>
                 <label>Поиск</label>
-                <md-input @keyup="onSearchTextChange" v-model="searchText"/>
+                <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
         </template>
     </ListPage>
