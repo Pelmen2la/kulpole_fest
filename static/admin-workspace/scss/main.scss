@@ -34,23 +34,10 @@ b {
     font-size: 1.25em;
 }
 
-.md-list-item {
-    &.junior .md-list-item-text {
-        color: #64DD17
-    }
-    &.regular .md-list-item-text {
-        color: #FFD800;
-    }
-    &.senior .md-list-item-text {
-        color: red;
-    }
-}
-
 .link-like-button {
     color: blue;
     cursor: pointer;
     font-size: 1em;
-    font-family: "Times New Roman";
     &:hover {
         text-decoration: underline;
     }
@@ -61,6 +48,15 @@ b {
     height: 5px;
 }
 
-.invisible-link {
-    display: none;
+.left-right-container {
+    > * {
+        width: 45%;
+
+        &:first-child {
+            float: left;
+        }
+        &:last-child {
+            float: right;
+        }
+    }
 }

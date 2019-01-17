@@ -106,6 +106,13 @@ function getDataModelSpecificFilters(modelName, params) {
         if(params.userId) {
             filters.push({userId: idToObj(params.userId)});
         }
+        ['isCostumeAccepted', 'isArmorAccepted'].forEach((propName) => {
+            if(params[propName] !== undefined) {
+                let filter = {};
+                filter[propName] = params[propName] === 'yes';
+                filters.push(filter);
+            }
+        });
     }
     return filters.length ? {$and: filters} : {};
 };

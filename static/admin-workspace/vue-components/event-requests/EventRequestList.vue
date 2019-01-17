@@ -12,6 +12,24 @@
                 <label>Поиск</label>
                 <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
+            <div class="left-right-container">
+                <md-field>
+                    <label>Фильтр по костюму</label>
+                    <md-select v-model="getPageState().isCostumeAcceptedFilter" @md-selected="onComboFilterChange">
+                        <md-option v-for="(filter, index) in wearFilterComboData" :value="filter.id" :key="index">
+                            {{filter.name}}
+                        </md-option>
+                    </md-select>
+                </md-field>
+                <md-field>
+                    <label>Фильтр по доспеху</label>
+                    <md-select v-model="getPageState().isArmorAcceptedFilter" @md-selected="onComboFilterChange">
+                        <md-option v-for="(filter, index) in wearFilterComboData" :value="filter.id" :key="index">
+                            {{filter.name}}
+                        </md-option>
+                    </md-select>
+                </md-field>
+            </div>
         </template>
     </ListPage>
 </template>
@@ -27,7 +45,12 @@
         data() {
             return {
                 pageStateName: 'eventRequestsPage',
-                loadDataTimeoutId: null
+                loadDataTimeoutId: null,
+                wearFilterComboData: [
+                    {id: 'all', name: 'Все'},
+                    {id: 'yes', name: 'Допущен'},
+                    {id: 'no', name: 'Не допущен'}
+                ]
             }
         },
         methods: {
@@ -35,9 +58,16 @@
                 return this.$store.state[this.pageStateName];
             },
             getLoadDataExtraParams: function() {
-                return {
-                    searchText: this.getPageState().searchText
+                const state = this.getPageState();
+                var params = {
+                    searchText: state.searchText
                 };
+                ['isCostumeAcceptedFilter', 'isArmorAcceptedFilter'].forEach((propName) => {
+                    if(state[propName] !== 'all') {
+                        params[propName.replace('Filter', '')] = state[propName];
+                    }
+                });
+                return params;
             },
             getGridColumnCfg: function() {
                 return [
@@ -58,6 +88,9 @@
             onSearchTextChange: function() {
                 window.clearTimeout(this.loadDataTimeoutId);
                 this.loadDataTimeoutId = window.setTimeout(this.loadData.bind(this), 300);
+            },
+            onComboFilterChange: function() {
+                this._isMounted && this.loadData();
             },
             loadData: function() {
                 this.$refs.ListPage.loadPageByIndex(0);

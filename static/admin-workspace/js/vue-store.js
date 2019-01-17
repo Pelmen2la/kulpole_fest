@@ -18,7 +18,9 @@ export default new Vuex.Store({
         },
         eventRequestsPage: {
             grid: getGridInitialState(),
-            searchText: ''
+            searchText: '',
+            isCostumeAcceptedFilter: 'all',
+            isArmorAcceptedFilter: 'all',
         },
     },
     mutations: {
