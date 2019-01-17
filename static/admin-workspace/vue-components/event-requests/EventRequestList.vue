@@ -81,7 +81,8 @@
                         dataIndex: 'userData',
                         renderer: (rec, val) => val.length ? val[0].name + ' ' + val[0].surname : 'Участник удален'
                     },
-                    {text: 'Статус', dataIndex: 'status'},
+                    {text: 'Костюм допущен', dataIndex: 'isCostumeAccepted', renderType: 'boolIcon'},
+                    {text: 'Доспех допущен', dataIndex: 'isArmorAccepted', renderType: 'boolIcon'},
                     {text: 'Дата', dataIndex: 'date'}
                 ];
             },

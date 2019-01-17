@@ -45,27 +45,36 @@
             }
         },
         methods: {
-            onEditBtnClick: function(rec) {
+            onEditBtnClick(rec) {
                 this.$emit('editBtnClick', rec);
             },
-            onDeleteBtnClick: function(rec) {
+            onDeleteBtnClickn(rec) {
                 this.$emit('deleteBtnClick', rec);
             },
-            getCellInnerHtml: function(columnCfg, rec) {
+            getCellInnerHtml(columnCfg, rec) {
                 var val = rec[columnCfg.dataIndex];
                 if(columnCfg.renderer) {
                     return columnCfg.renderer(rec, val);
-                } else {
-                    return val;
                 }
+                if(columnCfg.renderType) {
+                    return this.getTypeCellRender(columnCfg.renderType, val);
+                }
+                return val;
             },
-            onRowClick: function(index, rec) {
+            getTypeCellRender(type, val) {
+                if(type === 'boolIcon') {
+                    let imageName = val ? 'check-green' : 'cross-red';
+                    return `<img style="height: 16px;" src="/resources/icons/${imageName}.svg"/>`
+                }
+                return val;
+            },
+            onRowClick(index, rec) {
                 if(this.onRowSelect) {
                     this.selectedRowIndex = index;
                     this.onRowSelect(index, rec);
                 }
             },
-            onPagerPageIndexChange: function(index) {
+            onPagerPageIndexChange(index) {
                 this.$emit('pagerPageIndexChange', index);
             }
         },
