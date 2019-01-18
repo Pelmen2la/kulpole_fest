@@ -4,7 +4,7 @@
             <md-list class="nav">
                 <md-list-item>
                     <a class="logo-cnt" href="/">
-                        <img src="/resources/images/logo.png"/>
+                        <img src="/resources/images/logo-big-white.png"/>
                     </a>
                 </md-list-item>
                 <md-list-item v-for="(itemCfg, itemIndex) in menuItemsCfg" :key="itemIndex">
@@ -42,7 +42,7 @@
                     {
                         text: 'Заявки',
                         url: '/main/eventRequests',
-                        iconName: 'sword-with-shield'
+                        iconName: 'sword'
                     }
                 ]
             }

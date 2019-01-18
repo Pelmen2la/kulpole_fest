@@ -3,6 +3,7 @@
 .header {
     background: $main-light-blue-color;
     padding: $standard-paddings;
+    font-size: 1.3em;
 
     .top-panel {
         overflow: auto;
@@ -11,8 +12,13 @@
         .logo {
             display: inline-block;
 
+            img {
+                float: left;
+                height: 2.4375em;
+                margin-right: 0.5em;
+            }
             .fest-name {
-                font-size: calc(1em + 7px);
+                font-size: 1.4375em;
             }
         }
 

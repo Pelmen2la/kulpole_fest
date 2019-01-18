@@ -9,6 +9,7 @@ html(ng-app='jeweleryApp')
       div.header
         div.top-panel
           a.logo(href="/")
+            img(src="/resources/images/logo.png")
             span
               | Официальный сайт исторического фестиваля
             br
@@ -17,9 +18,9 @@ html(ng-app='jeweleryApp')
 
           div.auth-container
             if logedInUserData
-              a(href='/profile')= logedInUserData.fullName
+              a.text-with-icon.knight-head-2-black-icon(href='/profile')= logedInUserData.fullName
               div.separator
-              a(href="/logout")
+              a.text-with-icon.logout-icon(href="/logout")
                 | Выйти
             else
               a(href="/auth")
@@ -33,14 +34,14 @@ html(ng-app='jeweleryApp')
           a(href='/')
             | Главная
         li
-          a(href='/news')
+          a.text-with-icon.parchment-black-icon(href='/news')
             | Новости
         li
-          a(href='/events')
+          a.text-with-icon.swords-cross-black-icon(href='/events')
             | Фестивали
         if hasEventRequests
           li
-            a(href='/user_event_requests/')
+            a.text-with-icon.sword-black-icon(href='/user_event_requests/')
               | Ваши заявки
 
 
