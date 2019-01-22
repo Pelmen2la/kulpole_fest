@@ -12,6 +12,7 @@ import EventList from '../vue-components/events/EventList.vue'
 import EventForm from '../vue-components/events/EventForm.vue'
 import EventRequestList from '../vue-components/event-requests/EventRequestList.vue'
 import EventRequestForm from '../vue-components/event-requests/EventRequestForm.vue'
+import ClubList from '../vue-components/clubs/ClubList.vue'
 
 Vue.use(VueRouter);
 
@@ -30,36 +31,31 @@ const router = new VueRouter({
                     component: Main,
                     children: [
                         {
-                            path: '/main/users',
-                            component: UserList,
-                            name: 'Список пользователей'
+                            path: '/main/eventRequests',
+                            component: EventRequestList,
+                            name: 'Список заявок'
                         },
                         {
-                            path: '/main/users/edit/:userId',
-                            component: UserForm,
+                            path: '/main/eventRequests/edit/:eventRequestId',
+                            component: EventRequestForm,
                             props: true,
-                            name: 'Редактирование пользователя'
+                            name: 'Просмотр заявки'
                         },
                         {
-                            path: '/main/users/create',
-                            component: UserForm,
-                            name: 'Создание пользователя'
+                            path: '/main/events',
+                            component: EventList,
+                            name: 'Список событий'
                         },
                         {
-                            path: '/main/systemUsers',
-                            component: SystemUserList,
-                            name: 'Список членов исторической комиссии'
-                        },
-                        {
-                            path: '/main/systemUsers/edit/:systemUserId',
-                            component: SystemUserForm,
+                            path: '/main/events/edit/:eventId',
+                            component: EventForm,
                             props: true,
-                            name: 'Редактирование члена исторической комиссии'
+                            name: 'Редактирование события'
                         },
                         {
-                            path: '/main/systemUsers/create',
-                            component: SystemUserForm,
-                            name: 'Создание члена исторической комиссии'
+                            path: '/main/events/create',
+                            component: EventForm,
+                            name: 'Создание события'
                         },
                         {
                             path: '/main/news',
@@ -78,31 +74,41 @@ const router = new VueRouter({
                             name: 'Создание новости'
                         },
                         {
-                            path: '/main/events',
-                            component: EventList,
-                            name: 'Список новостей'
+                            path: '/main/users',
+                            component: UserList,
+                            name: 'Список пользователей'
                         },
                         {
-                            path: '/main/events/edit/:eventId',
-                            component: EventForm,
+                            path: '/main/users/edit/:userId',
+                            component: UserForm,
                             props: true,
-                            name: 'Редактирование события'
+                            name: 'Редактирование пользователя'
                         },
                         {
-                            path: '/main/events/create',
-                            component: EventForm,
-                            name: 'Создание события'
+                            path: '/main/users/create',
+                            component: UserForm,
+                            name: 'Создание пользователя'
                         },
                         {
-                            path: '/main/eventRequests',
-                            component: EventRequestList,
-                            name: 'Список заявок'
+                            path: '/main/clubs',
+                            component: ClubList,
+                            name: 'Список клубов'
                         },
                         {
-                            path: '/main/eventRequests/edit/:eventRequestId',
-                            component: EventRequestForm,
+                            path: '/main/systemUsers',
+                            component: SystemUserList,
+                            name: 'Список членов исторической комиссии'
+                        },
+                        {
+                            path: '/main/systemUsers/edit/:systemUserId',
+                            component: SystemUserForm,
                             props: true,
-                            name: 'Просмотр заявки'
+                            name: 'Редактирование члена исторической комиссии'
+                        },
+                        {
+                            path: '/main/systemUsers/create',
+                            component: SystemUserForm,
+                            name: 'Создание члена исторической комиссии'
                         }
                     ]
                 }

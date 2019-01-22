@@ -45,6 +45,11 @@
                         iconName: 'knight-head-2'
                     },
                     {
+                        text: 'Клубы',
+                        url: '/main/clubs',
+                        iconName: 'tent'
+                    },
+                    {
                         text: 'Комиссия',
                         url: '/main/systemUsers',
                         iconName: 'centurion'

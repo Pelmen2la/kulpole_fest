@@ -5,6 +5,7 @@ const eventModel = require('./../../models/event');
 const eventRequestModel = require('./../../models/event-request');
 const eventRequestMessageModel = require('./../../models/event-request-message');
 const newsModel = require('./../../models/news');
+const clubModel = require('./../../models/club');
 const commonUtils = require('./../../common/utils');
 
 
@@ -29,6 +30,10 @@ const dataModelsCfg = {
     },
     systemUser: {
         model: systemUserModel,
+        hasMultipleName: true
+    },
+    club: {
+        model: clubModel,
         hasMultipleName: true
     }
 };
@@ -106,6 +111,8 @@ function getDataModelSpecificFilters(modelName, params) {
         filters.push(getSearchFilterConditions(['name', 'surname', 'club', 'email', 'phone'], params.searchText || ''));
     } else if(modelName == 'news') {
         filters.push(getSearchFilterConditions(['title', 'html'], params.searchText || ''));
+    } else if(modelName == 'club') {
+        filters.push(getSearchFilterConditions(['name'], params.searchText || ''));
     } else if(modelName == 'eventRequest') {
         filters.push(getSearchFilterConditions(['eventData.title', 'userData.name', 'userData.surname'], params.searchText || ''));
         if(params.userId) {

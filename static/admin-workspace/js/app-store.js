@@ -25,6 +25,11 @@ export default new Vuex.Store({
             isCostumeAcceptedFilter: 'all',
             isArmorAcceptedFilter: 'all',
         },
+        clubsPage: {
+            grid: getGridInitialState(),
+            searchText: '',
+            isClubConfirmedFilter: 'all',
+        },
     },
     mutations: {
         changeGridState(state, {pageName, newState}) {

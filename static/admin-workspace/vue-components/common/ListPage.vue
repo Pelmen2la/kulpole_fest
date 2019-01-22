@@ -6,8 +6,8 @@
         <slot name="filters_container"></slot>
         <MaterialGrid
                 :columnConfig="gridColumnsCfg"
-                :data="getGridState().data"
-                :hasEdit="true"
+                :data="gridData"
+                :hasEdit="!hideGridEditBtn"
                 :hasDelete="true"
                 :pagingProps="getGridState()"
                 @editBtnClick="onGridEditBtnClick"
@@ -26,7 +26,8 @@
         components: {
             MaterialGrid
         },
-        props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg', 'hideAddButton', 'pageStateName'],
+        props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg', 'hideAddButton',
+            'hideGridEditBtn', 'pageStateName'],
         methods: {
             loadData: function() {
                 var url = utils.stringFormat('/admin/workspace/{0}?{1}',
@@ -81,6 +82,11 @@
                     pageIndex: index
                 });
                 this.loadData();
+            }
+        },
+        computed: {
+            gridData() {
+                return this.getGridState().data;
             }
         },
         mounted: function() {

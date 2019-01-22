@@ -48,7 +48,7 @@
             onEditBtnClick(rec) {
                 this.$emit('editBtnClick', rec);
             },
-            onDeleteBtnClickn(rec) {
+            onDeleteBtnClick(rec) {
                 this.$emit('deleteBtnClick', rec);
             },
             getCellInnerHtml(columnCfg, rec) {
