@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const userModel = require('./../../models/user');
+const systemUserModel = require('./../../models/system-user');
 const eventModel = require('./../../models/event');
 const eventRequestModel = require('./../../models/event-request');
 const eventRequestMessageModel = require('./../../models/event-request-message');
@@ -24,6 +25,10 @@ const dataModelsCfg = {
     },
     eventRequest: {
         model: eventRequestModel,
+        hasMultipleName: true
+    },
+    systemUser: {
+        model: systemUserModel,
         hasMultipleName: true
     }
 };

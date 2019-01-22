@@ -2,8 +2,10 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './../vue-components/App'
 import Main from '../vue-components/common/Main.vue'
-import UsersList from '../vue-components/users/UserList.vue'
+import UserList from '../vue-components/users/UserList.vue'
 import UserForm from '../vue-components/users/UserForm.vue'
+import SystemUserList from '../vue-components/system-users/SystemUserList.vue'
+import SystemUserForm from '../vue-components/system-users/SystemUserForm.vue'
 import NewsList from '../vue-components/news/NewsList.vue'
 import NewsForm from '../vue-components/news/NewsForm.vue'
 import EventList from '../vue-components/events/EventList.vue'
@@ -29,7 +31,7 @@ const router = new VueRouter({
                     children: [
                         {
                             path: '/main/users',
-                            component: UsersList,
+                            component: UserList,
                             name: 'Список пользователей'
                         },
                         {
@@ -42,6 +44,22 @@ const router = new VueRouter({
                             path: '/main/users/create',
                             component: UserForm,
                             name: 'Создание пользователя'
+                        },
+                        {
+                            path: '/main/systemUsers',
+                            component: SystemUserList,
+                            name: 'Список членов исторической комиссии'
+                        },
+                        {
+                            path: '/main/systemUsers/edit/:systemUserId',
+                            component: SystemUserForm,
+                            props: true,
+                            name: 'Редактирование члена исторической комиссии'
+                        },
+                        {
+                            path: '/main/systemUsers/create',
+                            component: SystemUserForm,
+                            name: 'Создание члена исторической комиссии'
                         },
                         {
                             path: '/main/news',

@@ -1,4 +1,5 @@
-var utils = require('./../../common/utils');
+const utils = require('./../../common/utils');
+const systemUserModel = require('./../../models/system-user');
 
 const ADMIN_LOGIN_URL = '/admin/auth';
 
@@ -6,16 +7,29 @@ module.exports = function(app) {
     app.all('/admin/workspace', authMiddleware);
 
     app.post(ADMIN_LOGIN_URL, function(req, res) {
-        if(req.body.login != global.adminLogin || req.body.password != global.adminPassword) {
-            sendAuthPage(res, 'Не правильное имя пользователя или пароль');
-        } else {
-            req.session.isLogedIn = true;
+        const login = req.body.login;
+        const password = req.body.password;
+        if(login == global.adminLogin && password == global.adminPassword) {
+            req.session.logedInUserData = {
+                isAdmin: true
+            };
             res.redirect('/admin/workspace#/main/users');
+        } else {
+            systemUserModel.findOne({login, password}, (err, systemUserData) => {
+                if(err || !systemUserData) {
+                    sendAuthPage(res, 'Не правильное имя пользователя или пароль');
+                } else {
+                    req.session.logedInUserData = Object.assign(systemUserData.toObject(), {
+                        isAdmin: false
+                    });
+                    res.redirect('/admin/workspace#/main/users');
+                }
+            });
         }
     });
 
     app.get('/admin/logout', function (req, res) {
-        req.session.isLogedIn = true;
+        delete req.session.logedInUserData;
         res.redirect(ADMIN_LOGIN_URL);
     });
 
@@ -24,7 +38,7 @@ module.exports = function(app) {
     });
 
     function authMiddleware(req, res, next) {
-        if(req.session.isLogedIn) {
+        if(req.session.logedInUserData) {
             next();
         } else {
             res.redirect(ADMIN_LOGIN_URL);

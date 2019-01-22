@@ -25,14 +25,9 @@
             return {
                 menuItemsCfg: [
                     {
-                        text: 'Пользователи',
-                        url: '/main/users',
-                        iconName: 'knight-head-2'
-                    },
-                    {
-                        text: 'Новости',
-                        url: '/main/news',
-                        iconName: 'parchment'
+                        text: 'Заявки',
+                        url: '/main/eventRequests',
+                        iconName: 'sword'
                     },
                     {
                         text: 'События',
@@ -40,9 +35,19 @@
                         iconName: 'swords-cross'
                     },
                     {
-                        text: 'Заявки',
-                        url: '/main/eventRequests',
-                        iconName: 'sword'
+                        text: 'Новости',
+                        url: '/main/news',
+                        iconName: 'parchment'
+                    },
+                    {
+                        text: 'Пользователи',
+                        url: '/main/users',
+                        iconName: 'knight-head-2'
+                    },
+                    {
+                        text: 'Комиссия',
+                        url: '/main/systemUsers',
+                        iconName: 'centurion'
                     }
                 ]
             }

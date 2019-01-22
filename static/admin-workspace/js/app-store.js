@@ -9,6 +9,9 @@ export default new Vuex.Store({
             grid: getGridInitialState(),
             searchText: ''
         },
+        systemUsersPage: {
+            grid: getGridInitialState()
+        },
         newsPage: {
             grid: getGridInitialState(),
             searchText: ''
