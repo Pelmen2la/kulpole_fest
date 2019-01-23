@@ -123,6 +123,51 @@ button {
     }
 }
 
+.colored-label {
+    color: $main-dark-blue-color;
+}
+
+input[type=radio] {
+    display: none;
+
+    &+label {
+        cursor: pointer;
+        display: inline-block;
+        height: 1em;
+        padding-left: 1.5em;
+        position: relative;
+
+        &:before {
+            position: absolute;
+            left: 0;
+            top: -1px;
+            height: 1em;
+            width: 1em;
+            border: 2px solid $main-dark-blue-color;
+            border-radius: 0.5em;
+            box-sizing: border-box;
+            content: ' ';
+        }
+    }
+    &:checked {
+        &+label:after {
+            position: absolute;
+            left: calc(0.3em - 1px);
+            top:calc(0.3em - 2px);
+            height: 0.4em;
+            width: 0.4em;
+            border: 1px solid $main-dark-blue-color;
+            background: $main-dark-blue-color;
+            border-radius: 0.5em;
+            content: ' ';
+        }
+    }
+}
+
+.horizontal-radio-buttons-container input[type=radio]+label {
+    margin-right: 1em;
+}
+
 .file-input-wrapper {
     input[type=file] {
         display: none;

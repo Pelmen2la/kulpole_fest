@@ -7,6 +7,8 @@ const EventRequest = new mongoose.Schema({
     eventId: mongoose.Schema.ObjectId,
     role: String,
     text: String,
+    club: String,
+    city: String,
     photoUrls: {type: [String], default: []},
     status: {type: String, default: 'new'},
     isCostumeAccepted: {type: Boolean, default: false},

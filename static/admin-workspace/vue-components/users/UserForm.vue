@@ -10,10 +10,11 @@
             <md-input v-model="userData.surname"/>
         </md-field>
         <EmailTextfield v-model="userData.email" @validityChange="(isValid) => isEmailValid = isValid"/>
-        <md-field>
-            <label>Название клуба</label>
-            <md-input v-model="userData.club"/>
-        </md-field>
+        <label>Пол</label>
+        <div>
+            <md-radio v-model="userData.sex" value="male">Мужской</md-radio>
+            <md-radio v-model="userData.sex" value="female">Женский</md-radio>
+        </div>
         <md-field>
             <label>Пароль</label>
             <md-input v-model="userData.password"/>

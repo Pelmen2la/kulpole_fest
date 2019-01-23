@@ -9,8 +9,8 @@ import utils from './../utils'
         }
     };
 
-    function qn(inputName) {
-        return document.querySelector(`[name=${inputName}]`);
+    function qn(inputName, isMultiselect) {
+        return document['querySelector' + (isMultiselect ? 'All': '')](`[name=${inputName}]`);
     };
     function getInputValue(inputName) {
         return qn(inputName).value;
@@ -44,6 +44,13 @@ import utils from './../utils'
         }
         if(!emailRe.test(val.toLowerCase())) {
             return 'Email введен в не верном формате.'
+        }
+        return '';
+    };
+    function getSexRadioButtonsText() {
+        const selectedRadio = document.querySelector('input[type=radio][name=sex]:checked');
+        if(!selectedRadio) {
+            return 'Необходимо выбрать ваш пол.';
         }
         return '';
     };
@@ -83,10 +90,11 @@ import utils from './../utils'
             ensureInputInvalidState(qn('repeat-password'), getRepeatPasswordInputInvalidText());
         });
         addValidationOnChangeListeners(qn('repeat-password'), getRepeatPasswordInputInvalidText);
+        qn('sex', true).forEach((radio) => radio.addEventListener('change', ensureRegistrationButtonState));
     };
     function getRegistrationButtonDisabledText() {
         return getNameInputInvalidText() || getSurnameInputInvalidText() || getEmailInputInvalidText() ||
-            getPasswordInputInvalidText() || getRepeatPasswordInputInvalidText() || '';
+            getSexRadioButtonsText() || getPasswordInputInvalidText() || getRepeatPasswordInputInvalidText() || '';
     };
     var ensureRegistrationButtonStateTimeoutId;
     function ensureRegistrationButtonState() {

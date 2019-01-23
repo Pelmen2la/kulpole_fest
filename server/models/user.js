@@ -8,7 +8,7 @@ const User = new mongoose.Schema({
     email: String,
     phone: String,
     password: String,
-    club: String,
+    sex: String,
     registrationDate: {type: Date, default: Date.now}
 });
 
