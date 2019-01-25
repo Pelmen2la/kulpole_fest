@@ -2,9 +2,15 @@ import './../../scss/pages/add-event-request.scss'
 import utils from './../utils'
 
 (window.addEventRequestModule = function() {
+    const requestTextarea = document.getElementById('RequestTextTextarea');
+
     function init() {
         prepareFileInput();
-        utils.addInputOnChangeListeners(document.getElementById('RequestTextTextarea'), ensureAuthButtonState);
+        utils.addInputOnChangeListeners(requestTextarea, ensureAuthButtonState);
+        utils.addInputOnChangeListeners(utils.qn('city'), ensureAuthButtonState);
+        utils.addInputOnChangeListeners(utils.qn('club'), ensureAuthButtonState);
+        utils.addInputOnChangeListeners(utils.qn('socialNetworkLink'), ensureAuthButtonState);
+        utils.qn('region', true).forEach((radio) => radio.addEventListener('change', ensureSubmitRequestBtnStateCore));
     };
 
     function prepareFileInput() {
@@ -20,13 +26,28 @@ import utils from './../utils'
             ensureAuthButtonState();
         });
     };
+    function getCityFieldInvalidText() {
+        return utils.getInputValue('city') ? '' : 'Введите город.';
+    };
+    function getClubFieldInvalidText() {
+        return utils.getInputValue('club') ? '' : 'Введите название клуба.';
+    };
+    function getSocialNetworkLinkFieldInvalidText() {
+        return utils.getInputValue('socialNetworkLink') ? '' : 'Введите адрес в социальных сетях.';
+    };
+    function getRegionRadioButtonsText() {
+        const selectedRadio = document.querySelector('input[type=radio][name=region]:checked');
+        if(!selectedRadio) {
+            return 'Необходимо выбрать регион.';
+        }
+        return '';
+    };
     function getFileInputInvalidText() {
         const files = document.body.querySelector('input[type=file]').files.length;
-        return files < 3 || files > 5 ? 'Количество фотографий должно быть от 3 до 5' : '';
+        return files < 3 || files > 5 ? 'Количество фотографий должно быть от 3 до 5.' : '';
     };
     function getRequestFieldInvalidText() {
-        const requestTextarea = document.getElementById('RequestTextTextarea');
-        return requestTextarea.value ? '' : 'Текст заявки';
+        return requestTextarea.value ? '' : 'Введите текст заявки.';
     };
     var ensureSubmitRequestBtnStateTimeoutId;
     function ensureAuthButtonState() {
@@ -35,7 +56,8 @@ import utils from './../utils'
     };
     function ensureSubmitRequestBtnStateCore() {
         const btn = document.getElementById('RequestSubmitButton'),
-            disabledText = getFileInputInvalidText() || getRequestFieldInvalidText();
+            disabledText = getCityFieldInvalidText() || getClubFieldInvalidText() || getFileInputInvalidText() ||
+                getSocialNetworkLinkFieldInvalidText() || getRegionRadioButtonsText() || getRequestFieldInvalidText();
         btn[disabledText ? 'setAttribute' : 'removeAttribute']('disabled', true);
         btn[disabledText ? 'setAttribute' : 'removeAttribute']('title', disabledText);
     };

@@ -10,8 +10,28 @@
             <md-input v-model="eventRequestData.userFullName" readonly></md-input>
         </md-field>
         <md-field>
-            <label>Роль</label>
+            <label>Статус участника</label>
             <md-input v-model="eventRequestData.role" readonly></md-input>
+        </md-field>
+        <md-field>
+            <label>Город</label>
+            <md-input v-model="eventRequestData.city" readonly></md-input>
+        </md-field>
+        <md-field>
+            <label>Клуб</label>
+            <md-input v-model="eventRequestData.club" readonly></md-input>
+        </md-field>
+        <md-field>
+            <label>Клубное имя</label>
+            <md-input v-model="eventRequestData.clubName" readonly></md-input>
+        </md-field>
+        <md-field>
+            <label>Ссылка на социальные сети</label>
+            <md-input v-model="eventRequestData.socialNetworkLink" readonly></md-input>
+        </md-field>
+        <md-field>
+            <label>Регион</label>
+            <md-input v-model="eventRequestData.regionName" readonly></md-input>
         </md-field>
         <md-field>
             <label>Текст заявки</label>
@@ -85,7 +105,8 @@
                 utils.doRequest(url, {}, function(data) {
                     this.eventRequestData = Object.assign(data, {
                         eventTitle: data.eventData.length ? data.eventData[0].title : 'Мероприятие удалено',
-                        userFullName: data.userData.length ? (data.userData[0].name + ' ' + data.userData[0].surname) : 'Пользователь удален'
+                        userFullName: data.userData.length ? (data.userData[0].name + ' ' + data.userData[0].surname) : 'Пользователь удален',
+                        regionName: window.kulpoleAppData.textResources.eventRequestRegions[data.region]
                     });
                     this.$emit('endLoading');
                     window.setTimeout(() => this.isDataLoadingInProcess = false, 0);

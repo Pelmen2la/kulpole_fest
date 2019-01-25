@@ -12,6 +12,7 @@ module.exports = {
     },
     getUid,
     formatDbDateToWeb,
+    formatUrlToWeb,
     addModelKeysToObject
 };
 
@@ -25,6 +26,13 @@ function getUid() {
 
 function formatDbDateToWeb(date) {
     return moment(date).format('DD.MM.YYYY');
+};
+
+function formatUrlToWeb(url) {
+    if(url.indexOf('http://') !== 0 && url.indexOf('https://') !== 0) {
+        return 'http://' + url;
+    }
+    return url;
 };
 
 function addModelKeysToObject(obj, modelName) {

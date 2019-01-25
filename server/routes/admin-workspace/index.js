@@ -1,4 +1,8 @@
-var utils = require('./../../common/utils');
+const utils = require('./../../common/utils');
+const commonUtils = require('./../../common/utils');
+const pug = require('pug');
+const path = require('path');
+
 
 module.exports = function(app) {
     require('./auth')(app);
@@ -6,6 +10,13 @@ module.exports = function(app) {
     require('./upload')(app);
 
     app.get('/admin/workspace/', function(req, res, next) {
-        utils.sendHtmlFileResponse(res, '/static/admin-workspace/html/index.html')
+        const params = {
+            textResourcesJsonString: JSON.stringify(global.textResources),
+            formatFns: {
+                formatDbDateToWeb: commonUtils.formatDbDateToWeb,
+                formatUrlToWeb: commonUtils.formatUrlToWeb
+            }
+        };
+        res.send((pug.renderFile(path.join(global.appRoot, '/static/admin-workspace/views/index.pug'), params)));
     });
 };

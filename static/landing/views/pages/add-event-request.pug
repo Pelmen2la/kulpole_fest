@@ -8,7 +8,36 @@ block main-content
       div.input-container.with-fly-label
         input(type="text" id="RoleInput" name="role")
         label(for="RoleInput")
-          | Роль
+          | Статус участника *
+
+      div.input-container.with-fly-label
+        input(type="text" id="CityInput" name="city")
+        label(for="CityInput")
+          | Город *
+
+      div.input-container.with-fly-label
+        input(type="text" id="ClubInput" name="club")
+        label(for="ClubInput")
+          | Клуб *
+
+      div.input-container.with-fly-label
+        input(type="text" id="ClubNameInput" name="clubName")
+        label(for="ClubNameInput")
+          | Клубное имя
+
+      div.input-container.with-fly-label
+        input(type="text" id="SocialNetworkLinkInput" name="socialNetworkLink")
+        label(for="SocialNetworkLinkInput")
+          | Ссылка на социальные сети *
+
+      span= "Регион *"
+      div.horizontal-radio-buttons-container
+        input(id="RusRadiobutton" type="radio" name="region" value="rus")
+        label(for="RusRadiobutton")= "Русь"
+        input(id="HordeRadiobutton" type="radio" name="region" value="horde")
+        label(for="HordeRadiobutton")= "Орда"
+        input(id="EuropeRadiobutton" type="radio" name="region" value="europe")
+        label(for="EuropeRadiobutton")= "Европа"
 
       div.textarea-container.with-fly-label
         textarea(rows=5 id="RequestTextTextarea" name="text")

@@ -5,11 +5,37 @@ block main-content
     h1= 'Заявка на ' + eventRequestData.eventData[0].title
     if eventRequestData.role
       b
-        | Роль
+        | Статус
       span= eventRequestData.role
+
+    b
+      | Город
+    p= eventRequestData.city
+
+    if eventRequestData.club
+      b
+        | Клуб
+      span= eventRequestData.club
+
+    if eventRequestData.clubName
+      b
+        | Клубное имя
+      span= eventRequestData.clubName
+
+    if eventRequestData.socialNetworkLink
+      b
+        | Ссылка в социальных сетях
+      a(href=eventRequestData.socialNetworkLink)= eventRequestData.socialNetworkLink
+
+    if eventRequestData.region
+      b
+        | Регион
+      span= textResources.eventRequestRegions[eventRequestData.region]
+
     b
       | Текст заявки
     p= eventRequestData.text
+
     b
       | Фотографии
     ul.photo-list#EventRequestPhotoList

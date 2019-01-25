@@ -1,0 +1,10 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title Kulpole fest admin page
+  body
+    #MainAppContainer
+
+    script(type='text/javascript') window.kulpoleAppData = { textResources: JSON.parse('#{textResourcesJsonString}'.replace(/&quot;/g, '\"')) }
+    script(src='/dist/js/admin-workspace-index.js')

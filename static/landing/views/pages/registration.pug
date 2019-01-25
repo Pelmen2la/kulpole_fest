@@ -28,7 +28,7 @@ block main-content
           input(type="text" id="EmailInput" name="email" value=registrationUserData ? registrationUserData.email : '')
           label(for="EmailInput")
             | Email *
-        span.colored-label= "Пол *"
+        span= "Пол *"
         div.horizontal-radio-buttons-container
           input(id="MaleRadiobutton" type="radio" name="sex" value="male")
           label(for="MaleRadiobutton")= "Мужской"

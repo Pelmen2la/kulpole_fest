@@ -42,12 +42,16 @@ module.exports = function(app) {
                 const targetPath = getEventRequestPhotoFolderPath(eventUid, eventRequestUid);
                 uploadHelper.tryUploadFiles(targetPath, req, (photoUrls) => {
                     var eventRequestData = req.body;
+                    const link = eventRequestData.socialNetworkLink;
                     Object.assign(eventRequestData, {
                         uid: eventRequestUid,
                         photoUrls,
                         eventId: eventData.get('_id'),
                         userId: new mongoose.Types.ObjectId(req.session.logedInUserData._id)
                     });
+                    if(link.indexOf('http://') !== 0 && link.indexOf('https://') !== 0) {
+                        eventRequestData.socialNetworkLink = 'http://' + link;
+                    }
                     (new eventRequestModel(eventRequestData)).save((err, data) => {
                         res.redirect('/')
                     });

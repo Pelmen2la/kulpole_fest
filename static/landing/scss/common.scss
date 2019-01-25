@@ -152,20 +152,25 @@ input[type=radio] {
     &:checked {
         &+label:after {
             position: absolute;
-            left: calc(0.3em - 1px);
-            top:calc(0.3em - 2px);
+            left: calc(0.3em);
+            top:calc(0.3em - 1px);
             height: 0.4em;
             width: 0.4em;
             border: 1px solid $main-dark-blue-color;
+            border-radius: 0.2em;
+            box-sizing: border-box;
             background: $main-dark-blue-color;
-            border-radius: 0.5em;
             content: ' ';
         }
     }
 }
 
-.horizontal-radio-buttons-container input[type=radio]+label {
-    margin-right: 1em;
+.horizontal-radio-buttons-container {
+    margin: 0.5em 0;
+
+    input[type=radio]+label {
+        margin-right: 1em;
+    }
 }
 
 .file-input-wrapper {

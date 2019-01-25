@@ -8,19 +8,9 @@ import utils from './../utils'
             ensureRegistrationButtonState();
         }
     };
-
-    function qn(inputName, isMultiselect) {
-        return document['querySelector' + (isMultiselect ? 'All': '')](`[name=${inputName}]`);
-    };
-    function getInputValue(inputName) {
-        return qn(inputName).value;
-    };
-    function ensureInputInvalidState(input, invalidText) {
-        input.classList[invalidText ? 'add' : 'remove']('invalid');
-        input[invalidText ? 'setAttribute' : 'removeAttribute']('title', invalidText);
-    };
+    
     function getNameInputInvalidText() {
-        const val = getInputValue('name');
+        const val = utils.getInputValue('name');
         if(!val) {
             return 'Необходимо ввести имя.'
         }
@@ -30,14 +20,14 @@ import utils from './../utils'
         return '';
     };
     function getSurnameInputInvalidText() {
-        const val = getInputValue('surname');
+        const val = utils.getInputValue('surname');
         if(val && val.length < 4) {
             return 'Фамилия не может быть короче 4 символов.'
         }
         return '';
     };
     function getEmailInputInvalidText() {
-        const val = getInputValue('email'),
+        const val = utils.getInputValue('email'),
             emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if(!val) {
             return 'Необходимо ввести email.'
@@ -55,7 +45,7 @@ import utils from './../utils'
         return '';
     };
     function getPasswordInputInvalidText() {
-        const val = getInputValue('password');
+        const val = utils.getInputValue('password');
         if(!val) {
             return 'Необходимо ввести пароль.'
         }
@@ -65,32 +55,25 @@ import utils from './../utils'
         return '';
     };
     function getRepeatPasswordInputInvalidText() {
-        const val = getInputValue('repeat-password');
+        const val = utils.getInputValue('repeat-password');
         if(!val) {
             return 'Необходимо ввести пароль пароль.'
         }
-        if(val != getInputValue('password')) {
+        if(val != utils.getInputValue('password')) {
             return 'Введенные вами пароли не совпадают.'
         }
         return '';
     };
     function prepareTextInputs() {
-        const addValidationOnChangeListeners = (input, getInvalidTextFn, extraFn) => {
-                utils.addInputOnChangeListeners(input, (e) => {
-                    ensureInputInvalidState(input, getInvalidTextFn());
-                    ensureRegistrationButtonState();
-                    extraFn && extraFn();
-                });
-            };
-
-        addValidationOnChangeListeners(qn('name'), getNameInputInvalidText);
-        addValidationOnChangeListeners(qn('surname'), getSurnameInputInvalidText);
-        addValidationOnChangeListeners(qn('email'), getEmailInputInvalidText);
-        addValidationOnChangeListeners(qn('password'), getPasswordInputInvalidText, () => {
-            ensureInputInvalidState(qn('repeat-password'), getRepeatPasswordInputInvalidText());
+        utils.addValidationOnChangeListeners(utils.qn('name'), getNameInputInvalidText, ensureRegistrationButtonStateCore);
+        utils.addValidationOnChangeListeners(utils.qn('surname'), getSurnameInputInvalidText, ensureRegistrationButtonStateCore);
+        utils.addValidationOnChangeListeners(utils.qn('email'), getEmailInputInvalidText, ensureRegistrationButtonStateCore);
+        utils.addValidationOnChangeListeners(utils.qn('password'), getPasswordInputInvalidText, () => {
+            utils.ensureInputInvalidState(utils.qn('repeat-password'), getRepeatPasswordInputInvalidText());
+            ensureRegistrationButtonStateCore();
         });
-        addValidationOnChangeListeners(qn('repeat-password'), getRepeatPasswordInputInvalidText);
-        qn('sex', true).forEach((radio) => radio.addEventListener('change', ensureRegistrationButtonState));
+        utils.addValidationOnChangeListeners(utils.qn('repeat-password'), getRepeatPasswordInputInvalidText, ensureRegistrationButtonStateCore);
+        utils.qn('sex', true).forEach((radio) => radio.addEventListener('change', ensureRegistrationButtonState));
     };
     function getRegistrationButtonDisabledText() {
         return getNameInputInvalidText() || getSurnameInputInvalidText() || getEmailInputInvalidText() ||

@@ -12,8 +12,11 @@ function getPageHtml(pageName, req, params = {}) {
     return new Promise((resolve) => {
         new Promise((extendParamsResolve) => {
             params.formatFns = {
-                formatDbDateToWeb: commonUtils.formatDbDateToWeb
+                formatDbDateToWeb: commonUtils.formatDbDateToWeb,
+                formatUrlToWeb: commonUtils.formatUrlToWeb
             };
+            params.textResources = global.textResources;
+
             if(req.session.logedInUserData) {
                 const userData = req.session.logedInUserData;
                 params.logedInUserData = {
