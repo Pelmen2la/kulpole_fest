@@ -4,6 +4,7 @@ const moment = require('moment');
 const mongoose = require('mongoose');
 const eventModel = mongoose.model('event');
 const eventRequestModel = mongoose.model('event_request');
+const clubModel = mongoose.model('club');
 const multer = require('multer');
 const upload = multer({ dest: 'upload/' });
 const uploadHelper = require('./../../helpers/upload');
@@ -23,8 +24,11 @@ module.exports = function(app) {
 
     app.get('/events/:eventUid/request/new', function(req, res) {
         if(utils.checkAuth(req, res)) {
-            eventModel.findOne({uid: req.params.eventUid}, function(err, eventData) {
-                utils.getPageHtml('add-event-request', req, {eventData: eventData || []}).then((pageHtml) => res.send(pageHtml));
+            eventModel.findOne({uid: req.params.eventUid}, (err, eventData) => {
+                clubModel.find({}, (err, clubsData) => {
+                    const params = {eventData: eventData || {}, clubsData: clubsData || []};
+                    utils.getPageHtml('add-event-request', req, params).then((pageHtml) => res.send(pageHtml));
+                });
             });
         }
     });
@@ -43,6 +47,12 @@ module.exports = function(app) {
                 uploadHelper.tryUploadFiles(targetPath, req, (photoUrls) => {
                     var eventRequestData = req.body;
                     const link = eventRequestData.socialNetworkLink;
+                    const club = eventRequestData.club;
+                    clubModel.findOne({ name: new RegExp(`^${club}$`, 'i')}, (err, clubData) => {
+                        if(!clubData) {
+                            (new clubModel({name: club})).save();
+                        }
+                    });
                     Object.assign(eventRequestData, {
                         uid: eventRequestUid,
                         photoUrls,
@@ -53,7 +63,7 @@ module.exports = function(app) {
                         eventRequestData.socialNetworkLink = 'http://' + link;
                     }
                     (new eventRequestModel(eventRequestData)).save((err, data) => {
-                        res.redirect('/')
+                        res.redirect('/user_event_requests/')
                     });
                 });
             });

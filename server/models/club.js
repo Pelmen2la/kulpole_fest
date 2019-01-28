@@ -4,7 +4,7 @@ const utils = require('./../common/utils');
 const Club = new mongoose.Schema({
     uid: {type: String, default: utils.getUid},
     name: String,
-    isConfirmed: Boolean,
+    isConfirmed: {type: Boolean, default: true},
     registrationDate: {type: Date, default: Date.now}
 });
 

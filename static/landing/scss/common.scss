@@ -30,6 +30,10 @@ p {
     opacity: 0.5;
 }
 
+.hide {
+    display: none;
+}
+
 .text-with-icon {
     display: inline-block;
     padding-left: 1.2em;
@@ -106,6 +110,41 @@ textarea {
             color: $gray-blue-color;
             transition: font-size 0.3s, top 0.3s;
         }
+    }
+}
+
+.custom-combo-container {
+    position: relative;
+
+    .combo-list {
+        position: absolute;
+        opacity: 0;
+        visibility: hidden;
+        top: calc(100% - 1em);
+        width: 100%;
+        box-sizing: border-box;
+        transition-property: opacity;
+        transition-duration: 0.3s;
+        background: white;
+        border: 1px solid $main-dark-blue-color;
+        border-top: none;
+        z-index: 10;
+        max-height: 400px;
+        overflow-y: auto;
+
+        li {
+            padding: 0.2em;
+            cursor: pointer;
+
+            &:hover {
+                background: $main-light-blue-color;
+            }
+        }
+    }
+    .input-container input:focus.not-empty + label + .combo-list,
+    .combo-list:hover {
+        visibility: visible;
+        opacity: 1;
     }
 }
 

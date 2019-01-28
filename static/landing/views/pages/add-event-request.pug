@@ -2,7 +2,7 @@ extends ../index
 
 block main-content
   div.add-event-request-page-wrapper
-    form#AuthForm.vent-request-form(action='/events/' + eventData.uid + '/request/new' method="POST" enctype="multipart/form-data")
+    form#AuthForm.vent-request-form(action='/events/' + eventData.uid + '/request/new' method="POST" enctype="multipart/form-data" autocomplete="off")
       h1= 'Форма создания заявки на ' + eventData.title
 
       div.input-container.with-fly-label
@@ -15,10 +15,15 @@ block main-content
         label(for="CityInput")
           | Город *
 
-      div.input-container.with-fly-label
-        input(type="text" id="ClubInput" name="club")
-        label(for="ClubInput")
-          | Клуб *
+      div.custom-combo-container
+        div.input-container.with-fly-label
+          input(type="text" id="ClubInput" name="club")
+          label(for="ClubInput")
+            | Клуб *
+          if clubsData && clubsData.length
+            ul.combo-list
+              for club in clubsData
+                li(data-value=club.name)= club.name
 
       div.input-container.with-fly-label
         input(type="text" id="ClubNameInput" name="clubName")

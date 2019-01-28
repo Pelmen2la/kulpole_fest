@@ -48,8 +48,7 @@
             },
             getGridColumnCfg: function() {
                 return [
-                    {text: 'Название', dataIndex: 'name'},
-                    {text: 'Клуб одобрен', dataIndex: 'isConfirmed', renderType: 'boolIcon'}
+                    {text: 'Название', dataIndex: 'name'}
                 ];
             },
             onSearchTextChange: function() {
