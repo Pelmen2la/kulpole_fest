@@ -1,0 +1,24 @@
+- eventRequests = eventRequests.filter(function(er) { return !!er._id; })
+- var newEventRequests = eventRequests.filter(function(er) { return !er.isCostumeAccepted && !er.isArmorAccepted;})
+- var inProcessEventRequests = eventRequests.filter(function(er) { return (er.isCostumeAccepted && !er.isArmorAccepted) || (!er.isCostumeAccepted && er.isArmorAccepted);})
+- var confirmedEventRequests = eventRequests.filter(function(er) { return er.isCostumeAccepted && er.isArmorAccepted;})
+- var getEventRequestHtml = function(er) {
+-   var href = '/event_request/' + er.uid;
+-   return '<a href="' + href + '">' + er.user.name + ' ' + er.user.surname + '</a>'
+- }
+- var getEventRequestsListHtml = function(listData, listTitle) {
+-   if(!confirmedEventRequests.length) {
+-     return '';
+-   }
+-   var listItemsHtml = listData.map(function(er) { return '<li>' + getEventRequestHtml(er) + '</li>'; }).join('')
+-   var listHtml ='<ul class="event-request-list">' + listItemsHtml + '</ul>';
+-   return '<b>' + listTitle + '</b>' + listHtml
+- }
+
+div.event-request-list-container
+  if eventRequests.length
+    != getEventRequestsListHtml(confirmedEventRequests, 'Принятые заявки')
+    != getEventRequestsListHtml(inProcessEventRequests, 'Заявки на рассмотрении')
+    != getEventRequestsListHtml(newEventRequests, 'Новые заявки')
+  else
+    b= "Список заявок пуст"

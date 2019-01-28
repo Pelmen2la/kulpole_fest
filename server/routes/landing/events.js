@@ -4,9 +4,10 @@ const moment = require('moment');
 const mongoose = require('mongoose');
 const eventModel = mongoose.model('event');
 const eventRequestModel = mongoose.model('event_request');
+const userModel = mongoose.model('user');
 const clubModel = mongoose.model('club');
 const multer = require('multer');
-const upload = multer({ dest: 'upload/' });
+const upload = multer({dest: 'upload/'});
 const uploadHelper = require('./../../helpers/upload');
 const adminDataHelper = require('./../../helpers/admin-workspace/data');
 const path = require('path');
@@ -48,7 +49,7 @@ module.exports = function(app) {
                     var eventRequestData = req.body;
                     const link = eventRequestData.socialNetworkLink;
                     const club = eventRequestData.club;
-                    clubModel.findOne({ name: new RegExp(`^${club}$`, 'i')}, (err, clubData) => {
+                    clubModel.findOne({name: new RegExp(`^${club}$`, 'i')}, (err, clubData) => {
                         if(!clubData) {
                             (new clubModel({name: club})).save();
                         }
@@ -73,7 +74,9 @@ module.exports = function(app) {
     app.get('/event_request/:eventRequestUid', function(req, res, next) {
         tryGetEventRequestData(req, res, req.params.eventRequestUid).then((result) => {
             if(result.eventRequestData) {
-                adminDataHelper.updateEventRequestLastOpenDate(result.eventRequestData._id, 'user');
+                if(result.canEdit) {
+                    adminDataHelper.updateEventRequestLastOpenDate(result.eventRequestData._id, 'user');
+                }
                 utils.getPageHtml('event-request', req, {eventRequestData: result.eventRequestData}).then((pageHtml) => res.send(pageHtml));
             } else {
                 res.redirect('/events');
@@ -151,7 +154,8 @@ function getEventsData(req, eventsYear) {
                 }
             }, {
                 $project: commonUtils.addModelKeysToObject({
-                    eventRequests: {
+                    eventRequests: 1,
+                    userEventRequests: {
                         $filter: {
                             input: '$eventRequests',
                             as: 'er',
@@ -163,8 +167,42 @@ function getEventsData(req, eventsYear) {
                 }, 'event')
             }, {
                 $project: commonUtils.addModelKeysToObject({
-                    eventRequest: {$arrayElemAt: ["$eventRequests", 0]}
+                    eventRequests: 1,
+                    userEventRequest: {$arrayElemAt: ['$userEventRequests', 0]}
                 }, 'event')
+            }, {
+                $unwind: {
+                    path: '$eventRequests',
+                    preserveNullAndEmptyArrays: true
+                }
+            }, {
+                $unwind: {
+                    path: '$eventRequests.userId',
+                    preserveNullAndEmptyArrays: true
+                }
+            }, {
+                $lookup: {
+                    from: userModel.collection.collectionName,
+                    localField: 'eventRequests.userId',
+                    foreignField: '_id',
+                    as: 'eventRequests.users'
+                }
+            }, {
+                $project: commonUtils.addModelKeysToObject({
+                    'eventRequests._id': 1,
+                    'eventRequests.uid': 1,
+                    'eventRequests.isCostumeAccepted': 1,
+                    'eventRequests.isArmorAccepted': 1,
+                    'eventRequests.user': {$arrayElemAt: ['$eventRequests.users', 0]}
+                }, 'event')
+            }, {
+                $group: {
+                    _id: '$_id',
+                    eventRequests: {$push: '$eventRequests'},
+                    title: {$first: '$title'},
+                    html: {$first: '$html'},
+                    date: {$first: '$date'}
+                }
             }]);
         }
         eventModel.aggregate(aggArgs).exec().then(function(eventsData) {
@@ -176,11 +214,13 @@ function getEventsData(req, eventsYear) {
 function addRequestsStatesToEvents(logedInUserData, eventsData) {
     return new Promise((resolve) => {
         if(!logedInUserData) {
-            resolve(eventsData.map((event) => { return { event };}));
+            resolve(eventsData.map((event) => {
+                return {event};
+            }));
             return;
         }
         const eventIds = eventsData.map((e) => e.get('id'));
-        const filters = { $and: [{ userId: logedInUserData._id }, { eventId: { $in: eventIds }}]};
+        const filters = {$and: [{userId: logedInUserData._id}, {eventId: {$in: eventIds}}]};
         eventRequestModel.find(filters, (err, eventRequestData) => {
             eventsData = eventsData.map((event) => {
                 var eventRequest = eventRequestData.find((r) => r.get('eventId') == event.get('id'));
@@ -200,7 +240,7 @@ function getEventYears() {
         eventModel.aggregate([
             {$project: {year: {$year: '$date'}}},
             {$sort: {year: 1}},
-            {$group: {_id: null, years: {$addToSet: "$year"}}}
+            {$group: {_id: null, years: {$addToSet: '$year'}}}
         ]).exec().then(function(data) {
             resolve(data.length ? data[0].years : [(new Date).getFullYear()]);
         });
@@ -227,5 +267,5 @@ function getEventRequestPhotoFolderPath(eventUid, eventRequestUid) {
 function getYearFilter(year) {
     const fromDate = moment(year + '-01-01T00:00:00').toDate();
     const toDate = moment(year + '-12-31T23:59:59').toDate();
-    return { $and: [{ date : {$gt: fromDate}}, { date: {$lt: toDate}}]};
+    return {$and: [{date: {$gt: fromDate}}, {date: {$lt: toDate}}]};
 };

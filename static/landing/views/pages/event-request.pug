@@ -42,15 +42,15 @@ block main-content
       li
         each photoUrl in eventRequestData.photoUrls
           img(src=photoUrl)
-
-    div.file-input-wrapper
-      input(type="file" name="photo" accept=".jpg, .jpeg, .png")
-      button(type="button")
-        | Загрузить фотографию
-      p.text-container
-        span.uploaded-files-text
-        br
-        span.notification-text
+    if canEdit
+      div.file-input-wrapper
+        input(type="file" name="photo" accept=".jpg, .jpeg, .png")
+        button(type="button")
+          | Загрузить фотографию
+        p.text-container
+          span.uploaded-files-text
+          br
+          span.notification-text
 
     div.event-request-chat-container
       h2 Переписка
@@ -59,10 +59,11 @@ block main-content
           p.empty-chat-message Переписка пуста
         each chatMessage in eventRequestData.chatMessages
           div(class='chat-message ' + (chatMessage.owner === 'user' ? 'my' : ''))!= chatMessage.text.replace(/\n/g, '<br/>')
-      div.textarea-container.with-fly-label
-        textarea(maxlength="500" rows="5")#ChatMessageTextarea
-        label(for="ChatMessageTextarea") Текст сообщения
-        img.send-chat-message-btn(src='/resources/icons/scroll.svg', v-if='newMessageText.length', @click='trySendChatMessage')
+      if canEdit
+        div.textarea-container.with-fly-label
+          textarea(maxlength="500" rows="5")#ChatMessageTextarea
+          label(for="ChatMessageTextarea") Текст сообщения
+          img.send-chat-message-btn(src='/resources/icons/scroll.svg', v-if='newMessageText.length', @click='trySendChatMessage')
 
 
 

@@ -41,7 +41,7 @@ p {
     background-repeat: no-repeat;
 
     $icon-names: "knight-head-2-black", "logout", "parchment-black", "swords-cross-black", "sword-with-shield-black",
-        "sword-black";
+    "sword-black";
 
     @each $icon-name in $icon-names {
         &.#{$icon-name}-icon {
@@ -169,7 +169,7 @@ button {
 input[type=radio] {
     display: none;
 
-    &+label {
+    & + label {
         cursor: pointer;
         display: inline-block;
         height: 1em;
@@ -189,10 +189,10 @@ input[type=radio] {
         }
     }
     &:checked {
-        &+label:after {
+        & + label:after {
             position: absolute;
             left: calc(0.3em);
-            top:calc(0.3em - 1px);
+            top: calc(0.3em - 1px);
             height: 0.4em;
             width: 0.4em;
             border: 1px solid $main-dark-blue-color;
@@ -207,7 +207,7 @@ input[type=radio] {
 .horizontal-radio-buttons-container {
     margin: 0.5em 0;
 
-    input[type=radio]+label {
+    input[type=radio] + label {
         margin-right: 1em;
     }
 }
@@ -261,6 +261,36 @@ input[type=radio] {
             .news-shot-description {
                 height: 4.5em;
                 overflow: hidden;
+            }
+        }
+    }
+}
+
+.event-request-list-container {
+    overflow: auto;
+    border: 1px solid $main-dark-blue-color;
+    box-sizing: border-box;
+    margin-bottom: 0.5em;
+    max-height: 800px;
+
+    b {
+        display: block;
+        text-align: center;
+        font-size: 1.2em;
+        margin-bottom: 0.2em;
+    }
+    .event-request-list {
+        padding: 0.2em;
+
+        li a {
+            display: inline-block;
+            padding: 0.2em 0.3em;
+            width: 100%;
+            box-sizing: border-box;
+
+            &:hover {
+                background: $main-dark-blue-color;
+                color: white;
             }
         }
     }

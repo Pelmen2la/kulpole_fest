@@ -4,19 +4,20 @@ import './../../scss/pages/event-request.scss'
 import './../../../common/scss/event-request-chat.scss'
 
 (window.eventRequestAppModule = function() {
-
-    function init() {
-        prepareChat();
-        preparePhotoFileInput();
-
-    };
-
     const eventRequestId = document.querySelector('.event-request-page-wrapper').dataset.eventRequestId;
     const chatMessagesContainer = document.querySelector('.chat-messages-container');
     const chatTextarea = document.getElementById('ChatMessageTextarea');
-    const fileInputWrapper = document.querySelector('.file-input-wrapper');
-    const fileInput = fileInputWrapper.querySelector('input[type=file]');
+    const fileInput = document.querySelector('input[type=file]');
     const photoList = document.getElementById('EventRequestPhotoList');
+
+    function init() {
+        if(chatTextarea) {
+            prepareChat();
+        }
+        if(fileInput) {
+            preparePhotoFileInput();
+        }
+    };
 
     function preparePhotoFileInput() {
         fileInput.addEventListener('change', uploadFile);
