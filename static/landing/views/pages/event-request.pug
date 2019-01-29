@@ -42,7 +42,7 @@ block main-content
       li
         each photoUrl in eventRequestData.photoUrls
           img(src=photoUrl)
-    if canEdit
+    if isCanEdit
       div.file-input-wrapper
         input(type="file" name="photo" accept=".jpg, .jpeg, .png")
         button(type="button")
@@ -59,7 +59,7 @@ block main-content
           p.empty-chat-message Переписка пуста
         each chatMessage in eventRequestData.chatMessages
           div(class='chat-message ' + (chatMessage.owner === 'user' ? 'my' : ''))!= chatMessage.text.replace(/\n/g, '<br/>')
-      if canEdit
+      if isCanEdit
         div.textarea-container.with-fly-label
           textarea(maxlength="500" rows="5")#ChatMessageTextarea
           label(for="ChatMessageTextarea") Текст сообщения

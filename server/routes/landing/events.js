@@ -77,7 +77,8 @@ module.exports = function(app) {
                 if(result.canEdit) {
                     adminDataHelper.updateEventRequestLastOpenDate(result.eventRequestData._id, 'user');
                 }
-                utils.getPageHtml('event-request', req, {eventRequestData: result.eventRequestData}).then((pageHtml) => res.send(pageHtml));
+                const params = {eventRequestData: result.eventRequestData, isCanEdit: result.canEdit};
+                utils.getPageHtml('event-request', req, params).then((pageHtml) => res.send(pageHtml));
             } else {
                 res.redirect('/events');
             }
@@ -252,7 +253,7 @@ function tryGetEventRequestData(req, res, eventRequestId) {
         if(utils.checkAuth(req, res)) {
             adminDataHelper.getEventRequest(eventRequestId, (eventRequestData) => {
                 resolve({
-                    canEdit: eventRequestData && eventRequestData.userId == req.session.logedInUserData._id,
+                    canEdit: eventRequestData && eventRequestData.userId.toString() == req.session.logedInUserData._id,
                     eventRequestData
                 });
             });
