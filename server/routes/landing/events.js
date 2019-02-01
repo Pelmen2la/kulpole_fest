@@ -200,6 +200,7 @@ function getEventsData(req, eventsYear) {
                 $group: {
                     _id: '$_id',
                     eventRequests: {$push: '$eventRequests'},
+                    uid: {$first: '$uid'},
                     title: {$first: '$title'},
                     html: {$first: '$html'},
                     date: {$first: '$date'}

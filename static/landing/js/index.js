@@ -32,7 +32,7 @@ import './../scss/index.scss'
                 const searchText = event.target.value;
                 list.querySelectorAll('li').forEach((listItem) => {
                     const listItemValue = listItem.dataset.value;
-                    const searchRegexp = new RegExp(searchText.toLowerCase(), 'g');
+                    const searchRegexp = new RegExp(searchText.toLowerCase(), 'gi');
                     const match = listItemValue.match(searchRegexp);
                     listItem.classList[match ? 'remove' : 'add']('hide');
                     listItem.innerHTML = listItemValue.replace(searchRegexp, `<b>${searchText}</b>`);
