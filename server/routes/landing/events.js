@@ -130,9 +130,12 @@ module.exports = function(app) {
 
 function sendEventsPageHtml(req, res, eventsYear) {
     getEventYears().then((yearList) => {
-        if(isNaN(eventsYear) || yearList.indexOf(eventsYear) === -1) {
-            res.redirect('/events');
+        if(isNaN(eventsYear)) {
+            res.redirect('/');
             return;
+        }
+        if(yearList.indexOf(eventsYear) === -1) {
+            eventsYear = yearList[0] || (new Date).getFullYear();
         }
 
         getEventsData(req, eventsYear).then((eventsData) => {
@@ -154,24 +157,6 @@ function getEventsData(req, eventsYear) {
                     as: 'eventRequests'
                 }
             }, {
-                $project: commonUtils.addModelKeysToObject({
-                    eventRequests: 1,
-                    userEventRequests: {
-                        $filter: {
-                            input: '$eventRequests',
-                            as: 'er',
-                            cond: {
-                                $eq: ['$$er.userId', mongoose.Types.ObjectId(req.session.logedInUserData._id)]
-                            }
-                        }
-                    }
-                }, 'event')
-            }, {
-                $project: commonUtils.addModelKeysToObject({
-                    eventRequests: 1,
-                    userEventRequest: {$arrayElemAt: ['$userEventRequests', 0]}
-                }, 'event')
-            }, {
                 $unwind: {
                     path: '$eventRequests',
                     preserveNullAndEmptyArrays: true
@@ -190,8 +175,10 @@ function getEventsData(req, eventsYear) {
                 }
             }, {
                 $project: commonUtils.addModelKeysToObject({
+                    'userEventRequest': 1,
                     'eventRequests._id': 1,
                     'eventRequests.uid': 1,
+                    'eventRequests.userId': 1,
                     'eventRequests.isCostumeAccepted': 1,
                     'eventRequests.isArmorAccepted': 1,
                     'eventRequests.user': {$arrayElemAt: ['$eventRequests.users', 0]}
@@ -205,6 +192,24 @@ function getEventsData(req, eventsYear) {
                     html: {$first: '$html'},
                     date: {$first: '$date'}
                 }
+            }, {
+                $project: commonUtils.addModelKeysToObject({
+                    eventRequests: 1,
+                    userEventRequests: {
+                        $filter: {
+                            input: '$eventRequests',
+                            as: 'er',
+                            cond: {
+                                $eq: ['$$er.userId', mongoose.Types.ObjectId(req.session.logedInUserData._id)]
+                            }
+                        }
+                    }
+                }, 'event')
+            }, {
+                $project: commonUtils.addModelKeysToObject({
+                    eventRequests: 1,
+                    userEventRequest: {$arrayElemAt: ['$userEventRequests', 0]}
+                }, 'event')
             }]);
         }
         eventModel.aggregate(aggArgs).exec().then(function(eventsData) {

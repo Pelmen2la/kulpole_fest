@@ -1,3 +1,4 @@
+- eventRequests = eventRequests || [];
 - eventRequests = eventRequests.filter(function(er) { return !!er._id; })
 - var newEventRequests = eventRequests.filter(function(er) { return !er.isCostumeAccepted && !er.isArmorAccepted;})
 - var inProcessEventRequests = eventRequests.filter(function(er) { return (er.isCostumeAccepted && !er.isArmorAccepted) || (!er.isCostumeAccepted && er.isArmorAccepted);})
@@ -7,7 +8,7 @@
 -   return '<a href="' + href + '">' + er.user.name + ' ' + er.user.surname + '</a>'
 - }
 - var getEventRequestsListHtml = function(listData, listTitle) {
--   if(!confirmedEventRequests.length) {
+-   if(!listData.length) {
 -     return '';
 -   }
 -   var listItemsHtml = listData.map(function(er) { return '<li>' + getEventRequestHtml(er) + '</li>'; }).join('')
