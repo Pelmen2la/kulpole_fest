@@ -125,6 +125,9 @@ function getDataModelSpecificFilters(modelName, params) {
                 filters.push(filter);
             }
         });
+        if(params.regionFilter !== undefined) {
+            filters.push({region: {$in: params.regionFilter.split(',')}});
+        }
     }
     return filters.length ? {$and: filters} : {};
 };

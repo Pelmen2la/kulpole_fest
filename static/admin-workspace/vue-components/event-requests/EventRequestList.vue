@@ -12,7 +12,7 @@
                 <label>Поиск</label>
                 <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
-            <div class="left-right-container">
+            <div class="event-request-list-filters-container">
                 <md-field>
                     <label>Фильтр по костюму</label>
                     <md-select v-model="getPageState().isCostumeAcceptedFilter" @md-selected="onComboFilterChange">
@@ -26,6 +26,14 @@
                     <md-select v-model="getPageState().isArmorAcceptedFilter" @md-selected="onComboFilterChange">
                         <md-option v-for="(filter, index) in wearFilterComboData" :value="filter.id" :key="index">
                             {{filter.name}}
+                        </md-option>
+                    </md-select>
+                </md-field>
+                <md-field>
+                    <label>Фильтр по региону</label>
+                    <md-select v-model="getPageState().regionFilter" @md-selected="onComboFilterChange" multiple>
+                        <md-option v-for="(regionName, regionId) in regions" :value="regionId" :key="regionId">
+                            {{regionName}}
                         </md-option>
                     </md-select>
                 </md-field>
@@ -67,6 +75,7 @@
                         params[propName.replace('Filter', '')] = state[propName];
                     }
                 });
+                params.regionFilter = state.regionFilter;
                 return params;
             },
             getGridColumnCfg: function() {
@@ -80,6 +89,11 @@
                         text: 'Имя участника',
                         dataIndex: 'userData',
                         renderer: (rec, val) => val.length ? val[0].name + ' ' + val[0].surname : 'Участник удален'
+                    },
+                    {
+                        text: 'Регион',
+                        dataIndex: 'region',
+                        renderer: (rec, val) => this.regions[val]
                     },
                     {text: 'Костюм допущен', dataIndex: 'isCostumeAccepted', renderType: 'boolIcon'},
                     {text: 'Доспех допущен', dataIndex: 'isArmorAccepted', renderType: 'boolIcon'},
@@ -96,6 +110,23 @@
             loadData: function() {
                 this.$refs.ListPage.loadPageByIndex(0);
             }
+        },
+        computed: {
+            regions() {
+                return window.kulpoleAppData.textResources.eventRequestRegions;
+            }
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .event-request-list-filters-container .md-field {
+        width: 30%;
+        float: left;
+
+        &:nth-child(2) {
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+    }
+</style>

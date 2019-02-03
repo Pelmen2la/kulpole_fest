@@ -24,6 +24,7 @@ export default new Vuex.Store({
             searchText: '',
             isCostumeAcceptedFilter: 'all',
             isArmorAcceptedFilter: 'all',
+            regionFilter: Object.keys(window.kulpoleAppData.textResources.eventRequestRegions)
         },
         clubsPage: {
             grid: getGridInitialState(),
