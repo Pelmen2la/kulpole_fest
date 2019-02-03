@@ -9,6 +9,8 @@ module.exports = {
     tryUploadFiles
 };
 
+sharp.cache(false);
+
 function tryUploadFiles(relativeTargetPath, req, clb) {
     if(req.file) {
         tryUploadFileCore(relativeTargetPath, req.file, clb);
@@ -49,25 +51,26 @@ function tryUploadFileCore(relativeTargetPath, file, clb) {
     src.pipe(dest);
 
     src.on('end', function() {
-        ensureDirExists(IMAGES_FOLDER_PATH, relativeTargetPath);
-        while(fs.existsSync(getTargetPath())) {
-            suffix = parseInt(suffix + 1);
-        }
-
-        var finalTargetPath = getTargetPath();
-        var image = sharp(tempFilePath);
-        image.metadata().then(function(metadata) {
-            var sizeLimit = 1000,
-                needToResize = metadata.height > sizeLimit || metadata.width > sizeLimit;
-            if(needToResize) {
-                var isAutoHeight = metadata.height < metadata.width;
-                image = image.resize(isAutoHeight ? sizeLimit : null, isAutoHeight ? null : sizeLimit)
+        ensureDirExists(IMAGES_FOLDER_PATH, relativeTargetPath).then(() => {
+            while(fs.existsSync(getTargetPath())) {
+                suffix = parseInt(suffix + 1);
             }
 
-            image.toFile(finalTargetPath, () => {
-                fs.unlink(tempFilePath, () => {
+            var finalTargetPath = getTargetPath();
+            var image = sharp(tempFilePath);
+            image.metadata().then(function(metadata) {
+                var sizeLimit = 1000,
+                    needToResize = metadata.height > sizeLimit || metadata.width > sizeLimit;
+                if(needToResize) {
+                    var isAutoHeight = metadata.height < metadata.width;
+                    image = image.resize(isAutoHeight ? sizeLimit : null, isAutoHeight ? null : sizeLimit)
+                }
+
+                image.toFile(finalTargetPath, () => {
+                    fs.unlink(tempFilePath, () => {
+                    });
+                    clb(getTargetPath().split('static')[1].replace(/\\/g, '/'));
                 });
-                clb(getTargetPath().split('static')[1].replace(/\\/g, '/'));
             });
         });
     });
@@ -75,11 +78,22 @@ function tryUploadFileCore(relativeTargetPath, file, clb) {
 
 function ensureDirExists(startFolderPath, relativePath) {
     const parts = relativePath.split('\\');
-    var targetPath = startFolderPath;
-    for(var part, i = 0; part = parts[i]; i++) {
-        targetPath = path.join(targetPath, part);
-        if(!fs.existsSync(targetPath)) {
-            fs.mkdirSync(targetPath);
-        }
-    }
-}
+    var targetPath = startFolderPath,
+        i = 0;
+    const ensureExists = (clb) => {
+        targetPath = path.join(targetPath, parts[i]);
+        fs.mkdir(targetPath, () => {
+            i++;
+            if(parts[i]) {
+                ensureExists(clb);
+            } else {
+                clb();
+            }
+        });
+    };
+
+    return new Promise((resolve) => {
+        ensureExists(resolve);
+    });
+};
+
