@@ -124,6 +124,8 @@ module.exports = function(app) {
     });
 };
 
+module.exports.getEventsData = getEventsData;
+
 async function sendEventsPageHtml(req, res, eventsYear) {
     if(isNaN(eventsYear)) {
         res.redirect('/');
@@ -141,9 +143,9 @@ async function sendEventsPageHtml(req, res, eventsYear) {
 
 async function getEventsData(req, eventsYear) {
     return new Promise((resolve) => {
-        var aggArgs = [{$match: getYearFilter(eventsYear)}, {$sort: {date: 1}}];
-        if(req.session.logedInUserData) {
-            aggArgs = aggArgs.concat([{
+        var aggArgs = [
+            {$match: getYearFilter(eventsYear)}, {$sort: {date: 1}},
+            {
                 $lookup: {
                     from: eventRequestModel.collection.collectionName,
                     localField: '_id',
@@ -186,7 +188,10 @@ async function getEventsData(req, eventsYear) {
                     html: {$first: '$html'},
                     date: {$first: '$date'}
                 }
-            }, {
+            }
+        ];
+        if(req.session.logedInUserData) {
+            aggArgs.concat([{
                 $project: commonUtils.addModelKeysToObject({
                     eventRequests: 1,
                     userEventRequests: {
