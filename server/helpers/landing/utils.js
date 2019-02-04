@@ -10,7 +10,7 @@ module.exports = {
 
 function getPageHtml(pageName, req, params = {}) {
     return new Promise((resolve) => {
-        new Promise((extendParamsResolve) => {
+        new Promise(async (extendParamsResolve) => {
             params.formatFns = {
                 formatDbDateToWeb: commonUtils.formatDbDateToWeb,
                 formatUrlToWeb: commonUtils.formatUrlToWeb
@@ -23,10 +23,9 @@ function getPageHtml(pageName, req, params = {}) {
                     fullName: userData.name + ' ' + userData.surname,
                     id: userData._id
                 };
-                adminDataHelper.getEventRequestList({userId: req.session.logedInUserData._id}, (eventRequestsList) => {
-                    params.hasEventRequests = eventRequestsList && eventRequestsList.content && eventRequestsList.content.length;
-                    extendParamsResolve();
-                })
+                const eventRequestsList = await adminDataHelper.getEventRequestList({userId: req.session.logedInUserData._id});
+                params.hasEventRequests = eventRequestsList && eventRequestsList.content && eventRequestsList.content.length;
+                extendParamsResolve();
             } else {
                 extendParamsResolve();
             }

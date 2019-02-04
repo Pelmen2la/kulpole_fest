@@ -52,51 +52,61 @@ for(var key in dataModelsCfg) {
 function createCRUD(dataModelName, model) {
     const capName = dataModelName[0].toUpperCase() + dataModelName.substring(1);
 
-    module.exports[`get${capName}List`] = function(params, clb) {
+    module.exports[`get${capName}List`] = async function(params) {
         const filters = getDataModelSpecificFilters(dataModelName, params),
             queryOpts = getListQueryOptions(params),
             lookupArgs = getListDataModelLookupArgs(dataModelName),
             filterArg = {$match: filters},
             aggArgs = lookupArgs.concat([{$skip: queryOpts.skip}, {$limit: queryOpts.limit}, filterArg]),
             countAggArgs = lookupArgs.concat([filterArg, {$group: {_id: null, count: {$sum: 1}}}]);
-        model.aggregate(aggArgs).exec().then(function(data) {
-            model.aggregate(countAggArgs).exec().then(function(countData) {
-                const total = countData.length ? countData[0].count : 0;
-                clb({
-                    content: data,
-                    totalPages: Math.ceil(total / ROWS_ON_PAGE)
+        return new Promise((resolve) => {
+            model.aggregate(aggArgs).exec().then(function(data) {
+                model.aggregate(countAggArgs).exec().then(function(countData) {
+                    const total = countData.length ? countData[0].count : 0;
+                    resolve({
+                        content: data,
+                        totalPages: Math.ceil(total / ROWS_ON_PAGE)
+                    });
                 });
             });
         });
     };
 
-    module.exports[`add${capName}`] = function(data, clb) {
-        (new model(data)).save((err, userData) => {
-            clb(err ? null : userData);
-        });
+    module.exports[`add${capName}`] = async function(data) {
+        return new Promise((resolve) => {
+            (new model(data)).save((err, userData) => {
+                resolve(err ? null : userData);
+            });
+        })
     };
 
-    module.exports[`get${capName}`] = function(id, clb) {
+    module.exports[`get${capName}`] = async function(id) {
         const lookupArgs = getSingleRecordLookupArgs(dataModelName);
         // GUID to object ID
         if(id.length >= 24) {
             id = idToObj(id);
         }
-        model.aggregate(lookupArgs.concat([{$match: {$or: [{_id: id}, {uid: id}]}}])).exec().then((data) => {
-            clb(data.length ? data[0] : null);
+        return new Promise((resolve) => {
+            model.aggregate(lookupArgs.concat([{$match: {$or: [{_id: id}, {uid: id}]}}])).exec().then((data) => {
+                resolve(data.length ? data[0] : null);
+            });
         });
     };
 
-    module.exports[`update${capName}`] = function(id, data, clb) {
+    module.exports[`update${capName}`] = function(id, data) {
         delete data._id;
-        model.findOneAndUpdate({_id: id}, data, (err, data) => {
-            clb(err ? null : data);
+        return new Promise((resolve) => {
+            model.findOneAndUpdate({_id: id}, data, (err, data) => {
+                resolve(err ? null : data);
+            });
         });
     };
 
-    module.exports[`delete${capName}`] = function(id, clb) {
-        model.findOneAndDelete(id, (err, data) => {
-            clb(err ? null : data);
+    module.exports[`delete${capName}`] = function(id) {
+        return new Promise((resolve) => {
+            model.findOneAndDelete(id, (err, data) => {
+                resolve(err ? null : data);
+            });
         });
     };
 };

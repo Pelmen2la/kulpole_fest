@@ -1,11 +1,11 @@
-- eventRequests = eventRequests || [];
-- eventRequests = eventRequests.filter(function(er) { return !!er._id; })
+- eventRequests = (eventRequests || []).filter(function(er) { return !!er._id && !!er.user; });
 - var newEventRequests = eventRequests.filter(function(er) { return !er.isCostumeAccepted && !er.isArmorAccepted;})
 - var inProcessEventRequests = eventRequests.filter(function(er) { return (er.isCostumeAccepted && !er.isArmorAccepted) || (!er.isCostumeAccepted && er.isArmorAccepted);})
 - var confirmedEventRequests = eventRequests.filter(function(er) { return er.isCostumeAccepted && er.isArmorAccepted;})
 - var getEventRequestHtml = function(er) {
 -   var href = '/event_request/' + er.uid;
--   return '<a href="' + href + '">' + er.user.name + ' ' + er.user.surname + '</a>'
+-   var fullName = er.user ? er.user.name + ' ' + er.user.surname : 'Пользователь удален';
+-   return '<a href="' + href + '">' + fullName + '</a>'
 - }
 - var getEventRequestsListHtml = function(listData, listTitle) {
 -   if(!listData.length) {

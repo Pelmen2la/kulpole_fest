@@ -1,4 +1,5 @@
 const utils = require('./../../helpers/landing/utils');
+const dataHelper = require('./../../helpers/admin-workspace/data');
 const mongoose = require('mongoose');
 const NewsModel = mongoose.model('news');
 
@@ -10,6 +11,7 @@ module.exports = function(app) {
 
     app.get('/', function(req, res, next) {
         NewsModel.find({}, null, { sort: { 'date': -1 }, limit: 3 }, function(err, newsData) {
+            dataHelper
             utils.getPageHtml('main', req, {newsData: newsData || []}).then((pageHtml) => res.send(pageHtml));
         });
     });
