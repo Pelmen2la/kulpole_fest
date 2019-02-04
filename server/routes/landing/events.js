@@ -255,13 +255,11 @@ async function getEventYears() {
 
 async function tryGetEventRequestData(req, res, eventRequestId) {
     return new Promise(async (resolve) => {
-        if(utils.checkAuth(req, res)) {
-            const eventRequestData = await adminDataHelper.getEventRequest(eventRequestId);
-            resolve({
-                canEdit: eventRequestData && eventRequestData.userId.toString() == req.session.logedInUserData._id,
-                eventRequestData
-            });
-        }
+        const eventRequestData = await adminDataHelper.getEventRequest(eventRequestId);
+        resolve({
+            canEdit: req.session.logedInUserData && eventRequestData && eventRequestData.userId.toString() == req.session.logedInUserData._id,
+            eventRequestData
+        });
     });
 };
 
