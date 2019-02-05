@@ -179,28 +179,17 @@ input[type=radio] {
         &:before {
             position: absolute;
             left: 0;
-            top: -1px;
+            top: 0;
             height: 1em;
             width: 1em;
-            border: 2px solid $main-dark-blue-color;
-            border-radius: 0.5em;
             box-sizing: border-box;
             content: ' ';
+            background: url('/resources/icons/radio-button.svg') no-repeat;
+            background-size: 1em;
         }
     }
-    &:checked {
-        & + label:after {
-            position: absolute;
-            left: calc(0.3em);
-            top: calc(0.3em - 1px);
-            height: 0.4em;
-            width: 0.4em;
-            border: 1px solid $main-dark-blue-color;
-            border-radius: 0.2em;
-            box-sizing: border-box;
-            background: $main-dark-blue-color;
-            content: ' ';
-        }
+    &:checked + label:before {
+        background-image: url('/resources/icons/radio-button-checked.svg');
     }
 }
 
