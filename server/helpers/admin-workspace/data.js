@@ -124,7 +124,8 @@ function getDataModelSpecificFilters(modelName, params) {
     } else if(modelName == 'club') {
         filters.push(getSearchFilterConditions(['name'], params.searchText || ''));
     } else if(modelName == 'eventRequest') {
-        filters.push(getSearchFilterConditions(['eventData.title', 'userData.name', 'userData.surname'], params.searchText || ''));
+        const searchFields = ['eventData.title', 'userData.name', 'userData.surname', 'userData.fullName', 'userData.reverseFullName'];
+        filters.push(getSearchFilterConditions(searchFields, params.searchText || ''));
         if(params.userId) {
             filters.push({userId: idToObj(params.userId)});
         }
@@ -163,7 +164,16 @@ function getListDataModelLookupArgs(modelName) {
                 dateDiff: { $subtract: ['$adminLastOpenDate', '$userLastActionDate'] },
                 chatMessages: '$chatMessages',
                 eventData: '$eventData',
-                userData: '$userData'
+                userData: {
+                    "$map": {
+                        input: "$userData",
+                        as: "u",
+                        in: commonUtils.addModelKeysToObject({
+                            fullName: {"$concat": ["$$u.name", " ", "$$u.surname"]},
+                            reverseFullName: {"$concat": ["$$u.surname", " ", "$$u.name"]}
+                        }, 'user', (field) => '$$u.' + field)
+                    }
+                }
             }, 'event_request')
         }, {$sort: {'dateDiff': 1}}]
     }

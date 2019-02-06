@@ -88,7 +88,7 @@
                     {
                         text: 'Имя участника',
                         dataIndex: 'userData',
-                        renderer: (rec, val) => val.length ? val[0].name + ' ' + val[0].surname : 'Участник удален'
+                        renderer: (rec, val) => val.length ? val[0].fullName : 'Участник удален'
                     },
                     {
                         text: 'Регион',

@@ -14,6 +14,15 @@
                 @deleteBtnClick="onGridDeleteBtnClick"
                 @pagerPageIndexChange="onGridPagerPageIndexChange"
         />
+        <md-dialog :md-active="confirmDeleteRecordId !== null" class="confirm-delete-window"
+                   @md-clicked-outside="resetConfirmDeleteRecordId">
+            <md-dialog-title>Удаление записи</md-dialog-title>
+            <p>{{'Вы действительно хотите удалить ' + getConfirmDeleteRecordText() + '?'}}</p>
+            <md-dialog-actions>
+                <md-button class="md-raised" @click="resetConfirmDeleteRecordId">Нет</md-button>
+                <md-button class="md-raised md-primary" @click="deleteRecordAfterConfirm">Да</md-button>
+            </md-dialog-actions>
+        </md-dialog>
     </div>
 </template>
 
@@ -27,7 +36,12 @@
             MaterialGrid
         },
         props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg', 'hideAddButton',
-            'hideGridEditBtn', 'pageStateName'],
+            'hideGridEditBtn', 'pageStateName', 'getCustomConfirmDeleteRecordText'],
+        data() {
+            return {
+                confirmDeleteRecordId: null
+            }
+        },
         methods: {
             loadData: function() {
                 var url = utils.stringFormat('/admin/workspace/{0}?{1}',
@@ -63,16 +77,34 @@
                 }
                 return paramsString;
             },
+            resetConfirmDeleteRecordId: function() {
+                this.confirmDeleteRecordId = null;
+            },
+            getConfirmDeleteRecord: function() {
+                gridData.find((entry) => entry[this.recordIdFieldName] == recId);
+            },
+            getConfirmDeleteRecordText: function() {
+                if(this.getCustomConfirmDeleteRecordText) {
+                    return this.getCustomConfirmDeleteRecordText(this.getConfirmDeleteRecord);
+                } else {
+                    return 'запись';
+                }
+            },
             onGridEditBtnClick: function(rec) {
                 this.$router.push(utils.stringFormat('/main/{0}/edit/{1}', this.dataTypeMultipleName, rec._id));
             },
             onGridDeleteBtnClick: function(rec) {
-                var recId = rec._id,
+                this.confirmDeleteRecordId = rec[this.recordIdFieldName];
+            },
+            deleteRecordAfterConfirm: function() {
+                var recId = this.confirmDeleteRecordId,
                     url = utils.stringFormat('/admin/workspace/{0}/{1}', this.dataTypeMultipleName, recId);
-                utils.doRequest(url, {method: 'DELETE'}, function(data) {
-                    var entry = this.gridData.find((entry) => entry._id == recId);
-                    this.gridData.splice(this.gridData.indexOf(entry), 1);
-                }.bind(this));
+                utils.doRequest(url, {method: 'DELETE'}, (data) => {
+                    const gridData = this.getGridState().data;
+                    const entry = gridData.find((entry) => entry[this.recordIdFieldName] == recId);
+                    gridData.splice(gridData.indexOf(entry), 1);
+                    this.resetConfirmDeleteRecordId();
+                });
             },
             onGridPagerPageIndexChange: function(pageIndex) {
                 this.loadPageByIndex(pageIndex);
@@ -87,6 +119,9 @@
         computed: {
             gridData() {
                 return this.getGridState().data;
+            },
+            recordIdFieldName: function() {
+                return '_id';
             }
         },
         mounted: function() {
@@ -94,3 +129,11 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .confirm-delete-window {
+        p {
+            padding: 24px;
+        }
+    }
+</style>

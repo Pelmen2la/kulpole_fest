@@ -35,9 +35,9 @@ function formatUrlToWeb(url) {
     return url;
 };
 
-function addModelKeysToObject(obj, modelName) {
+function addModelKeysToObject(obj, modelName, getValueFn = (field) => 1) {
     let eventRequestModelKeys = {};
-    mongoose.model(modelName).schema.eachPath((key) => eventRequestModelKeys[key] = 1);
+    mongoose.model(modelName).schema.eachPath((key) => eventRequestModelKeys[key] = getValueFn(key));
     Object.assign(obj, eventRequestModelKeys);
     return obj;
 };
