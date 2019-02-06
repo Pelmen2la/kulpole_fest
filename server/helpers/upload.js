@@ -77,7 +77,7 @@ function tryUploadFileCore(relativeTargetPath, file, clb) {
 };
 
 function ensureDirExists(dirPath) {
-    const parts = dirPath.split('\\');
+    const parts = dirPath.split(/[\\\/]/g);
     var targetPath = '/',
         i = 0;
     const ensureExists = (clb) => {
