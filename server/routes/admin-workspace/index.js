@@ -12,6 +12,7 @@ module.exports = function(app) {
     app.get('/admin/workspace/', function(req, res, next) {
         const params = {
             textResourcesJsonString: JSON.stringify(global.textResources),
+            isAdmin: req.session.adminWorkspaceLogedInUserData.isAdmin,
             formatFns: {
                 formatDbDateToWeb: commonUtils.formatDbDateToWeb,
                 formatUrlToWeb: commonUtils.formatUrlToWeb

@@ -6,5 +6,5 @@ html(lang='en')
   body
     #MainAppContainer
 
-    script(type='text/javascript') window.kulpoleAppData = { textResources: JSON.parse('#{textResourcesJsonString}'.replace(/&quot;/g, '\"')) }
+    script(type='text/javascript') window.kulpoleAppData = { textResources: JSON.parse('#{textResourcesJsonString}'.replace(/&quot;/g, '\"')), isAdmin: #{isAdmin} }
     script(src='/dist/js/admin-workspace-index.js')
