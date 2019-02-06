@@ -107,12 +107,12 @@ module.exports = function(app) {
         }
     });
 
-    app.post('/event_request/:eventRequestUid/add_photo', upload.single('photo'), async function(req, res, next) {
-        const eventRequestId = req.params.eventRequestUid;
+    app.post('/event_request/:eventRequestId/add_photo', upload.single('photo'), async function(req, res, next) {
+        const eventRequestId = req.params.eventRequestId;
         const result = await tryGetEventRequestData(req, res, eventRequestId);
         const eventRequestData = result.eventRequestData;
         if(eventRequestData) {
-            const targetPath = getEventRequestPhotoFolderPath(eventRequestData.uid, eventRequestData.eventData[0].uid);
+            const targetPath = getEventRequestPhotoFolderPath(eventRequestData.eventData[0].uid, eventRequestData.uid);
             uploadHelper.tryUploadFiles(targetPath, req, async (photoUrl) => {
                 const photoUrls = (eventRequestData.photoUrls || []).concat(photoUrl);
                 await adminDataHelper.updateEventRequest(eventRequestId, {photoUrls});
