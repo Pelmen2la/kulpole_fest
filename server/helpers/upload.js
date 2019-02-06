@@ -51,7 +51,7 @@ function tryUploadFileCore(relativeTargetPath, file, clb) {
     src.pipe(dest);
 
     src.on('end', function() {
-        ensureDirExists(IMAGES_FOLDER_PATH, relativeTargetPath).then(() => {
+        ensureDirExists(getTargetFolderPath()).then(() => {
             while(fs.existsSync(getTargetPath())) {
                 suffix = parseInt(suffix + 1);
             }
@@ -76,9 +76,9 @@ function tryUploadFileCore(relativeTargetPath, file, clb) {
     });
 };
 
-function ensureDirExists(startFolderPath, relativePath) {
-    const parts = relativePath.split('\\');
-    var targetPath = startFolderPath,
+function ensureDirExists(dirPath) {
+    const parts = dirPath.split('\\');
+    var targetPath = '/',
         i = 0;
     const ensureExists = (clb) => {
         targetPath = path.join(targetPath, parts[i]);
