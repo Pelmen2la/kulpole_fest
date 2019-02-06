@@ -44,10 +44,14 @@ block main-content
         input(id="EuropeRadiobutton" type="radio" name="region" value="europe")
         label(for="EuropeRadiobutton")= "Европа"
 
+
       div.textarea-container.with-fly-label
         textarea(rows=5 id="RequestTextTextarea" name="text")
         label(for="RequestTextTextarea")
           | Текст заявки *
+
+      input(id="HideChatCheckbox" type="checkbox" name="hideChat" value="true" class="like-block")
+      label(for="HideChatCheckbox")= "Спрятать переписку от остальных пользователей"
 
       b
         | Фотографии (3-5 шт.)

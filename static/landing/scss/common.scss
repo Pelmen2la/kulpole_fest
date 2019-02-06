@@ -166,6 +166,7 @@ button {
     color: $main-dark-blue-color;
 }
 
+input[type=checkbox],
 input[type=radio] {
     display: none;
 
@@ -174,22 +175,30 @@ input[type=radio] {
         display: inline-block;
         height: 1em;
         padding-left: 1.5em;
-        position: relative;
-
-        &:before {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 1em;
-            width: 1em;
-            box-sizing: border-box;
-            content: ' ';
-            background: url('/resources/icons/radio-button.svg') no-repeat;
-            background-size: 1em;
-        }
+        background-size: 1em;
+        background-repeat: no-repeat;
     }
-    &:checked + label:before {
+}
+
+input[type=radio] {
+    & + label {
+        background-image: url('/resources/icons/radio-button.svg');
+    }
+    &:checked + label {
         background-image: url('/resources/icons/radio-button-checked.svg');
+    }
+}
+
+input[type=checkbox] {
+    & + label {
+        background-image: url('/resources/icons/checkbox.svg');
+    }
+    &:checked + label {
+        background-image: url('/resources/icons/checkbox-checked.svg');
+    }
+    &.like-block + label {
+        display: block;
+        margin-bottom: 1em;
     }
 }
 

@@ -18,7 +18,7 @@ function doRequest(url, opts, clb) {
     fetch(url, opts).then(function(resp) {
         return resp.json();
     }).then(function(data) {
-        clb(data)
+        clb && clb(data)
     });
 };
 

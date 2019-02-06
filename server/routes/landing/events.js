@@ -60,6 +60,7 @@ module.exports = function(app) {
                         eventId: eventData.get('_id'),
                         userId: new mongoose.Types.ObjectId(req.session.logedInUserData._id)
                     });
+                    eventRequestData.hideChat = eventRequestData.hideChat === 'true';
                     if(link.indexOf('http://') !== 0 && link.indexOf('https://') !== 0) {
                         eventRequestData.socialNetworkLink = 'http://' + link;
                     }
@@ -81,6 +82,17 @@ module.exports = function(app) {
             utils.getPageHtml('event-request', req, params).then((pageHtml) => res.send(pageHtml));
         } else {
             res.redirect('/events');
+        }
+    });
+
+    app.put('/event_request/:eventRequestUid/set_hide_chat/', async function(req, res, next) {
+        const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
+        if(result.eventRequestData) {
+            eventRequestModel.findOneAndUpdate({_id: result.eventRequestData._id}, req.body, (err, eventRequestData) => {
+                res.send({success: !err, data: eventRequestData});
+            });
+        } else {
+            res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
         }
     });
 
