@@ -39,8 +39,8 @@ block main-content
     b
       | Фотографии
     ul.photo-list#EventRequestPhotoList
-      li
-        each photoUrl in eventRequestData.photoUrls
+      each photoUrl in eventRequestData.photoUrls
+        li
           img(src=photoUrl)
     if isCanEdit
       div.file-input-wrapper

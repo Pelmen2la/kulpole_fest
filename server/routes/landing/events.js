@@ -113,9 +113,10 @@ module.exports = function(app) {
         const eventRequestData = result.eventRequestData;
         if(eventRequestData) {
             const targetPath = getEventRequestPhotoFolderPath(eventRequestData.uid, eventRequestData.eventData[0].uid);
-            uploadHelper.tryUploadFiles(targetPath, req, (photoUrl) => {
+            uploadHelper.tryUploadFiles(targetPath, req, async (photoUrl) => {
                 const photoUrls = (eventRequestData.photoUrls || []).concat(photoUrl);
-                adminDataHelper.updateEventRequest(eventRequestId, {photoUrls}, () => res.send(photoUrl));
+                await adminDataHelper.updateEventRequest(eventRequestId, {photoUrls});
+                res.send(photoUrl);
                 adminDataHelper.updateEventRequestLastActionDate(eventRequestId, 'user');
             });
         } else {
