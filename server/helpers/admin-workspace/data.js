@@ -104,7 +104,7 @@ function createCRUD(dataModelName, model) {
 
     module.exports[`delete${capName}`] = function(id) {
         return new Promise((resolve) => {
-            model.findOneAndDelete(id, (err, data) => {
+            model.findOneAndDelete({_id: id}, (err, data) => {
                 resolve(err ? null : data);
             });
         });
