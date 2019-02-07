@@ -52,10 +52,6 @@ import './../../../common/scss/event-request-chat.scss'
         };
 
         xhr.open('post', `/event_request/${eventRequestId}/add_photo`, true);
-
-        xhr.setRequestHeader('X-File-Name', file.name);
-        xhr.setRequestHeader('X-File-Size', file.size);
-        xhr.setRequestHeader('X-File-Type', file.type);
         data.append('photo', file, file.name);
         xhr.send(data);
     };
