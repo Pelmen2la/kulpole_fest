@@ -7,6 +7,7 @@ import './../../../common/scss/event-request-chat.scss'
     const eventRequestId = document.querySelector('.event-request-page-wrapper').dataset.eventRequestId;
     const chatMessagesContainer = document.querySelector('.chat-messages-container');
     const chatTextarea = document.getElementById('ChatMessageTextarea');
+    const hideChatCheckbox = document.getElementById('HideChatCheckbox');
     const fileInput = document.querySelector('input[type=file]');
     const photoList = document.getElementById('EventRequestPhotoList');
 
@@ -17,10 +18,20 @@ import './../../../common/scss/event-request-chat.scss'
         if(fileInput) {
             preparePhotoFileInput();
         }
+        if(hideChatCheckbox) {
+            prepareHideChatCheckbox();
+        }
     };
 
     function preparePhotoFileInput() {
         fileInput.addEventListener('change', uploadFile);
+    };
+
+    function prepareHideChatCheckbox() {
+        hideChatCheckbox.addEventListener('change', function() {
+            const hideChat = arguments[0].target.checked;
+            commonUtils.doDataRequest(`/event_request/${eventRequestId}/set_hide_chat/`, 'PUT', {hideChat});
+        });
     };
 
     function prepareChat() {

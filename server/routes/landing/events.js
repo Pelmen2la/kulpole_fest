@@ -60,6 +60,7 @@ module.exports = function(app) {
                         eventId: eventData.get('_id'),
                         userId: new mongoose.Types.ObjectId(req.session.logedInUserData._id)
                     });
+                    eventRequestData.hideChat = eventRequestData.hideChat === 'true';
                     if(link.indexOf('http://') !== 0 && link.indexOf('https://') !== 0) {
                         eventRequestData.socialNetworkLink = 'http://' + link;
                     }
@@ -71,85 +72,93 @@ module.exports = function(app) {
         }
     });
 
-    app.get('/event_request/:eventRequestUid', function(req, res, next) {
-        tryGetEventRequestData(req, res, req.params.eventRequestUid).then((result) => {
-            if(result.eventRequestData) {
-                if(result.canEdit) {
-                    adminDataHelper.updateEventRequestLastOpenDate(result.eventRequestData._id, 'user');
-                }
-                const params = {eventRequestData: result.eventRequestData, isCanEdit: result.canEdit};
-                utils.getPageHtml('event-request', req, params).then((pageHtml) => res.send(pageHtml));
-            } else {
-                res.redirect('/events');
+    app.get('/event_request/:eventRequestUid', async function(req, res, next) {
+        const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
+        if(result.eventRequestData) {
+            if(result.canEdit) {
+                adminDataHelper.updateEventRequestLastOpenDate(result.eventRequestData._id, 'user');
             }
-        });
+            const params = {eventRequestData: result.eventRequestData, isCanEdit: result.canEdit};
+            utils.getPageHtml('event-request', req, params).then((pageHtml) => res.send(pageHtml));
+        } else {
+            res.redirect('/events');
+        }
     });
 
-    app.post('/event_request/:eventRequestUid/send_msg', function(req, res, next) {
-        tryGetEventRequestData(req, res, req.params.eventRequestUid).then((result) => {
-            if(result.eventRequestData) {
-                adminDataHelper.addEventRequestMessage(result.eventRequestData._id, req.body.text, 'user', (result) => {
-                    res.send(result);
-                });
-            } else {
-                res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
-            }
-        });
-    });
-
-    app.post('/event_request/:eventRequestUid/add_photo', upload.single('photo'), function(req, res, next) {
-        var eventRequestId = req.params.eventRequestUid;
-        tryGetEventRequestData(req, res, eventRequestId).then((result) => {
-            const eventRequestData = result.eventRequestData;
-            if(eventRequestData) {
-                const targetPath = getEventRequestPhotoFolderPath(eventRequestData.uid, eventRequestData.eventData[0].uid);
-                uploadHelper.tryUploadFiles(targetPath, req, (photoUrl) => {
-                    const photoUrls = (eventRequestData.photoUrls || []).concat(photoUrl);
-                    adminDataHelper.updateEventRequest(eventRequestId, {photoUrls}, () => res.send(photoUrl));
-                    adminDataHelper.updateEventRequestLastActionDate(eventRequestId, 'user');
-                });
-            } else {
-                res.send('');
-            }
-        });
-    });
-
-    app.get('/user_event_requests/', function(req, res, next) {
-        if(utils.checkAuth(req, res)) {
-            adminDataHelper.getEventRequestList({userId: req.session.logedInUserData._id}, (eventRequestList) => {
-                const params = {
-                    eventRequestList: eventRequestList.content,
-                    showEventName: true,
-                    showUserName: false
-                };
-                utils.getPageHtml('event-requests', req, params).then((pageHtml) => res.send(pageHtml));
+    app.put('/event_request/:eventRequestUid/set_hide_chat/', async function(req, res, next) {
+        const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
+        if(result.eventRequestData) {
+            eventRequestModel.findOneAndUpdate({_id: result.eventRequestData._id}, req.body, (err, eventRequestData) => {
+                res.send({success: !err, data: eventRequestData});
             });
+        } else {
+            res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
+        }
+    });
+
+    app.post('/event_request/:eventRequestUid/send_msg', async function(req, res, next) {
+        const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
+        if(result.eventRequestData) {
+            adminDataHelper.addEventRequestMessage(result.eventRequestData._id, req.body.text, 'user', (result) => {
+                res.send(result);
+            });
+        } else {
+            res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
+        }
+    });
+
+    app.post('/event_request/:eventRequestId/add_photo', upload.single('photo'), async function(req, res, next) {
+        const eventRequestId = req.params.eventRequestId;
+        const result = await tryGetEventRequestData(req, res, eventRequestId);
+        const eventRequestData = result.eventRequestData;
+        if(eventRequestData) {
+            const targetPath = getEventRequestPhotoFolderPath(eventRequestData.eventData[0].uid, eventRequestData.uid);
+            uploadHelper.tryUploadFiles(targetPath, req, async (photoUrl) => {
+                const photoUrls = (eventRequestData.photoUrls || []).concat(photoUrl);
+                await adminDataHelper.updateEventRequest(eventRequestId, {photoUrls});
+                res.send(photoUrl);
+                adminDataHelper.updateEventRequestLastActionDate(eventRequestId, 'user');
+            });
+        } else {
+            res.send('');
+        }
+    });
+
+    app.get('/user_event_requests/', async function(req, res, next) {
+        if(utils.checkAuth(req, res)) {
+            const eventRequestList = await adminDataHelper.getEventRequestList({userId: req.session.logedInUserData._id});
+            const params = {
+                eventRequestList: eventRequestList.content,
+                showEventName: true,
+                showUserName: false
+            };
+            utils.getPageHtml('event-requests', req, params).then((pageHtml) => res.send(pageHtml));
         }
     });
 };
 
-function sendEventsPageHtml(req, res, eventsYear) {
-    getEventYears().then((yearList) => {
-        if(isNaN(eventsYear)) {
-            res.redirect('/');
-            return;
-        }
-        if(yearList.indexOf(eventsYear) === -1) {
-            eventsYear = yearList[0] || (new Date).getFullYear();
-        }
+module.exports.getEventsData = getEventsData;
 
-        getEventsData(req, eventsYear).then((eventsData) => {
-            const params = {eventsYear, yearList, eventsData: eventsData || []};
-            utils.getPageHtml('events', req, params).then((pageHtml) => res.send(pageHtml));
-        });
-    });
+async function sendEventsPageHtml(req, res, eventsYear) {
+    if(isNaN(eventsYear)) {
+        res.redirect('/');
+        return;
+    }
+    const yearList = await getEventYears();
+    if(yearList.indexOf(eventsYear) === -1) {
+        eventsYear = yearList[0] || (new Date).getFullYear();
+    }
+
+    const eventsData = await getEventsData(req, eventsYear);
+    const params = {eventsYear, yearList, eventsData: eventsData || []};
+    utils.getPageHtml('events', req, params).then((pageHtml) => res.send(pageHtml));
 };
 
-function getEventsData(req, eventsYear) {
+async function getEventsData(req, eventsYear) {
     return new Promise((resolve) => {
-        let aggArgs = [{$match: getYearFilter(eventsYear)}, {$sort: {date: -1}}];
-        if(req.session.logedInUserData) {
-            aggArgs = aggArgs.concat([{
+        var aggArgs = [
+            {$match: getYearFilter(eventsYear)}, {$sort: {date: 1}},
+            {
                 $lookup: {
                     from: eventRequestModel.collection.collectionName,
                     localField: '_id',
@@ -192,7 +201,10 @@ function getEventsData(req, eventsYear) {
                     html: {$first: '$html'},
                     date: {$first: '$date'}
                 }
-            }, {
+            }
+        ];
+        if(req.session.logedInUserData) {
+            aggArgs.concat([{
                 $project: commonUtils.addModelKeysToObject({
                     eventRequests: 1,
                     userEventRequests: {
@@ -242,7 +254,7 @@ function addRequestsStatesToEvents(logedInUserData, eventsData) {
     });
 };
 
-function getEventYears() {
+async function getEventYears() {
     return new Promise((resolve) => {
         eventModel.aggregate([
             {$project: {year: {$year: '$date'}}},
@@ -254,16 +266,13 @@ function getEventYears() {
     });
 };
 
-function tryGetEventRequestData(req, res, eventRequestId) {
-    return new Promise((resolve) => {
-        if(utils.checkAuth(req, res)) {
-            adminDataHelper.getEventRequest(eventRequestId, (eventRequestData) => {
-                resolve({
-                    canEdit: eventRequestData && eventRequestData.userId.toString() == req.session.logedInUserData._id,
-                    eventRequestData
-                });
-            });
-        }
+async function tryGetEventRequestData(req, res, eventRequestId) {
+    return new Promise(async (resolve) => {
+        const eventRequestData = await adminDataHelper.getEventRequest(eventRequestId);
+        resolve({
+            canEdit: req.session.logedInUserData && eventRequestData && eventRequestData.userId.toString() == req.session.logedInUserData._id,
+            eventRequestData
+        });
     });
 };
 

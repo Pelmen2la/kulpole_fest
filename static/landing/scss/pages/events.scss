@@ -20,34 +20,4 @@
             }
         }
     }
-    .event-header {
-        overflow: hidden;
-
-        .event-header-bottom-container {
-            font-size: 1.2em;
-            .date {
-                display: inline-block;
-                float: left;
-            }
-            .request-link {
-                display: inline-block;
-                float: right;
-            }
-        }
-    }
-    .event-content-container {
-        overflow: auto;
-        border-bottom: 1px solid $main-dark-blue-color;
-        margin: 0.5em 0 2em;
-
-        .event-html-wrapper {
-            float: left;
-            padding: 0.5em 0;
-            width: 70%;
-        }
-        .event-request-list-container {
-            float: right;
-            width: 30%;
-        }
-    }
 }

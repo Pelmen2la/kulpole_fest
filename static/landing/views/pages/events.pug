@@ -13,20 +13,7 @@ block main-content
 
     if eventsData.length
       each eventData in eventsData
-        - var hasPassed = new Date > new Date(eventData.date)
-        div.event-header
-          h2= eventData.title
-          div.event-header-bottom-container
-            b.date= formatFns.formatDbDateToWeb(eventData.date)
-            if logedInUserData && (!hasPassed || eventData.userEventRequest)
-              - var linkText = eventData.userEventRequest ? 'Открыть вашу заявку' : 'Подать заявку'
-              - var linkSrc = eventData.userEventRequest ? '/event_request/' + eventData.userEventRequest.uid : '/events/' + eventData.uid + '/request/new'
-              a.request-link(href=linkSrc)= linkText
-
-        div.event-content-container
-          div.event-html-wrapper!= eventData.html
-          - var eventRequests = eventData.eventRequests
-          include ../partials/event-request-list
+        include ../partials/event
 
 
 

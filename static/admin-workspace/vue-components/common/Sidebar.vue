@@ -23,7 +23,7 @@
         name: 'sidebar',
         data() {
             return {
-                menuItemsCfg: [
+                commonMenuItemsCfg: [
                     {
                         text: 'Заявки',
                         url: '/main/eventRequests',
@@ -48,7 +48,9 @@
                         text: 'Клубы',
                         url: '/main/clubs',
                         iconName: 'tent'
-                    },
+                    }
+                ],
+                adminMenuItemsCfg: [
                     {
                         text: 'Комиссия',
                         url: '/main/systemUsers',
@@ -57,7 +59,16 @@
                 ]
             }
         },
-        methods: {}
+        methods: {},
+        computed: {
+            menuItemsCfg() {
+                var cfg = this.commonMenuItemsCfg;
+                if(window.kulpoleAppData.isAdmin) {
+                    cfg = cfg.concat(this.adminMenuItemsCfg);
+                }
+                return cfg;
+            }
+        }
     }
 </script>
 

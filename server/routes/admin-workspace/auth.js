@@ -10,7 +10,7 @@ module.exports = function(app) {
         const login = req.body.login;
         const password = req.body.password;
         if(login == global.adminLogin && password == global.adminPassword) {
-            req.session.adminLogedInUserData = {
+            req.session.adminWorkspaceLogedInUserData = {
                 isAdmin: true
             };
             res.redirect('/admin/workspace#/main/users');
@@ -19,7 +19,7 @@ module.exports = function(app) {
                 if(err || !systemUserData) {
                     sendAuthPage(res, 'Не правильное имя пользователя или пароль');
                 } else {
-                    req.session.adminLogedInUserData = Object.assign(systemUserData.toObject(), {
+                    req.session.adminWorkspaceLogedInUserData = Object.assign(systemUserData.toObject(), {
                         isAdmin: false
                     });
                     res.redirect('/admin/workspace#/main/users');
@@ -29,7 +29,7 @@ module.exports = function(app) {
     });
 
     app.get('/admin/logout', function (req, res) {
-        delete req.session.adminLogedInUserData;
+        delete req.session.adminWorkspaceLogedInUserData;
         res.redirect(ADMIN_LOGIN_URL);
     });
 
@@ -38,7 +38,7 @@ module.exports = function(app) {
     });
 
     function authMiddleware(req, res, next) {
-        if(req.session.adminLogedInUserData) {
+        if(req.session.adminWorkspaceLogedInUserData) {
             next();
         } else {
             res.redirect(ADMIN_LOGIN_URL);

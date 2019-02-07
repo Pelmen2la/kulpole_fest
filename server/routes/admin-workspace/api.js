@@ -15,30 +15,27 @@ module.exports = function(app) {
 function createCRUD(app, mnemonic, multMnemonic) {
     const capMnemonic = mnemonic[0].toUpperCase() + mnemonic.substring(1),
         idParamName = mnemonic + 'Id';
-    app.get('/admin/workspace/' + multMnemonic, function(req, res, next) {
-        dataHelper['get' + capMnemonic + 'List'](req.query, (result) => res.json(result));
+    app.get('/admin/workspace/' + multMnemonic, async function(req, res, next) {
+        const result = await dataHelper['get' + capMnemonic + 'List'](req.query);
+        res.json(result)
     });
-    app.get('/admin/workspace/' + multMnemonic + '/:' + idParamName, function(req, res, next) {
-        dataHelper['get' + capMnemonic](req.params[idParamName], (result) => {
-            res.json(result);
-            onOpen(mnemonic, result);
-        });
+    app.get('/admin/workspace/' + multMnemonic + '/:' + idParamName, async function(req, res, next) {
+        const result = await dataHelper['get' + capMnemonic](req.params[idParamName]);
+        res.json(result);
+        onOpen(mnemonic, result);
     });
-    app.post('/admin/workspace/' + multMnemonic + '/', function(req, res, next) {
-        dataHelper['add' + capMnemonic](req.body, (result) => {
-            res.json({success: true, data: result});
-        });
+    app.post('/admin/workspace/' + multMnemonic + '/', async function(req, res, next) {
+        const result = await dataHelper['add' + capMnemonic](req.body);
+        res.json({success: true, data: result});
     });
-    app.put('/admin/workspace/' + multMnemonic + '/:' + idParamName, function(req, res, next) {
-        dataHelper['update' + capMnemonic](req.params[idParamName], req.body, (result) => {
-            onUpdate(mnemonic, result);
-            res.json({success: true, data: result});
-        });
+    app.put('/admin/workspace/' + multMnemonic + '/:' + idParamName, async function(req, res, next) {
+        const result = await dataHelper['update' + capMnemonic](req.params[idParamName], req.body);
+        onUpdate(mnemonic, result);
+        res.json({success: true, data: result});
     });
-    app.delete('/admin/workspace/' + multMnemonic + '/:' + idParamName, function(req, res, next) {
-        dataHelper['delete' + capMnemonic](req.params[idParamName], (result) => {
-            res.json({success: true});
-        });
+    app.delete('/admin/workspace/' + multMnemonic + '/:' + idParamName, async function(req, res, next) {
+        await dataHelper['delete' + capMnemonic](req.params[idParamName]);
+        res.json({success: true});
     });
 };
 

@@ -166,6 +166,7 @@ button {
     color: $main-dark-blue-color;
 }
 
+input[type=checkbox],
 input[type=radio] {
     display: none;
 
@@ -174,33 +175,30 @@ input[type=radio] {
         display: inline-block;
         height: 1em;
         padding-left: 1.5em;
-        position: relative;
-
-        &:before {
-            position: absolute;
-            left: 0;
-            top: -1px;
-            height: 1em;
-            width: 1em;
-            border: 2px solid $main-dark-blue-color;
-            border-radius: 0.5em;
-            box-sizing: border-box;
-            content: ' ';
-        }
+        background-size: 1em;
+        background-repeat: no-repeat;
     }
-    &:checked {
-        & + label:after {
-            position: absolute;
-            left: calc(0.3em);
-            top: calc(0.3em - 1px);
-            height: 0.4em;
-            width: 0.4em;
-            border: 1px solid $main-dark-blue-color;
-            border-radius: 0.2em;
-            box-sizing: border-box;
-            background: $main-dark-blue-color;
-            content: ' ';
-        }
+}
+
+input[type=radio] {
+    & + label {
+        background-image: url('/resources/icons/radio-button.svg');
+    }
+    &:checked + label {
+        background-image: url('/resources/icons/radio-button-checked.svg');
+    }
+}
+
+input[type=checkbox] {
+    & + label {
+        background-image: url('/resources/icons/checkbox.svg');
+    }
+    &:checked + label {
+        background-image: url('/resources/icons/checkbox-checked.svg');
+    }
+    &.like-block + label {
+        display: block;
+        margin-bottom: 1em;
     }
 }
 
@@ -263,6 +261,38 @@ input[type=radio] {
                 overflow: hidden;
             }
         }
+    }
+}
+
+.event-header {
+    overflow: hidden;
+
+    .event-header-bottom-container {
+        font-size: 1.2em;
+        .date {
+            display: inline-block;
+            float: left;
+        }
+        .request-link {
+            display: inline-block;
+            float: right;
+        }
+    }
+}
+
+.event-content-container {
+    overflow: auto;
+    border-bottom: 1px solid $main-dark-blue-color;
+    margin: 0.5em 0 2em;
+
+    .event-html-wrapper {
+        float: left;
+        padding: 0.5em 0;
+        width: 70%;
+    }
+    .event-request-list-container {
+        float: right;
+        width: 30%;
     }
 }
 

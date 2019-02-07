@@ -39,8 +39,8 @@ block main-content
     b
       | Фотографии
     ul.photo-list#EventRequestPhotoList
-      li
-        each photoUrl in eventRequestData.photoUrls
+      each photoUrl in eventRequestData.photoUrls
+        li
           img(src=photoUrl)
     if isCanEdit
       div.file-input-wrapper
@@ -52,18 +52,22 @@ block main-content
           br
           span.notification-text
 
-    div.event-request-chat-container
-      h2 Переписка
-      div.chat-messages-container()
-        if !eventRequestData.chatMessages.length
-          p.empty-chat-message Переписка пуста
-        each chatMessage in eventRequestData.chatMessages
-          div(class='chat-message ' + (chatMessage.owner === 'user' ? 'my' : ''))!= chatMessage.text.replace(/\n/g, '<br/>')
-      if isCanEdit
-        div.textarea-container.with-fly-label
-          textarea(maxlength="500" rows="5")#ChatMessageTextarea
-          label(for="ChatMessageTextarea") Текст сообщения
-          img.send-chat-message-btn(src='/resources/icons/scroll.svg', v-if='newMessageText.length', @click='trySendChatMessage')
+    if isCanEdit || !eventRequestData.hideChat
+      div.event-request-chat-container
+        h2 Переписка
+        if isCanEdit
+          input(id="HideChatCheckbox" type="checkbox" name="hideChat" value="true" class="like-block" checked=eventRequestData.hideChat)
+          label(for="HideChatCheckbox")= "Спрятать переписку от остальных пользователей"
+        div.chat-messages-container()
+          if !eventRequestData.chatMessages.length
+            p.empty-chat-message Переписка пуста
+          each chatMessage in eventRequestData.chatMessages
+            div(class='chat-message ' + (chatMessage.owner === 'user' ? 'my' : ''))!= chatMessage.text.replace(/\n/g, '<br/>')
+        if isCanEdit
+          div.textarea-container.with-fly-label
+            textarea(maxlength="500" rows="5")#ChatMessageTextarea
+            label(for="ChatMessageTextarea") Текст сообщения
+            img.send-chat-message-btn(src='/resources/icons/scroll.svg', v-if='newMessageText.length', @click='trySendChatMessage')
 
 
 
