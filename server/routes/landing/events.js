@@ -77,6 +77,8 @@ module.exports = function(app) {
         if(result.eventRequestData) {
             if(result.canEdit) {
                 adminDataHelper.updateEventRequestLastOpenDate(result.eventRequestData._id, 'user');
+            } else {
+                res.redirect('/events');
             }
             const params = {eventRequestData: result.eventRequestData, isCanEdit: result.canEdit};
             utils.getPageHtml('event-request', req, params).then((pageHtml) => res.send(pageHtml));

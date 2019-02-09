@@ -57,7 +57,8 @@ block main-content
         h2 Переписка
         if isCanEdit
           input(id="HideChatCheckbox" type="checkbox" name="hideChat" value="true" class="like-block" checked=eventRequestData.hideChat)
-          label(for="HideChatCheckbox")= "Спрятать переписку от остальных пользователей"
+          if false
+            label(for="HideChatCheckbox")= "Спрятать переписку от остальных пользователей"
         div.chat-messages-container()
           if !eventRequestData.chatMessages.length
             p.empty-chat-message Переписка пуста
