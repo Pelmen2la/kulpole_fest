@@ -131,8 +131,8 @@ module.exports = function(app) {
         if(eventRequestData) {
             const targetPath = getEventRequestPhotoFolderPath(eventRequestData.eventData[0].uid, eventRequestData.uid);
             uploadHelper.tryUploadFiles(targetPath, req, async (photoUrl) => {
-                const photoUrls = (eventRequestData.photoUrls || []).concat(photoUrl);
-                await adminDataHelper.updateEventRequest(eventRequestId, {photoUrls});
+                const photosProps = (eventRequestData.photosProps || []).concat({url: photoUrl});
+                await adminDataHelper.updateEventRequest(eventRequestId, {photosProps});
                 res.send(photoUrl);
                 adminDataHelper.updateEventRequestLastActionDate(eventRequestId, 'user');
             });
