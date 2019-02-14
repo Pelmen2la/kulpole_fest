@@ -65,6 +65,9 @@
                 if(type === 'boolIcon') {
                     let imageName = val ? 'check-green' : 'cross-red';
                     return `<img style="height: 16px;" src="/resources/icons/${imageName}.svg"/>`
+                } else if(type === 'date') {
+                    let splittedDate = val.split('T');
+                    return splittedDate[1].split('.')[0] + ' ' + splittedDate[0];
                 }
                 return val;
             },

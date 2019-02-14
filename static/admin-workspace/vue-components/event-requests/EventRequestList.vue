@@ -97,7 +97,7 @@
                     },
                     {text: 'Костюм допущен', dataIndex: 'isCostumeAccepted', renderType: 'boolIcon'},
                     {text: 'Доспех допущен', dataIndex: 'isArmorAccepted', renderType: 'boolIcon'},
-                    {text: 'Дата', dataIndex: 'date'}
+                    {text: 'Дата', dataIndex: 'date', renderType: 'date'}
                 ];
             },
             onSearchTextChange: function() {

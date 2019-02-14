@@ -41,7 +41,7 @@
             getGridColumnCfg: function() {
                 return [
                     {text: 'Заголовок', dataIndex: 'title'},
-                    {text: 'Дата', dataIndex: 'date'}
+                    {text: 'Дата', dataIndex: 'date', renderType: 'date'}
                 ];
             },
             onSearchTextChange: function() {
