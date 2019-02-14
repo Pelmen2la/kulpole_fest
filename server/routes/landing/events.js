@@ -201,7 +201,6 @@ async function getEventsData(req, eventsYear) {
                 }
             }, {
                 $project: commonUtils.addModelKeysToObject({
-                    'userEventRequest': 1,
                     'eventRequests._id': 1,
                     'eventRequests.uid': 1,
                     'eventRequests.userId': 1,
@@ -221,7 +220,7 @@ async function getEventsData(req, eventsYear) {
             }
         ];
         if(req.session.logedInUserData) {
-            aggArgs.concat([{
+            aggArgs = aggArgs.concat([{
                 $project: commonUtils.addModelKeysToObject({
                     eventRequests: 1,
                     userEventRequests: {
@@ -243,30 +242,6 @@ async function getEventsData(req, eventsYear) {
         }
         eventModel.aggregate(aggArgs).exec().then(function(eventsData) {
             resolve(eventsData)
-        });
-    });
-};
-
-function addRequestsStatesToEvents(logedInUserData, eventsData) {
-    return new Promise((resolve) => {
-        if(!logedInUserData) {
-            resolve(eventsData.map((event) => {
-                return {event};
-            }));
-            return;
-        }
-        const eventIds = eventsData.map((e) => e.get('id'));
-        const filters = {$and: [{userId: logedInUserData._id}, {eventId: {$in: eventIds}}]};
-        eventRequestModel.find(filters, (err, eventRequestData) => {
-            eventsData = eventsData.map((event) => {
-                var eventRequest = eventRequestData.find((r) => r.get('eventId') == event.get('id'));
-                return {
-                    event,
-                    request: eventRequest || null
-                }
-            });
-
-            resolve(eventsData);
         });
     });
 };
