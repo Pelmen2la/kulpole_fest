@@ -13,7 +13,7 @@ block main-content
                 strong.event-name= 'Фестиваль: ' + eventRequest.eventData[0].title
               if showUserName
                 strong.user-name= 'Участник: ' + eventRequest.userData[0].name + ' ' + eventRequest.userData[0].surname
-              img(src=eventRequest.photoUrls[0])
+              img(src=eventRequest.photosProps[0].url)
               span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'не допущен')
               span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'не допущен')
 

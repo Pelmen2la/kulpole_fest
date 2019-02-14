@@ -3,6 +3,8 @@ import utils from './../utils'
 
 (window.addEventRequestModule = function() {
     const requestTextarea = document.getElementById('RequestTextTextarea');
+    const photoList = document.getElementById('EventRequestPhotoList');
+    var photos = [];
 
     function init() {
         prepareFileInput();
@@ -11,20 +13,46 @@ import utils from './../utils'
         utils.addInputOnChangeListeners(utils.qn('club'), ensureAuthButtonState);
         utils.addInputOnChangeListeners(utils.qn('socialNetworkLink'), ensureAuthButtonState);
         utils.qn('region', true).forEach((radio) => radio.addEventListener('change', ensureSubmitRequestBtnStateCore));
+
+        document.getElementById('AuthForm').addEventListener('submit', function(e) {
+            const form = e.target;
+            const photoDescriptions = [];
+            var formData = new FormData(form);
+            var xhr = new XMLHttpRequest();
+
+            photoList.querySelectorAll('textarea').forEach(textarea => photoDescriptions.push(textarea.value));
+
+            photos.forEach(p => formData.append('photo[]', p, p.name));
+            formData.append('photoDescriptions', photoDescriptions);
+            xhr.onload = () => window.location.replace('/user_event_requests/');
+            xhr.open('POST', form.action);
+            xhr.send(formData);
+            e.preventDefault();
+        });
     };
 
     function prepareFileInput() {
         const wrapper = document.querySelector('.file-input-wrapper'),
-            fileInput = wrapper.querySelector('input[type=file]'),
-            notificationSpan = wrapper.querySelector('.notification-text'),
-            uploadedFilesTextSpan = wrapper.querySelector('.uploaded-files-text');
+            fileInput = wrapper.querySelector('input[type=file]');
         fileInput.addEventListener('change', () => {
-            const filesArr = Array.prototype.slice.call(fileInput.files),
-                notificationText = getFileInputInvalidText();
-            uploadedFilesTextSpan.innerHTML = 'Загружены фотографии: ' + filesArr.map((f) => f.name).join(', ') + '.';
-            notificationSpan.innerHTML = notificationText;
+            const uploadedPhotos = Array.prototype.slice.call(fileInput.files);
+            createImagesPreview(uploadedPhotos);
+            photos = photos.concat(uploadedPhotos);
             ensureAuthButtonState();
         });
+    };
+    function createImagesPreview(images) {
+        const reader = new FileReader();
+        var counter = 0;
+        reader.onload = function(e) {
+            const src = e.target.result;
+            photoList.innerHTML += `<li><img src="${src}"/><textarea rows="3" placeholder="Описание фотографии"></textarea></li>`;
+            counter++;
+            if(images[counter]) {
+                reader.readAsDataURL(images[counter]);
+            }
+        }
+        reader.readAsDataURL(images[0]);
     };
     function getCityFieldInvalidText() {
         return utils.getInputValue('city') ? '' : 'Введите город.';
@@ -43,8 +71,7 @@ import utils from './../utils'
         return '';
     };
     function getFileInputInvalidText() {
-        const files = document.body.querySelector('input[type=file]').files.length;
-        return files < 3 || files > 5 ? 'Количество фотографий должно быть от 3 до 5.' : '';
+        return photos.length < 2 ? 'Количество фотографий должно быть 2 и более.' : '';
     };
     function getRequestFieldInvalidText() {
         return requestTextarea.value ? '' : 'Введите текст заявки.';

@@ -2,7 +2,7 @@ extends ../index
 
 block main-content
   div.add-event-request-page-wrapper
-    form#AuthForm.vent-request-form(action='/events/' + eventData.uid + '/request/new' method="POST" enctype="multipart/form-data" autocomplete="off")
+    form#AuthForm.event-request-form(action='/events/' + eventData.uid + '/request/new' method="POST" enctype="multipart/form-data" autocomplete="off")
       h1= 'Форма создания заявки на ' + eventData.title
 
       div.input-container.with-fly-label
@@ -55,15 +55,12 @@ block main-content
         label(for="HideChatCheckbox")= "Спрятать переписку от остальных пользователей"
 
       b
-        | Фотографии (3-5 шт.)
+        | Фотографии (необходимо загрузить не менее 2х фотографий)
       div.file-input-wrapper
-        input(type="file" name="photo" accept=".jpg, .jpeg, .png" multiple)
+        input(type="file" accept=".jpg, .jpeg, .png" multiple)
         button(type="button")
           | Загрузить фотографии
-        p.text-container
-          span.uploaded-files-text
-          br
-          span.notification-text
+        ul#EventRequestPhotoList.event-request-photos-container
 
       if errorText
         b.error-text= errorText

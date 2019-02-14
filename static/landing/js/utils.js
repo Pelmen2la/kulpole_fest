@@ -1,15 +1,28 @@
 export default {
     addInputOnChangeListeners,
+    removeInputOnChangeListeners,
     getInputValue,
     qn,
     addValidationOnChangeListeners,
     ensureInputInvalidState
 }
 
-function addInputOnChangeListeners(input, fn) {
+function addInputOnChangeListeners(input, fn, delay) {
     ['keyup', 'change'].forEach((event) => {
-        input.addEventListener(event, fn)
+        var timeoutId;
+        input.addEventListener(event, (e) => {
+            if(delay) {
+                window.clearTimeout(timeoutId);
+                timeoutId = window.setTimeout(() => fn(e), delay);
+            } else {
+                fn(e);
+            }
+        });
     });
+};
+
+function removeInputOnChangeListeners(input, fn) {
+    ['keyup', 'change'].forEach((event) => input.removeEventListener(event, fn));
 };
 
 function qn(inputName, isMultiselect) {

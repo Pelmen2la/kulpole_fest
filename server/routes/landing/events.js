@@ -34,7 +34,7 @@ module.exports = function(app) {
         }
     });
 
-    app.post('/events/:eventUid/request/new', upload.array('photo', 5), function(req, res, next) {
+    app.post('/events/:eventUid/request/new', upload.array('photo[]', 5), function(req, res, next) {
         if(utils.checkAuth(req, res)) {
             const eventRequestUid = commonUtils.getUid();
             const eventUid = req.params.eventUid;
@@ -49,6 +49,8 @@ module.exports = function(app) {
                     var eventRequestData = req.body;
                     const link = eventRequestData.socialNetworkLink;
                     const club = eventRequestData.club;
+                    const photoDescriptions = req.body.photoDescriptions.split(',');
+                    const photosProps = photoUrls.map((url, i) => ({ url, description: photoDescriptions[i]}));
                     clubModel.findOne({name: new RegExp(`^${club}$`, 'i')}, (err, clubData) => {
                         if(!clubData) {
                             (new clubModel({name: club})).save();
@@ -56,7 +58,7 @@ module.exports = function(app) {
                     });
                     Object.assign(eventRequestData, {
                         uid: eventRequestUid,
-                        photoUrls,
+                        photosProps,
                         eventId: eventData.get('_id'),
                         userId: new mongoose.Types.ObjectId(req.session.logedInUserData._id)
                     });
@@ -91,6 +93,19 @@ module.exports = function(app) {
         const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
         if(result.eventRequestData) {
             eventRequestModel.findOneAndUpdate({_id: result.eventRequestData._id}, req.body, (err, eventRequestData) => {
+                res.send({success: !err, data: eventRequestData});
+            });
+        } else {
+            res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
+        }
+    });
+
+    app.put('/event_request/:eventRequestUid/update_photo_description/', async function(req, res, next) {
+        const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
+        if(result.eventRequestData) {
+            result.eventRequestData.photosProps[req.body.photoIndex].description = req.body.description;
+            const updateData = {photosProps: result.eventRequestData.photosProps};
+            eventRequestModel.findOneAndUpdate({_id: result.eventRequestData._id}, updateData, (err, eventRequestData) => {
                 res.send({success: !err, data: eventRequestData});
             });
         } else {

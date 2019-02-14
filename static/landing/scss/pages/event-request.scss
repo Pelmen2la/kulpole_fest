@@ -3,18 +3,6 @@
         display: block;
         margin: 1em 0;
     }
-    .photo-list {
-        overflow: auto;
-
-        li {
-            float: left;
-            margin-right: 1em;
-
-            img {
-                max-height: 300px;
-            }
-        }
-    }
 
     .event-request-chat-container .textarea-container {
         margin-top: 0.5em;

@@ -326,6 +326,33 @@ input[type=checkbox] {
     }
 }
 
+.event-request-photos-container {
+    overflow: auto;
+
+    li {
+        float: left;
+        width: 25%;
+        padding: 0.5em;
+        box-sizing: border-box;
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: 200px;
+            margin: 0 auto;
+        }
+        textarea {
+            margin-top: 5px;
+            border: 1px solid black;
+            width: 100%;
+
+            &:focus {
+                border-color: $main-dark-blue-color;
+            }
+        }
+    }
+}
+
 .pager {
     li {
         font-size: 1.4em;

@@ -37,11 +37,12 @@
             <label>Текст заявки</label>
             <md-textarea v-model="eventRequestData.text" readonly></md-textarea>
         </md-field>
-        <div v-if="eventRequestData.photoUrls && eventRequestData.photoUrls.length">
+        <div v-if="eventRequestData.photosProps && eventRequestData.photosProps.length">
             <b>Фотографии</b>
             <ul class="photo-list">
-                <li v-for="photoUrl in eventRequestData.photoUrls">
-                    <img :src="photoUrl" @click="openedImageUrl = photoUrl"/>
+                <li v-for="photoProps in eventRequestData.photosProps">
+                    <img :src="photoProps.url" @click="openedImageUrl = photoProps.url"/>
+                    <p>{{photoProps.description || 'Без описания'}}</p>
                 </li>
             </ul>
         </div>
@@ -146,13 +147,28 @@
     .event-form-main-container {
         .photo-list {
             margin-top: 1em;
+            overflow: auto;
+
             li {
-                display: inline-block;
-                margin-right: 1em;
+                float: left;
+                width: 25%;
+                padding: 0.5em;
+                box-sizing: border-box;
 
                 img {
-                    height: 150px;
+                    display: block;
+                    max-width: 100%;
+                    height: 200px;
+                    margin: 0 auto;
                     cursor: pointer;
+                }
+                p {
+                    line-height: 1.2em;
+                    height: calc(3.6em + 3px);
+                    padding: 3px;
+                    width: 100%;
+                    border: 1px solid black;
+                    overflow: hidden;
                 }
             }
         }

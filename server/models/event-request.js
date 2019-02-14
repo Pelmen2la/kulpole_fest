@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const utils = require('./../common/utils');
 
+const PhotoProps = new mongoose.Schema({
+    uid: {type: String, default: utils.getUid},
+    url: {type:String, default: ''},
+    description: { type: String, default: '' }
+});
+
 const EventRequest = new mongoose.Schema({
     uid: {type: String, default: utils.getUid},
     userId: mongoose.Schema.ObjectId,
@@ -12,7 +18,7 @@ const EventRequest = new mongoose.Schema({
     city: String,
     region: String,
     socialNetworkLink: String,
-    photoUrls: {type: [String], default: []},
+    photosProps: {type: [PhotoProps], default: []},
     status: {type: String, default: 'new'},
     hideChat: {type: Boolean, default: false},
     isCostumeAccepted: {type: Boolean, default: false},

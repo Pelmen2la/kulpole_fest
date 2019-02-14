@@ -38,10 +38,13 @@ block main-content
 
     b
       | Фотографии
-    ul.photo-list#EventRequestPhotoList
-      each photoUrl in eventRequestData.photoUrls
+    ul.event-request-photos-container#EventRequestPhotoList
+      each photoProps in eventRequestData.photosProps
         li
-          img(src=photoUrl)
+          img(src=photoProps.url)
+          if isCanEdit
+            textarea(rows="3" placeholder="Описание фотографии")= photoProps.description || ''
+
     if isCanEdit
       div.file-input-wrapper
         input(type="file" name="photo" accept=".jpg, .jpeg, .png")

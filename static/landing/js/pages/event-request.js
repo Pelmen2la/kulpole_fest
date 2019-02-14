@@ -10,6 +10,7 @@ import './../../../common/scss/event-request-chat.scss'
     const hideChatCheckbox = document.getElementById('HideChatCheckbox');
     const fileInput = document.querySelector('input[type=file]');
     const photoList = document.getElementById('EventRequestPhotoList');
+    const getUpdateApiUrl = (action) => `/event_request/${eventRequestId}/${action}/`;
 
     function init() {
         if(chatTextarea) {
@@ -17,6 +18,7 @@ import './../../../common/scss/event-request-chat.scss'
         }
         if(fileInput) {
             preparePhotoFileInput();
+            preparePhotosTextareas();
         }
         if(hideChatCheckbox) {
             prepareHideChatCheckbox();
@@ -27,10 +29,27 @@ import './../../../common/scss/event-request-chat.scss'
         fileInput.addEventListener('change', uploadFile);
     };
 
+    function preparePhotosTextareas() {
+        const textareas = document.querySelectorAll('.event-request-photos-container textarea');
+        const addPhotoTextareaOnChangeListener = function(textarea) {
+            utils.removeInputOnChangeListeners(textarea, onPhotoTextareaChange);
+            utils.addInputOnChangeListeners(textarea, onPhotoTextareaChange, 500);
+        };
+        const onPhotoTextareaChange = function(e) {
+            const textarea = e.target;
+            const photoContainer = textarea.parentNode;
+            const updateNotificationText = photoContainer.querySelector('.description-update-notification');
+            const photoIndex = Array.prototype.indexOf.call(photoList.children, photoContainer);
+            const description = textarea.value;
+            commonUtils.doDataRequest(getUpdateApiUrl('update_photo_description'), 'PUT', {photoIndex, description});
+        };
+        textareas.forEach((textarea) => addPhotoTextareaOnChangeListener(textarea));
+    };
+
     function prepareHideChatCheckbox() {
         hideChatCheckbox.addEventListener('change', function() {
             const hideChat = arguments[0].target.checked;
-            commonUtils.doDataRequest(`/event_request/${eventRequestId}/set_hide_chat/`, 'PUT', {hideChat});
+            commonUtils.doDataRequest(getUpdateApiUrl('set_hide_chat'), 'PUT', {hideChat});
         });
     };
 
@@ -56,6 +75,7 @@ import './../../../common/scss/event-request-chat.scss'
             const imageUrl = e.target.responseText;
             if(imageUrl) {
                 photoList.innerHTML += `<li><img src="${imageUrl}"/></li>`;
+                photoList.innerHTML += `<li><img src="${src}"/><textarea rows="3" placeholder="Описание фотографии"></textarea></li>`;
             }
         };
 
@@ -74,6 +94,7 @@ import './../../../common/scss/event-request-chat.scss'
                 chatTextarea.value = '';
                 if(res.messageData) {
                     chatMessagesContainer.innerHTML += getMessageHtml(res.messageData);
+                    document.querySelector('.empty-chat-message').remove();
                     scrollChatMessagesContainerToEnd();
                 }
             });
