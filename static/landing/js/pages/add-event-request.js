@@ -4,6 +4,7 @@ import utils from './../utils'
 (window.addEventRequestModule = function() {
     const requestTextarea = document.getElementById('RequestTextTextarea');
     const photoList = document.getElementById('EventRequestPhotoList');
+    const acceptDocumentsCheckbox = document.getElementById('AcceptDocumentsCheckbox');
     var photos = [];
 
     function init() {
@@ -13,6 +14,7 @@ import utils from './../utils'
         utils.addInputOnChangeListeners(utils.qn('club'), ensureAuthButtonState);
         utils.addInputOnChangeListeners(utils.qn('socialNetworkLink'), ensureAuthButtonState);
         utils.qn('region', true).forEach((radio) => radio.addEventListener('change', ensureSubmitRequestBtnStateCore));
+        acceptDocumentsCheckbox.addEventListener('change', ensureAuthButtonState);
 
         document.getElementById('AuthForm').addEventListener('submit', function(e) {
             const form = e.target;
@@ -76,6 +78,9 @@ import utils from './../utils'
     function getRequestFieldInvalidText() {
         return requestTextarea.value ? '' : 'Введите текст заявки.';
     };
+    function getAcceptDocumentsCheckboxInvalidText() {
+        return acceptDocumentsCheckbox.checked ? '' : 'Необходимо ознакомиться с документрами фестиваля.';
+    };
     var ensureSubmitRequestBtnStateTimeoutId;
     function ensureAuthButtonState() {
         window.clearTimeout(ensureSubmitRequestBtnStateTimeoutId);
@@ -84,7 +89,8 @@ import utils from './../utils'
     function ensureSubmitRequestBtnStateCore() {
         const btn = document.getElementById('RequestSubmitButton'),
             disabledText = getCityFieldInvalidText() || getClubFieldInvalidText() || getFileInputInvalidText() ||
-                getSocialNetworkLinkFieldInvalidText() || getRegionRadioButtonsText() || getRequestFieldInvalidText();
+                getSocialNetworkLinkFieldInvalidText() || getRegionRadioButtonsText() || getRequestFieldInvalidText() ||
+                getAcceptDocumentsCheckboxInvalidText();
         btn[disabledText ? 'setAttribute' : 'removeAttribute']('disabled', true);
         btn[disabledText ? 'setAttribute' : 'removeAttribute']('title', disabledText);
     };
