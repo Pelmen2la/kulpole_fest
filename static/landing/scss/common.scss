@@ -113,6 +113,15 @@ textarea {
     }
 }
 
+select {
+    padding: 3px;
+    border-color: $main-dark-blue-color;
+
+    option {
+        padding: 3px;
+    }
+}
+
 .custom-combo-container {
     position: relative;
 

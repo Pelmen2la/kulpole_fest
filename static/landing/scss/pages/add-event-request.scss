@@ -1,1 +1,6 @@
 @import './../variables.scss';
+
+label + select {
+    display: block;
+    margin: 5px 0;
+}

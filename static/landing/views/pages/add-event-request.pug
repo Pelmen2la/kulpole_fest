@@ -5,10 +5,13 @@ block main-content
     form#AuthForm.event-request-form(action='/events/' + eventData.uid + '/request/new' method="POST" enctype="multipart/form-data" autocomplete="off")
       h1= 'Форма создания заявки на ' + eventData.title
 
-      div.input-container.with-fly-label
-        input(type="text" id="RoleInput" name="role")
-        label(for="RoleInput")
-          | Статус участника *
+
+      label
+        | Статус участника
+      select(name="role")
+        each role in textResources.eventRequestRoles
+          option(value=role)= role
+
 
       div.input-container.with-fly-label
         input(type="text" id="CityInput" name="city")
@@ -37,12 +40,9 @@ block main-content
 
       span= "Регион *"
       div.horizontal-radio-buttons-container
-        input(id="RusRadiobutton" type="radio" name="region" value="rus")
-        label(for="RusRadiobutton")= "Русь"
-        input(id="HordeRadiobutton" type="radio" name="region" value="horde")
-        label(for="HordeRadiobutton")= "Орда"
-        input(id="EuropeRadiobutton" type="radio" name="region" value="europe")
-        label(for="EuropeRadiobutton")= "Европа"
+        each val, key in textResources.eventRequestRegions
+          input(id=key + 'Radiobutton' type="radio" name="region" value=key)
+          label(for=key + 'Radiobutton')= val
 
 
       div.textarea-container.with-fly-label
