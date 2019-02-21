@@ -3,13 +3,15 @@ extends ../index
 block main-content
   div.main-page-wrapper
     if eventData
-      h2
-        | Ближайшее событие
-      include ../partials/event
+      div.main-page-block
+        h2
+          | Ближайшее событие
+        include ../partials/event
     if newsData && newsData.length
-      h2
-        | Недавние новости
-      include ../partials/news-list
+      div.main-page-block
+        h2
+          | Недавние новости
+        include ../partials/news-list
 
 block after-index-script
   script(src='/dist/js/landing-main.js')
