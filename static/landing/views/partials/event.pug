@@ -9,8 +9,7 @@ div.event-header
       - var linkSrc = eventData.userEventRequest ? '/event_request/' + eventData.userEventRequest.uid : '/events/' + eventData.uid + '/request/new'
       a.request-link(href=linkSrc)= linkText
 
-if false
-  div.event-content-container
+div.event-content-container
     div.event-html-wrapper!= eventData.html
     - var eventRequests = eventData.eventRequests
     include ./event-request-list

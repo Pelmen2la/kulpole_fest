@@ -5,7 +5,7 @@
 - var getEventRequestHtml = function(er) {
 -   var href = '/event_request/' + er.uid;
 -   var fullName = er.user ? er.user.name + ' ' + er.user.surname : 'Пользователь удален';
--   return '<a href="' + href + '">' + fullName + '</a>'
+-   return '<span>' + fullName + '</span>'
 - }
 - var getEventRequestsListHtml = function(listData, listTitle) {
 -   if(!listData.length) {

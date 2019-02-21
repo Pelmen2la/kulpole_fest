@@ -10,6 +10,10 @@ html, body {
     background: $gray-background-color;
 }
 
+html {
+    overflow: hidden;
+}
+
 body {
     overflow: auto;
     background: url("/resources/images/main-background.jpg") no-repeat center center fixed;;
