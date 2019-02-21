@@ -9,6 +9,7 @@
             <label>Логин</label>
             <md-input v-model="userData.login"/>
         </md-field>
+        <EmailTextfield v-model="userData.email" @validityChange="(isValid) => isEmailValid = isValid"/>
         <md-field>
             <label>Пароль</label>
             <md-input v-model="userData.password"/>
@@ -37,10 +38,12 @@
                 systemUserId: null,
                 isSaveInProgress: false,
                 backUrl: '/main/systemUsers',
+                isEmailValid: false,
                 userData: {
                     name: '',
                     login: '',
                     phone: '',
+                    email: '',
                     password: ''
                 }
             }
@@ -70,6 +73,9 @@
                 }
                 if(!this.userData.name) {
                     return 'Необходимо заполнить имя.'
+                }
+                if(this.userData.email && !this.isEmailValid) {
+                    return 'Email введен в неверном формате.'
                 }
                 return '';
             }

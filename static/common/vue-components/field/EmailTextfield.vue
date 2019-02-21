@@ -4,7 +4,7 @@
             <md-input :value="value"
                       @input="onInputChange"
                       class="checker-email-input"
-                      required
+                       :required="!!isRequired"
             />
             <span class="md-error">Email введен в неверном формате</span>
         </md-field>
@@ -13,7 +13,7 @@
 <script>
     export default {
         name: 'qsim-email-textfield',
-        props: ['value'],
+        props: ['value', 'isRequired'],
         data() {
             return {
                 isValid: false

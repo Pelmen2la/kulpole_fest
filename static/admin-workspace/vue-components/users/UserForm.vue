@@ -9,7 +9,7 @@
             <label>Фамилия</label>
             <md-input v-model="userData.surname"/>
         </md-field>
-        <EmailTextfield v-model="userData.email" @validityChange="(isValid) => isEmailValid = isValid"/>
+        <EmailTextfield v-model="userData.email" :isRequired="true" @validityChange="(isValid) => isEmailValid = isValid"/>
         <label>Пол</label>
         <div>
             <md-radio v-model="userData.sex" value="male">Мужской</md-radio>
@@ -77,7 +77,7 @@
                     return 'Необходимо заполнить имя пользователя.'
                 }
                 if(this.userData.email && !this.isEmailValid) {
-                    return 'Email введен в неверном форм.emailате.'
+                    return 'Email введен в неверном формате.'
                 }
                 return '';
             }
