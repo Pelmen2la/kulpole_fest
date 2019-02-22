@@ -57,7 +57,7 @@ function createCRUD(dataModelName, model) {
             queryOpts = getListQueryOptions(params),
             lookupArgs = getListDataModelLookupArgs(dataModelName),
             filterArg = {$match: filters},
-            aggArgs = lookupArgs.concat([{$skip: queryOpts.skip}, {$limit: queryOpts.limit}, filterArg]),
+            aggArgs = lookupArgs.concat([filterArg, {$skip: queryOpts.skip}, {$limit: queryOpts.limit}]),
             countAggArgs = lookupArgs.concat([filterArg, {$group: {_id: null, count: {$sum: 1}}}]);
         return new Promise((resolve) => {
             model.aggregate(aggArgs).exec().then(function(data) {
