@@ -10,6 +10,7 @@ module.exports = function() {
             global.appPort = data.appPort;
             global.adminLogin = data.adminData.login;
             global.adminPassword = data.adminData.password;
+            global.appStartTime = (new Date).getTime();
 
             fs.readFile(path.join(global.appRoot, '/server/common/text-resources.json'), 'utf8', function(err, fileContent) {
                 global.textResources = JSON.parse(fileContent);
