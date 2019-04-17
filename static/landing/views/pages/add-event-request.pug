@@ -23,10 +23,9 @@ block main-content
           input(type="text" id="ClubInput" name="club")
           label(for="ClubInput")
             | Клуб *
-          if clubsData && clubsData.length
-            ul.combo-list
-              for club in clubsData
-                li(data-value=club.name)= club.name
+          ul.combo-list
+            for club in clubsData || []
+              li(data-value=club.name)= club.name
 
       div.input-container.with-fly-label
         input(type="text" id="ClubNameInput" name="clubName")
@@ -77,4 +76,4 @@ block main-content
         | Создать заявку
 
 block after-index-script
-  script(src='/dist/js/landing-add-event-request.js')
+  script(src='/dist/js/landing-add-event-request.js?timestamp=' + appStartTime)

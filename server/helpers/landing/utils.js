@@ -16,6 +16,7 @@ function getPageHtml(pageName, req, params = {}) {
                 formatUrlToWeb: commonUtils.formatUrlToWeb
             };
             params.textResources = global.textResources;
+            params.appStartTime = global.appStartTime;
 
             if(req.session.logedInUserData) {
                 const userData = req.session.logedInUserData;
