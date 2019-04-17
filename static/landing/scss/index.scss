@@ -65,8 +65,44 @@ body {
                 background: $main-dark-blue-color;
             }
         }
+
         &:hover {
             transform: scale(1.1);
+        }
+    }
+}
+
+.document-content-container {
+    ol {
+        counter-reset: item;
+        margin-left: 1em;
+
+        li {
+            display: block;
+            margin: 0.4em 0;
+            line-height: 1.2em;
+
+            a {
+                display: inline;
+            }
+            &:before {
+                content: counters(item, ".") " ";
+                counter-increment: item;
+            }
+            b.list-title {
+                font-weight: bold;
+            }
+        }
+        div.list-like-container {
+            > b {
+                margin: 0.4em 0;
+                display: block;
+            }
+
+            > div {
+                margin: 0.4em 0;
+                margin-left: 1em;
+            }
         }
     }
 }
