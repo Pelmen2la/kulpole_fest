@@ -73,26 +73,35 @@ body {
 }
 
 .document-content-container {
-    ol {
+    margin-bottom: 2em;
+
+    ol,
+    ul {
         counter-reset: item;
-        margin-left: 1em;
 
         li {
             display: block;
-            margin: 0.4em 0;
+            margin: 0.4em 0 0.4em 1em;
             line-height: 1.2em;
+        }
+    }
 
+    ol {
+        li {
             a {
                 display: inline;
             }
+
             &:before {
                 content: counters(item, ".") " ";
                 counter-increment: item;
             }
+
             b.list-title {
                 font-weight: bold;
             }
         }
+
         div.list-like-container {
             > b {
                 margin: 0.4em 0;
