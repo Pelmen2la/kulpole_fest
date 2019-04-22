@@ -9,6 +9,19 @@ label + select {
     margin-bottom: 1em;
 
     a {
-        padding-left: 24px;
+        margin-left: 24px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .document-link-cnt {
+        margin-top: 7px;
+        .download-link {
+            height: 16px;
+            width: 16px;
+            background: url('/resources/icons/download.svg');
+            background-repeat: no-repeat;
+            background-size: 16px 16px;
+        }
     }
 }
