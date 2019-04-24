@@ -8,6 +8,7 @@ const SystemUser = new mongoose.Schema({
     phone: String,
     email: String,
     password: String,
+    responsibleForRegions: {type: [String], default: []},
     registrationDate: {type: Date, default: Date.now}
 });
 

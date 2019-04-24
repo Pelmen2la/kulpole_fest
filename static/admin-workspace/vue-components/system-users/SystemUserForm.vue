@@ -18,6 +18,12 @@
             <label>Телефон</label>
             <md-input v-model="userData.phone"/>
         </md-field>
+        <label>Ответсвенный за регионы</label>
+        <div>
+            <md-checkbox v-for="region, val in regions" v-model="userData.responsibleForRegions" :value="val">
+                {{region}}
+            </md-checkbox>
+        </div>
         <ButtonWithDisabledTooltip :disabledText="saveButtonDisabledText" :onClick="onSaveBtnClick" text="Сохранить"/>
     </div>
 </template>
@@ -44,7 +50,8 @@
                     login: '',
                     phone: '',
                     email: '',
-                    password: ''
+                    password: '',
+                    responsibleForRegions: []
                 }
             }
         },
@@ -53,6 +60,7 @@
                 var url = '/admin/workspace/systemUsers/' + systemUserId;
                 this.$emit('startLoading', {text: 'Загрузка данных аудитора'});
                 utils.doRequest(url, {}, function(data) {
+                    data.responsibleForRegions = data.responsibleForRegions || [];
                     this.userData = data;
                     this.$emit('endLoading');
                 }.bind(this));
@@ -78,6 +86,9 @@
                     return 'Email введен в неверном формате.'
                 }
                 return '';
+            },
+            regions() {
+                return window.kulpoleAppData.textResources.eventRequestRegions;
             }
         },
         mounted: function() {
