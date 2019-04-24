@@ -11,6 +11,7 @@ module.exports = function() {
             global.adminLogin = data.adminData.login;
             global.adminPassword = data.adminData.password;
             global.appStartTime = (new Date).getTime();
+            global.yandexMailKey = data.yandexMailKey;
 
             fs.readFile(path.join(global.appRoot, '/server/common/text-resources.json'), 'utf8', function(err, fileContent) {
                 global.textResources = JSON.parse(fileContent);

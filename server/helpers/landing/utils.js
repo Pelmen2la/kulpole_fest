@@ -17,6 +17,7 @@ function getPageHtml(pageName, req, params = {}) {
             };
             params.textResources = global.textResources;
             params.appStartTime = global.appStartTime;
+            params.yandexMailKey = global.yandexMailKey;
 
             if(req.session.logedInUserData) {
                 const userData = req.session.logedInUserData;
