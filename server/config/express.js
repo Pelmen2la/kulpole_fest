@@ -11,7 +11,7 @@ module.exports = function(app) {
     app.use(bodyParser.urlencoded({extended: false}));
     app.use(cookieSession({
         name: 'session',
-        keys: [global.sessionKey],
+        keys: [global.appConfig.sessionKey],
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }));
     app.use(bodyParser.json());

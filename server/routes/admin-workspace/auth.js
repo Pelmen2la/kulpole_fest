@@ -9,7 +9,8 @@ module.exports = function(app) {
     app.post(ADMIN_LOGIN_URL, function(req, res) {
         const login = req.body.login;
         const password = req.body.password;
-        if(login == global.adminLogin && password == global.adminPassword) {
+        const adminData = global.appConfig.adminData;
+        if(login == adminData.login && password == adminData.password) {
             req.session.adminWorkspaceLogedInUserData = {
                 isAdmin: true
             };

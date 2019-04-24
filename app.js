@@ -22,7 +22,7 @@ appConfig().then(() => {
     require('./server/config/mongoose')(app);
     require('./server/routes/index')(app);
 
-    const server = app.listen(global.appPort, 'localhost', function() {
+    const server = app.listen(global.appConfig.appPort, 'localhost', function() {
         console.log('App listening on port ' + server.address().port);
     });
 });
