@@ -10,6 +10,7 @@ const multer = require('multer');
 const upload = multer({dest: 'upload/'});
 const uploadHelper = require('./../../helpers/upload');
 const adminDataHelper = require('./../../helpers/admin-workspace/data');
+const emailHelper = require('./../../helpers/email');
 const path = require('path');
 
 const START_YEAR = 2018;
@@ -66,7 +67,8 @@ module.exports = function(app) {
                     if(link.indexOf('http://') !== 0 && link.indexOf('https://') !== 0) {
                         eventRequestData.socialNetworkLink = 'http://' + link;
                     }
-                    (new eventRequestModel(eventRequestData)).save((err, data) => {
+                    (new eventRequestModel(eventRequestData)).save((err, newEventRequestdata) => {
+                        emailHelper.sendNewEventRequestNotification(req, newEventRequestdata);
                         res.redirect('/user_event_requests/')
                     });
                 });
@@ -115,9 +117,11 @@ module.exports = function(app) {
 
     app.post('/event_request/:eventRequestUid/send_msg', async function(req, res, next) {
         const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
-        if(result.eventRequestData) {
+        const eventRequestData = result.eventRequestData;
+        if(eventRequestData) {
             adminDataHelper.addEventRequestMessage(result.eventRequestData._id, req.body.text, 'user', (result) => {
                 res.send(result);
+                emailHelper.sendEventRequestNewUserMsgNotification(req, eventRequestData, result.messageData);
             });
         } else {
             res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});

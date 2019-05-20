@@ -92,8 +92,9 @@ import './../../../common/scss/event-request-chat.scss'
             commonUtils.doDataRequest(getUpdateApiUrl('send_msg'), 'POST', messageData, (res) => {
                 chatTextarea.value = '';
                 if(res.messageData) {
+                    const emptyChatMessage = document.querySelector('.empty-chat-message');
+                    emptyChatMessage && emptyChatMessage.remove();
                     chatMessagesContainer.innerHTML += getMessageHtml(res.messageData);
-                    document.querySelector('.empty-chat-message').remove();
                     scrollChatMessagesContainerToEnd();
                 }
             });

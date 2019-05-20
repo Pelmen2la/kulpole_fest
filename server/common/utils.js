@@ -13,7 +13,8 @@ module.exports = {
     getUid,
     formatDbDateToWeb,
     formatUrlToWeb,
-    addModelKeysToObject
+    addModelKeysToObject,
+    getFullDomainName
 };
 
 function getUid() {
@@ -40,4 +41,8 @@ function addModelKeysToObject(obj, modelName, getValueFn = (field) => 1) {
     mongoose.model(modelName).schema.eachPath((key) => eventRequestModelKeys[key] = getValueFn(key));
     Object.assign(obj, eventRequestModelKeys);
     return obj;
+};
+
+function getFullDomainName(req) {
+    return `${req.protocol}://${req.get('host')}`;
 };
