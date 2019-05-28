@@ -45,7 +45,7 @@ async function sendEventRequestNewSystemUserMsgNotification(req, eventRequestDat
 };
 
 async function sendNewEventRequestNotification(req, eventRequestData) {
-    const textData = getEventRequestTextData(req, eventRequestData);
+    const textData = await getEventRequestTextData(req, eventRequestData);
     const title = `Поступило новая заявка по региону ${textData.regionName}`;
     const body = `Создана новая заявка: ${textData.adminLink}</a>.${getLogoHtml(req)}`;
 
