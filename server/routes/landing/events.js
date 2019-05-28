@@ -119,8 +119,7 @@ module.exports = function(app) {
         const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
         const eventRequestData = result.eventRequestData;
         if(eventRequestData) {
-            adminDataHelper.addEventRequestMessage(result.eventRequestData._id, req.body.text, 'user', async (result) => {
-                await emailHelper.sendEventRequestNewUserMsgNotification(req, eventRequestData, result.messageData);
+            adminDataHelper.addEventRequestMessage(req, result.eventRequestData._id, req.body.text, 'user', async (result) => {
                 res.send(result);
             });
         } else {

@@ -7,6 +7,7 @@ const eventRequestMessageModel = require('./../../models/event-request-message')
 const newsModel = require('./../../models/news');
 const clubModel = require('./../../models/club');
 const commonUtils = require('./../../common/utils');
+const emailHelper = require('./../../helpers/email');
 
 
 const ROWS_ON_PAGE = 20;
@@ -42,7 +43,8 @@ module.exports = {
     dataModelsCfg,
     addEventRequestMessage,
     updateEventRequestLastActionDate,
-    updateEventRequestLastOpenDate
+    updateEventRequestLastOpenDate,
+    idToObj
 };
 
 for(var key in dataModelsCfg) {
@@ -231,8 +233,8 @@ function getListQueryOptions(params) {
     };
 };
 
-function addEventRequestMessage(eventRequestId, text, owner, clb) {
-    eventRequestModel.findById(idToObj(eventRequestId), (err, eventRequestData) => {
+async function addEventRequestMessage(req, eventRequestId, text, owner, clb) {
+    eventRequestModel.findById(idToObj(eventRequestId), async (err, eventRequestData) => {
         if(!eventRequestData || err) {
             clb({success: false, errorText: 'Заявка не найдена'});
         }
@@ -241,6 +243,7 @@ function addEventRequestMessage(eventRequestId, text, owner, clb) {
             owner: owner,
             text
         };
+        await emailHelper.sendEventRequestNewMsgNotification(req, eventRequestData, text, owner);
         updateEventRequestLastActionDate(eventRequestId, owner).then(() => {
             (new eventRequestMessageModel(newMessageData)).save((err, messageData) => {
                 clb({success: true, messageData});

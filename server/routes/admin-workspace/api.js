@@ -1,4 +1,4 @@
-var dataHelper = require('../../helpers/admin-workspace/data');
+const dataHelper = require('../../helpers/admin-workspace/data');
 
 module.exports = function(app) {
     for(var key in dataHelper.dataModelsCfg) {
@@ -8,7 +8,7 @@ module.exports = function(app) {
     }
 
     app.post('/admin/workspace/send_event_request_msg/:eventRequestId', function(req, res, next) {
-        dataHelper.addEventRequestMessage(req.params.eventRequestId, req.body.text, 'admin', (result) => res.send(result));
+        dataHelper.addEventRequestMessage(req, req.params.eventRequestId, req.body.text, 'admin', (result) => res.send(result));
     });
 };
 
