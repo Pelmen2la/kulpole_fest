@@ -55,7 +55,6 @@
         </md-checkbox>
         <div class="event-request-chat-container">
             <h2>Переписка</h2>
-            <p>{{ eventRequestData.hideChat ? 'Переписка спрятана от остальных пользователей' : 'Переписка видна всем пользователям'}}</p>
             <div class="chat-messages-container">
                 <p class="empty-chat-message" v-if="!eventRequestData.chatMessages.length">Переписка пуста</p>
                 <div v-for="message in eventRequestData.chatMessages"
