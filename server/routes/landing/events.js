@@ -98,7 +98,7 @@ module.exports = function(app) {
                 res.send({success: !err, data: eventRequestData});
             });
         } else {
-            res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
+            res.send({success: false, errorText: 'У вас нет доступа к данной заявке'});
         }
     });
 
@@ -111,7 +111,7 @@ module.exports = function(app) {
                 res.send({success: !err, data: eventRequestData});
             });
         } else {
-            res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
+            res.send({success: false, errorText: 'У вас нет доступа к данной заявке'});
         }
     });
 
@@ -119,12 +119,12 @@ module.exports = function(app) {
         const result = await tryGetEventRequestData(req, res, req.params.eventRequestUid);
         const eventRequestData = result.eventRequestData;
         if(eventRequestData) {
-            adminDataHelper.addEventRequestMessage(result.eventRequestData._id, req.body.text, 'user', (result) => {
+            adminDataHelper.addEventRequestMessage(result.eventRequestData._id, req.body.text, 'user', async (result) => {
+                await emailHelper.sendEventRequestNewUserMsgNotification(req, eventRequestData, result.messageData);
                 res.send(result);
-                emailHelper.sendEventRequestNewUserMsgNotification(req, eventRequestData, result.messageData);
             });
         } else {
-            res.send({success: false, erroText: 'У вас нет доступа к данной заявке'});
+            res.send({success: false, errorText: 'У вас нет доступа к данной заявке'});
         }
     });
 
