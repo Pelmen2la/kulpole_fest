@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 const systemUser = mongoose.model('system_user');
-const user = mongoose.model('user');
-const dataHelper = require('./admin-workspace/data');
 const commonUtils = require('./../common/utils');
 const nodemailer = require('nodemailer');
 const emailsCfg = global.appConfig.notificationEmailCfg;
 const transporter = nodemailer.createTransport({
-    service: "Yandex",
+    service: 'gmail',
     auth: {
         user: emailsCfg.login,
         pass: emailsCfg.password
@@ -22,27 +20,28 @@ async function sendEventRequestNewMsgNotification(req, eventRequestData, message
     if(msgOwner === 'user') {
         return await sendEventRequestNewUserMsgNotification(req, eventRequestData, messageData);
     } else {
+        return await sendEventRequestNewSystemUserMsgNotification(req, eventRequestData, messageData);
     }
 }
 
 async function sendEventRequestNewUserMsgNotification(req, eventRequestData, messageData) {
-    const textData = getEventRequestTextData(req, eventRequestData);
+    const textData = await getEventRequestTextData(req, eventRequestData);
     const title = `Поступило новое сообщение в заявке от участника по региону ${textData.regionName}`;
-    const body = `В заявке ${textData.adminLink} поступило новое сообщение от участника.<br/> Текст сообщения: ${messageData.text}.${getLogoHtml(req)}` ;
+    const body = `В заявке ${textData.adminLink} поступило новое сообщение от участника.<br/> Текст сообщения: ${messageData.text}.${getLogoHtml(req)}`;
 
     sendEmailForRegionResponsibleSystemUsers(eventRequestData.region, title, body);
 };
 
 async function sendEventRequestNewSystemUserMsgNotification(req, eventRequestData, messageData) {
-    user.findById(dataHelper.idToObj(eventRequestData.userId), (err, userData) => {
-        const email = userData ? userData.get('email') : '';
-        if(email) {
-            const textData = getEventRequestTextData(req, eventRequestData);
-            const title = `Поступило новое сообщение по вашей заявке на фестиваль "${textData.title}"`;
-            const body = `По вашей заявлке ${textData.userUrl} поступило новое сообщение от исторической комиссии. Зайдите на сайт чтобы ответить.${getLogoHtml()}`;
-            sendEmail(email, title, body);
-        }
-    });
+    const adminDataHelper = require('./admin-workspace/data');
+    const userData = await adminDataHelper.getUser(eventRequestData.userId);
+    const email = userData ? userData.email : '';
+    if(email) {
+        const textData = await getEventRequestTextData(req, eventRequestData);
+        const title = `Поступило новое сообщение по вашей заявке на фестиваль "${textData.eventTitle}"`;
+        const body = `По вашей заявлке ${textData.userUrl} поступило новое сообщение от исторической комиссии. Зайдите на сайт чтобы ответить.${getLogoHtml(req)}`;
+        sendEmail(email, title, body);
+    }
 };
 
 async function sendNewEventRequestNotification(req, eventRequestData) {
@@ -53,15 +52,19 @@ async function sendNewEventRequestNotification(req, eventRequestData) {
     sendEmailForRegionResponsibleSystemUsers(eventRequestData.region, title, body);
 };
 
-function getEventRequestTextData(req, eventRequestData) {
-    const adminUrl = `${commonUtils.getFullDomainName(req)}/admin/workspace#/main/eventRequests/edit/${eventRequestData._id.toString()}`;
-    const userUrl = `${commonUtils.getFullDomainName(req)}/event_request/${eventRequestData._id.toString()}`;
-    return {
-        title: eventRequestData.title,
-        regionName: textResources.eventRequestRegions[eventRequestData.region],
-        adminLink: `<a href="${adminUrl}" target="_blank">${adminUrl}</a>`,
-        userUrl: `<a href="${userUrl}" target="_blank">${userUrl}</a>`,
-    };
+async function getEventRequestTextData(req, eventRequestData) {
+    return new Promise(async (resolve) => {
+        const adminDataHelper = require('./admin-workspace/data');
+        const eventData = await adminDataHelper.getEvent(eventRequestData.eventId);
+        const adminUrl = `${commonUtils.getFullDomainName(req)}/admin/workspace#/main/eventRequests/edit/${eventRequestData._id.toString()}`;
+        const userUrl = `${commonUtils.getFullDomainName(req)}/event_request/${eventRequestData._id.toString()}`;
+        resolve({
+            eventTitle: eventData.title,
+            regionName: textResources.eventRequestRegions[eventRequestData.region],
+            adminLink: `<a href="${adminUrl}" target="_blank">${adminUrl}</a>`,
+            userUrl: `<a href="${userUrl}" target="_blank">${userUrl}</a>`,
+        });
+    });
 };
 
 function getLogoHtml(req) {
