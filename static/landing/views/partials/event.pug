@@ -12,4 +12,5 @@ div.event-header
 div.event-content-container
     div.event-html-wrapper!= eventData.html
     - var eventRequests = eventData.eventRequests
-    include ./event-request-list
+    if logedInUserData
+      include ./event-request-list
