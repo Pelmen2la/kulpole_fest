@@ -68,11 +68,11 @@ block main-content
 
       b
         | Фотографии (необходимо загрузить не менее 2х фотографий)
-      div.file-input-wrapper
-        input(type="file" accept=".jpg, .jpeg, .png" multiple)
-        button(type="button")
-          | Загрузить фотографии
-        ul#EventRequestPhotoList.event-request-photos-container
+      br
+      label.file-input-wrapper.button-like(for="AddEventRequestPhotoFileInput")
+        input(id="AddEventRequestPhotoFileInput" type="file" accept=".jpg, .jpeg, .png" multiple)
+        | Загрузить фотографии
+      ul#EventRequestPhotoList.event-request-photos-container
 
       if errorText
         b.error-text= errorText

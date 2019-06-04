@@ -157,13 +157,15 @@ select {
     }
 }
 
-button {
+button,
+.button-like {
     padding: 0.5em;
     border-radius: 5px;
     text-align: center;
     background: $main-light-blue-color;
     border: 1px solid transparent;
     font-weight: bold;
+    cursor: pointer;
 
     &:focus,
     &:hover {
@@ -220,13 +222,15 @@ input[type=checkbox] {
 }
 
 .file-input-wrapper {
+    display: inline-block;
+    margin: 1em 0;
+
     input[type=file] {
         display: none;
     }
     .notification-text {
         color: $main-error-red-color;
     }
-    margin: 1em 0;
 }
 
 .news-list-container {

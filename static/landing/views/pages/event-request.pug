@@ -46,14 +46,15 @@ block main-content
             textarea(rows="3" placeholder="Описание фотографии")= photoProps.description || ''
 
     if isCanEdit
-      div.file-input-wrapper
-        input(type="file" name="photo" accept=".jpg, .jpeg, .png")
-        button(type="button")
-          | Загрузить фотографию
-        p.text-container
-          span.uploaded-files-text
-          br
-          span.notification-text
+      br
+      label.file-input-wrapper.button-like(for="EventRequestPhotoFileInput")
+        input(id="EventRequestPhotoFileInput" type="file" name="photo" accept=".jpg, .jpeg, .png")
+        | Загрузить фотографию
+
+      p.text-container
+        span.uploaded-files-text
+        br
+        span.notification-text
 
     if isCanEdit || !eventRequestData.hideChat
       div.event-request-chat-container

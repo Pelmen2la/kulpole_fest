@@ -5,7 +5,6 @@ import './../scss/index.scss'
 
     function init() {
         prepareTextInputs();
-        prepareFileInputs();
         prepareCustomComboList();
     };
     function prepareTextInputs() {
@@ -38,13 +37,6 @@ import './../scss/index.scss'
                     listItem.innerHTML = listItemValue.replace(searchRegexp, `<b>${searchText}</b>`);
                 });
             });
-        });
-    };
-    function prepareFileInputs() {
-        const inputWrappers = document.querySelectorAll('.file-input-wrapper');
-        inputWrappers.forEach((wrapper) => {
-            const fileInput = wrapper.querySelector('input[type=file]');
-            wrapper.querySelector('button').addEventListener('click', () => fileInput.click());
         });
     };
 
