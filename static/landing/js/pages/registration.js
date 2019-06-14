@@ -27,13 +27,12 @@ import utils from './../utils'
         return '';
     };
     function getEmailInputInvalidText() {
-        const val = utils.getInputValue('email'),
-            emailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const val = utils.getInputValue('email');
         if(!val) {
-            return 'Необходимо ввести email.'
+            return 'Необходимо ввести логин или email.'
         }
-        if(!emailRe.test(val.toLowerCase())) {
-            return 'Email введен в не верном формате.'
+        if(val.length < 4) {
+            return 'Логин или email не могут быть короче 4 символов.'
         }
         return '';
     };
