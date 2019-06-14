@@ -53,6 +53,14 @@
         <md-checkbox v-model="eventRequestData.isArmorAccepted" @change="(val) => onAcceptedCheckboxChange('isArmorAccepted', val)">
             Доспех допущен
         </md-checkbox>
+        <md-field>
+            <label>Статус заявки</label>
+            <md-select v-model="eventRequestData.status" @md-selected="onStatusComboChange">
+                <md-option v-for="(val, key) in statuses" :value="key" :key="key">
+                    {{val}}
+                </md-option>
+            </md-select>
+        </md-field>
         <div class="event-request-chat-container">
             <h2>Переписка</h2>
             <div class="chat-messages-container">
@@ -117,8 +125,15 @@
                 if(this.isDataLoadingInProcess) {
                     return;
                 }
-                var updateData = {};
-                updateData[propName] = val;
+                this.updateEventRequestData({[propName]: val});
+            },
+            onStatusComboChange: function() {
+                if(this.isDataLoadingInProcess) {
+                    return;
+                }
+                this.updateEventRequestData({status: this.eventRequestData.status});
+            },
+            updateEventRequestData: function(updateData) {
                 utils.doDataRequest('/admin/workspace/eventRequests/' + this.eventRequestId, 'PUT', updateData, () => null);
             },
             trySendChatMessage: function() {
@@ -134,7 +149,11 @@
                 });
             }
         },
-        computed: {},
+        computed: {
+            statuses() {
+                return window.kulpoleAppData.textResources.eventRequestStatuses;
+            }
+        },
         mounted: function() {
             this.eventRequestId = this.$route.params.eventRequestId;
             this.loadEventRequestData(this.eventRequestId);
