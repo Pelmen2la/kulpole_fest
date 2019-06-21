@@ -140,6 +140,9 @@ function getDataModelSpecificFilters(modelName, params) {
         if(params.regionFilter !== undefined) {
             filters.push({region: {$in: params.regionFilter.split(',')}});
         }
+        if(params.statusFilter !== undefined) {
+            filters.push({status: params.statusFilter});
+        }
     }
     return filters.length ? {$and: filters} : {};
 };

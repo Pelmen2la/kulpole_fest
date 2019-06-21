@@ -37,6 +37,14 @@
                         </md-option>
                     </md-select>
                 </md-field>
+                <md-field>
+                    <label>Фильтр по статусу</label>
+                    <md-select v-model="getPageState().statusFilter" @md-selected="onComboFilterChange">
+                        <md-option v-for="(statusName, statusId) in statuses" :value="statusId" :key="statusId">
+                            {{statusName}}
+                        </md-option>
+                    </md-select>
+                </md-field>
             </div>
         </template>
     </ListPage>
@@ -76,6 +84,9 @@
                     }
                 });
                 params.regionFilter = state.regionFilter;
+                if(state.statusFilter && state.statusFilter !== 'all') {
+                    params.statusFilter = state.statusFilter;
+                }
                 return params;
             },
             getGridColumnCfg: function() {
@@ -114,6 +125,11 @@
         computed: {
             regions() {
                 return window.kulpoleAppData.textResources.eventRequestRegions;
+            },
+            statuses() {
+                return Object.assign({
+                    all: 'Все'
+                }, window.kulpoleAppData.textResources.eventRequestStatuses);
             }
         }
     }
@@ -121,12 +137,11 @@
 
 <style lang="scss" scoped>
     .event-request-list-filters-container .md-field {
-        width: 30%;
+        width: 23%;
         float: left;
 
-        &:nth-child(2) {
-            margin-left: 5%;
-            margin-right: 5%;
+        &:not(:last-child) {
+            margin-right: 2.666666%;
         }
     }
 </style>
