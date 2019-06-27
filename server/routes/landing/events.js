@@ -35,7 +35,7 @@ module.exports = function(app) {
         }
     });
 
-    app.post('/events/:eventUid/request/new', upload.array('photo[]', 5), function(req, res, next) {
+    app.post('/events/:eventUid/request/new', upload.array('photo[]', 10), function(req, res, next) {
         if(utils.checkAuth(req, res)) {
             const eventRequestUid = commonUtils.getUid();
             const eventUid = req.params.eventUid;
