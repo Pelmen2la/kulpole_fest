@@ -76,7 +76,7 @@ import utils from './../utils'
         return photos.length < 2 ? 'Количество фотографий должно быть 2 и более.' : '';
     };
     function getRequestFieldInvalidText() {
-        return requestTextarea.value ? '' : 'Введите текст заявки.';
+        return requestTextarea.value ? '' : 'Введите описание костюма.';
     };
     function getAcceptDocumentsCheckboxInvalidText() {
         return acceptDocumentsCheckbox.checked ? '' : 'Необходимо ознакомиться с документрами фестиваля.';

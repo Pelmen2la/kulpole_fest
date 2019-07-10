@@ -34,7 +34,7 @@
             <md-input v-model="eventRequestData.regionName" readonly></md-input>
         </md-field>
         <md-field>
-            <label>Текст заявки</label>
+            <label>Описание костюма</label>
             <md-textarea v-model="eventRequestData.text" readonly></md-textarea>
         </md-field>
         <div v-if="eventRequestData.photosProps && eventRequestData.photosProps.length">
