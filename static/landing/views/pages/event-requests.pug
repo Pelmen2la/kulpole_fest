@@ -14,8 +14,8 @@ block main-content
               if showUserName
                 strong.user-name= 'Участник: ' + eventRequest.userData[0].name + ' ' + eventRequest.userData[0].surname
               img(src=eventRequest.photosProps[0].url)
-              span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'не допущен')
-              span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'не допущен')
+              span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
+              span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
 
 
 block after-index-script
