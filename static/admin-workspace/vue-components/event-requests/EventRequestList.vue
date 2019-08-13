@@ -12,7 +12,7 @@
                 <label>Поиск</label>
                 <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
-            <div class="event-request-list-filters-container">
+            <div class="event-request-list-top-filters-container">
                 <md-field>
                     <label>Фильтр по костюму</label>
                     <md-select v-model="getPageState().isCostumeAcceptedFilter" @md-selected="onComboFilterChange">
@@ -37,11 +37,21 @@
                         </md-option>
                     </md-select>
                 </md-field>
+            </div>
+            <div class="event-request-list-bottom-filters-container">
                 <md-field>
                     <label>Фильтр по статусу</label>
                     <md-select v-model="getPageState().statusFilter" @md-selected="onComboFilterChange">
                         <md-option v-for="(statusName, statusId) in statuses" :value="statusId" :key="statusId">
                             {{statusName}}
+                        </md-option>
+                    </md-select>
+                </md-field>
+                <md-field>
+                    <label>Фильтр по клубу</label>
+                    <md-select v-model="getPageState().clubFilter" @md-selected="onComboFilterChange">
+                        <md-option v-for="club in clubsData" :value="club.name" :key="club.name">
+                            {{club.name}}
                         </md-option>
                     </md-select>
                 </md-field>
@@ -51,6 +61,7 @@
 </template>
 
 <script>
+    import utils from '../../../common/js/utils'
     import ListPage from './../common/ListPage.vue'
 
     export default {
@@ -66,7 +77,8 @@
                     {id: 'all', name: 'Все'},
                     {id: 'yes', name: 'Допущен'},
                     {id: 'no', name: 'Не допущен'}
-                ]
+                ],
+                clubsData: []
             }
         },
         methods: {
@@ -86,6 +98,9 @@
                 params.regionFilter = state.regionFilter;
                 if(state.statusFilter && state.statusFilter !== 'all') {
                     params.statusFilter = state.statusFilter;
+                }
+                if(state.clubFilter && state.clubFilter !== 'Все') {
+                    params.clubFilter = state.clubFilter;
                 }
                 return params;
             },
@@ -120,6 +135,13 @@
             },
             loadData: function() {
                 this.$refs.ListPage.loadPageByIndex(0);
+            },
+            loadClubs: function() {
+                utils.doRequest('/admin/workspace/clubs', {}, (data) => {
+                    const clubs = data.content;
+                    clubs.unshift({id: 'all', name: 'Все'});
+                    this.clubsData = data.content;
+                });
             }
         },
         computed: {
@@ -131,17 +153,28 @@
                     all: 'Все'
                 }, window.kulpoleAppData.textResources.eventRequestStatuses);
             }
+        },
+        mounted: function() {
+            this.loadClubs();
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .event-request-list-filters-container .md-field {
-        width: 23%;
+    .event-request-list-top-filters-container .md-field {
+        width: 32%;
         float: left;
 
         &:not(:last-child) {
-            margin-right: 2.666666%;
+            margin-right: 2%;
+        }
+    }
+    .event-request-list-bottom-filters-container .md-field {
+        width: 49%;
+        float: left;
+
+        &:not(:last-child) {
+            margin-right: 2%;
         }
     }
 </style>
