@@ -46,7 +46,7 @@ function onOpen(modelName, entryData) {
 };
 
 function onUpdate(modelName, entryData) {
-    if(modelName === 'eventRequest') {
+    if(modelName === 'eventRequest' && entryData) {
         dataHelper.updateEventRequestLastActionDate(entryData.get('id'), 'admin');
     }
 };

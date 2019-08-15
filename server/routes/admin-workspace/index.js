@@ -7,6 +7,7 @@ const path = require('path');
 module.exports = function(app) {
     require('./auth')(app);
     require('./api')(app);
+    require('./tech')(app);
     require('./upload')(app);
 
     app.get('/admin/workspace/', function(req, res, next) {
