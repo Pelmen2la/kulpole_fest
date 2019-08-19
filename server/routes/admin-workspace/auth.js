@@ -12,7 +12,8 @@ module.exports = function(app) {
         const adminData = global.appConfig.adminData;
         if(login == adminData.login && password == adminData.password) {
             req.session.adminWorkspaceLogedInUserData = {
-                isAdmin: true
+                isAdmin: true,
+                name: adminData.userName
             };
             res.redirect('/admin/workspace#/main/users');
         } else {

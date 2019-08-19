@@ -30,7 +30,7 @@ function createCRUD(app, mnemonic, multMnemonic) {
     });
     app.put('/admin/workspace/' + multMnemonic + '/:' + idParamName, async function(req, res, next) {
         const result = await dataHelper['update' + capMnemonic](req.params[idParamName], req.body);
-        onUpdate(mnemonic, result);
+        onUpdate(mnemonic, result, req);
         res.json({success: true, data: result});
     });
     app.delete('/admin/workspace/' + multMnemonic + '/:' + idParamName, async function(req, res, next) {
@@ -45,8 +45,14 @@ function onOpen(modelName, entryData) {
     }
 };
 
-function onUpdate(modelName, entryData) {
+function onUpdate(modelName, entryData, req) {
     if(modelName === 'eventRequest' && entryData) {
         dataHelper.updateEventRequestLastActionDate(entryData.get('id'), 'admin');
+        const changes = req.body;
+        new dataHelper.getDataModel('eventRequestChangeModel')({
+            eventRequestId: entryData._id,
+            changeBody: JSON.stringify(changes),
+            userName: req.session.adminWorkspaceLogedInUserData.name
+        }).save();
     }
 };

@@ -4,6 +4,7 @@ const systemUserModel = require('./../../models/system-user');
 const eventModel = require('./../../models/event');
 const eventRequestModel = require('./../../models/event-request');
 const eventRequestMessageModel = require('./../../models/event-request-message');
+const eventRequestChangeModel = require('./../../models/event-request-change');
 const newsModel = require('./../../models/news');
 const clubModel = require('./../../models/club');
 const commonUtils = require('./../../common/utils');
@@ -36,11 +37,16 @@ const dataModelsCfg = {
     club: {
         model: clubModel,
         hasMultipleName: true
+    },
+    eventRequestChangeModel: {
+        model: eventRequestChangeModel,
+        hasMultipleName: true
     }
 };
 
 module.exports = {
     dataModelsCfg,
+    getDataModel,
     addEventRequestMessage,
     updateEventRequestLastActionDate,
     updateEventRequestLastOpenDate
@@ -211,11 +217,19 @@ function getSingleRecordLookupArgs(modelName) {
                 as: 'chatMessages'
             }
         }, {
+            $lookup: {
+                from: eventRequestChangeModel.collection.collectionName,
+                localField: '_id',
+                foreignField: 'eventRequestId',
+                as: 'changes'
+            }
+        },{
             $project: commonUtils.addModelKeysToObject({
                 dateDiff: {$subtract: ['$adminLastOpenDate', '$userLastActionDate']},
-                chatMessages: '$chatMessages',
                 eventData: '$eventData',
-                userData: '$userData'
+                userData: '$userData',
+                chatMessages: '$chatMessages',
+                changes: '$changes',
             }, 'event_request')
         }, {$sort: {'chatMessages.date': -1}}]
     }

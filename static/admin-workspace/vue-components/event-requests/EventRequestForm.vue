@@ -61,6 +61,18 @@
                 </md-option>
             </md-select>
         </md-field>
+        <div v-if="isChangesLogAllowed && eventRequestChanges.length > 0">
+            <span class="link-like-button" @click="onToggleChangesLogVisibilityBtnClick">
+                {{isChangesLogVisible ? 'Скрыть историю изменений' : 'Показать историю изменений'}}
+            </span>
+            <ul v-if="isChangesLogVisible" class="event-request-changes-list">
+                <li v-for="changes in eventRequestChanges">
+                    <span>{{formatDate(changes.date)}}</span> -
+                    <b>{{changes.userName}}</b> -
+                    <span>{{changes.changeBody}}</span>
+                </li>
+            </ul>
+        </div>
         <div class="event-request-chat-container">
             <h2>Переписка</h2>
             <div class="chat-messages-container">
@@ -100,10 +112,12 @@
                 isDataLoadingInProcess: false,
                 backUrl: '/main/eventRequests',
                 eventRequestData: {
-                    chatMessages: []
+                    chatMessages: [],
+                    changes: []
                 },
                 newMessageText: '',
-                openedImageUrl: ''
+                openedImageUrl: '',
+                isChangesLogVisible: false
             }
         },
         methods: {
@@ -136,6 +150,9 @@
             updateEventRequestData: function(updateData) {
                 utils.doDataRequest('/admin/workspace/eventRequests/' + this.eventRequestId, 'PUT', updateData, () => null);
             },
+            onToggleChangesLogVisibilityBtnClick: function() {
+                this.isChangesLogVisible = !this.isChangesLogVisible;
+            },
             trySendChatMessage: function() {
                 if(!this.newMessageText) {
                     return;
@@ -147,11 +164,20 @@
                         this.newMessageText = '';
                     }
                 });
+            },
+            formatDate(date) {
+               return utils.formatDbDateToWeb(date);
             }
         },
         computed: {
             statuses() {
                 return window.kulpoleAppData.textResources.eventRequestStatuses;
+            },
+            isChangesLogAllowed() {
+                return window.kulpoleAppData.isAdmin
+            },
+            eventRequestChanges() {
+                return this.eventRequestData.changes.sort((a, b) => new Date(a) - new Date(b) < 0 ? 1 : -1);
             }
         },
         mounted: function() {
@@ -189,6 +215,13 @@
                     overflow: hidden;
                 }
             }
+        }
+    }
+    .event-request-changes-list {
+        margin: 10px 0;
+
+        li {
+            padding: 4px 0
         }
     }
 </style>

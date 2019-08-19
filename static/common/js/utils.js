@@ -11,7 +11,8 @@ export default {
         };
         doRequest(url, opts, clb);
     },
-    stringFormat
+    stringFormat,
+    formatDbDateToWeb
 }
 
 function doRequest(url, opts, clb) {
@@ -28,4 +29,9 @@ function stringFormat(tpl) {
         tpl = tpl.replace(regexp, arguments[i]);
     }
     return tpl;
+};
+
+function formatDbDateToWeb(date) {
+    let splittedDate = date.split('T');
+    return splittedDate[1].split('.')[0] + ' ' + splittedDate[0];
 };
