@@ -73,7 +73,7 @@ import utils from './../utils'
         return '';
     };
     function getFileInputInvalidText() {
-        return photos.length < 2 ? 'Количество фотографий должно быть 2 и более.' : '';
+        return photos.length < 2 || photos.length > 10 ? 'Количество фотографий должно быть больше 2х и меньше 10ти..' : '';
     };
     function getRequestFieldInvalidText() {
         return requestTextarea.value ? '' : 'Введите описание костюма.';
