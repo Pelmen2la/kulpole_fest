@@ -16,6 +16,10 @@
             border: 1px solid $main-light-blue-color;
             color: black;
 
+            strong {
+                display: block;
+                margin-bottom: 5px;
+            }
             span {
                 display: block;
             }

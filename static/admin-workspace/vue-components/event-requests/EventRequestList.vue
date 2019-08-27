@@ -113,8 +113,15 @@
                     },
                     {
                         text: 'Имя участника',
-                        dataIndex: 'userData',
-                        renderer: (rec, val) => val.length ? val[0].fullName : 'Участник удален'
+                        dataIndex: 'participantName',
+                        renderer: (rec, val) => {
+                            if(val) {
+                                return val;
+                            }
+
+                            const userData = rec.userData;
+                            return userData.length ? userData[0].fullName : 'Участник удален';
+                        }
                     },
                     {
                         text: 'Регион',

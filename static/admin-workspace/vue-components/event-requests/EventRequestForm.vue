@@ -7,7 +7,7 @@
         </md-field>
         <md-field>
             <label>Имя участника</label>
-            <md-input v-model="eventRequestData.userFullName" readonly></md-input>
+            <md-input v-model="eventRequestData.participantName || eventRequestData.userFullName" readonly></md-input>
         </md-field>
         <md-field>
             <label>Статус участника</label>

@@ -15,6 +15,7 @@ const EventRequest = new mongoose.Schema({
     text: String,
     club: String,
     clubName: String,
+    participantName: String,
     city: String,
     region: String,
     socialNetworkLink: String,

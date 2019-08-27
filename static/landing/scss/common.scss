@@ -282,6 +282,7 @@ input[type=checkbox] {
 
     .event-header-bottom-container {
         font-size: 1.2em;
+
         .date {
             display: inline-block;
             float: left;
@@ -289,6 +290,7 @@ input[type=checkbox] {
         .request-link {
             display: inline-block;
             float: right;
+            margin-left: 20px;
         }
     }
 }

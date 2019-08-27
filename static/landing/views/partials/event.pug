@@ -4,10 +4,12 @@ div.event-header
   h2= eventData.title
   div.event-header-bottom-container
     b.date= formatFns.formatDbDateToWeb(eventData.date)
-    if logedInUserData && (!hasPassed || eventData.userEventRequest)
-      - var linkText = eventData.userEventRequest ? 'Открыть вашу заявку' : 'Подать заявку'
-      - var linkSrc = eventData.userEventRequest ? '/event_request/' + eventData.userEventRequest.uid : '/events/' + eventData.uid + '/request/new'
-      a.request-link(href=linkSrc)= linkText
+    if logedInUserData
+      if eventData.userEventRequest
+        a.request-link(href="/user_event_requests/")= 'Открыть ваши заявки'
+      if !hasPassed
+        - var addRequestHref = '/events/' + eventData.uid + '/request/new'
+        a.request-link(href=addRequestHref)= 'Подать заявку'
 
 div.event-content-container
     div.event-html-wrapper!= eventData.html

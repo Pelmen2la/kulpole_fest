@@ -5,13 +5,11 @@ block main-content
     form#AuthForm.event-request-form(action='/events/' + eventData.uid + '/request/new' method="POST" enctype="multipart/form-data" autocomplete="off")
       h1= 'Форма создания заявки на ' + eventData.title
 
-
       label
         | Статус участника
       select(name="role")
         each role in textResources.eventRequestRoles
           option(value=role)= role
-
 
       div.input-container.with-fly-label
         input(type="text" id="CityInput" name="city")
@@ -26,6 +24,11 @@ block main-content
           ul.combo-list
             for club in clubsData || []
               li(data-value=club.name)= club.name
+
+      div.input-container.with-fly-label
+        input(type="text" id="ParticipantNameInput" name="participantName")
+        label(for="ParticipantNameInput")
+          | Имя участника (заполняется только если вы подаете заявку за другого человека)
 
       div.input-container.with-fly-label
         input(type="text" id="ClubNameInput" name="clubName")

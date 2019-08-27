@@ -12,7 +12,8 @@ block main-content
               if showEventName
                 strong.event-name= 'Фестиваль: ' + eventRequest.eventData[0].title
               if showUserName
-                strong.user-name= 'Участник: ' + eventRequest.userData[0].name + ' ' + eventRequest.userData[0].surname
+                - var participantName = eventRequest.participantName || eventRequest.userData[0].name + ' ' + eventRequest.userData[0].surname
+                strong.user-name= 'Участник: ' + participantName
               img(src=eventRequest.photosProps[0].url)
               span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
               span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')

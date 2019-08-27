@@ -61,8 +61,11 @@ module.exports = function(app) {
                         uid: eventRequestUid,
                         photosProps,
                         eventId: eventData.get('_id'),
-                        userId: new mongoose.Types.ObjectId(req.session.logedInUserData._id)
+                        userId: new mongoose.Types.ObjectId(req.session.logedInUserData._id),
                     });
+                    if(!eventRequestData.participantName) {
+                        eventRequestData.participantName = `${req.session.logedInUserData.surname} ${req.session.logedInUserData.name}`;
+                    }
                     eventRequestData.hideChat = eventRequestData.hideChat === 'true';
                     if(link.indexOf('http://') !== 0 && link.indexOf('https://') !== 0) {
                         eventRequestData.socialNetworkLink = 'http://' + link;
@@ -150,7 +153,7 @@ module.exports = function(app) {
             const params = {
                 eventRequestList: eventRequestList.content,
                 showEventName: true,
-                showUserName: false
+                showUserName: eventRequestList.content.length > 1
             };
             utils.getPageHtml('event-requests', req, params).then((pageHtml) => res.send(pageHtml));
         }
