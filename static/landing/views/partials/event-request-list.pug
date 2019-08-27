@@ -4,7 +4,7 @@
 - var confirmedEventRequests = eventRequests.filter(function(er) { return er.isCostumeAccepted && er.isArmorAccepted;})
 - var getEventRequestHtml = function(er) {
 -   var href = '/event_request/' + er.uid;
--   var fullName = er.user ? er.user.name + ' ' + er.user.surname : 'Пользователь удален';
+-   var fullName = er.participantName || (er.user ? er.user.surname + ' ' + er.user.name : 'Пользователь удален');
 -   return '<span>' + fullName + '</span>'
 - }
 - var getEventRequestsListHtml = function(listData, listTitle) {
