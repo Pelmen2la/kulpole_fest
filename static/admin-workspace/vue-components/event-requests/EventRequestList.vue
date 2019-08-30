@@ -130,7 +130,14 @@
                     },
                     {text: 'Костюм допущен', dataIndex: 'isCostumeAccepted', renderType: 'boolIcon'},
                     {text: 'Доспех допущен', dataIndex: 'isArmorAccepted', renderType: 'boolIcon'},
-                    {text: 'Дата', dataIndex: 'date', renderType: 'date'}
+                    {text: 'Дата', dataIndex: 'date', renderType: 'date'},
+                    {
+                        text: 'Кто совершил последнее действие',
+                        renderer: (rec, val) => {
+                            const dateDiff = (new Date(rec.userLastActionDate) - new Date(rec.adminLastActionDate));
+                            return dateDiff > 0 ? 'Пользователь' : 'Представитель комиссии';
+                        }
+                    }
                 ];
             },
             onSearchTextChange: function() {
