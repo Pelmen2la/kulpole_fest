@@ -222,7 +222,8 @@ async function getEventsData(req, eventsYear) {
                     uid: {$first: '$uid'},
                     title: {$first: '$title'},
                     html: {$first: '$html'},
-                    date: {$first: '$date'}
+                    date: {$first: '$date'},
+                    acceptRequestEndDate: {$first: '$acceptRequestEndDate'}
                 }
             }
         ];

@@ -8,6 +8,9 @@
         <md-datepicker v-model="eventData.date">
             <label>Дата события</label>
         </md-datepicker>
+        <md-datepicker v-model="eventData.acceptRequestEndDate">
+            <label>Дата окончания приёма заявок</label>
+        </md-datepicker>
         <vue-editor
                 v-model="eventData.html"
                 useCustomImageHandler
@@ -40,6 +43,7 @@
                 eventData: {
                     title: '',
                     date: new Date,
+                    acceptRequestEndDate: new Date,
                     html: ''
                 }
             }

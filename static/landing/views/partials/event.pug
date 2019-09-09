@@ -1,4 +1,4 @@
-- var hasPassed = new Date > new Date(eventData.date)
+- var isSendRequestAvailable = new Date < new Date(eventData.acceptRequestEndDate)
 
 div.event-header
   h2= eventData.title
@@ -7,7 +7,7 @@ div.event-header
     if logedInUserData
       if eventData.userEventRequest
         a.request-link(href="/user_event_requests/")= 'Открыть ваши заявки'
-      if !hasPassed
+      if isSendRequestAvailable
         - var addRequestHref = '/events/' + eventData.uid + '/request/new'
         a.request-link(href=addRequestHref)= 'Подать заявку'
 

@@ -6,7 +6,8 @@ const Event = new mongoose.Schema({
     title: String,
     html: String,
     date: {type: Date, default: Date.now},
-    createDate: {type: Date, default: Date.now}
+    createDate: {type: Date, default: Date.now},
+    acceptRequestEndDate: {type: Date, default: Date.now}
 });
 
 module.exports = mongoose.model('event', Event);
