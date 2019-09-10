@@ -49,7 +49,8 @@ module.exports = {
     getDataModel,
     addEventRequestMessage,
     updateEventRequestLastActionDate,
-    updateEventRequestLastOpenDate
+    updateEventRequestLastOpenDate,
+    idToObj
 };
 
 for(var key in dataModelsCfg) {

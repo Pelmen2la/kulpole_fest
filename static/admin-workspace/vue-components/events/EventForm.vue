@@ -1,6 +1,11 @@
 <template>
     <div class="event-form-main-container">
-        <md-button class="md-raised" :href="'#' + backUrl">Назад</md-button>
+        <div>
+            <md-button class="md-raised" style="float: left" :href="'#' + backUrl">Назад</md-button>
+            <md-button class="md-raised md-primary" style="float: right" :href="getDownloadEventRequestsListUrl" target="_blank">
+                Скачать список участников
+            </md-button>
+        </div>
         <md-field>
             <label>Заголовок</label>
             <md-input v-model="eventData.title"/>
@@ -90,6 +95,9 @@
                     return 'Необходимо заполнить заголовок.'
                 }
                 return '';
+            },
+            getDownloadEventRequestsListUrl() {
+                return '/admin/workspace/events/' + this.eventId +'/event_requests_list/';
             }
         },
         mounted: function() {
