@@ -46,9 +46,10 @@ module.exports = function(app) {
             };
 
             eventRequestsData.forEach(er => {
-                const club = er.club;
+                const club = er.club || er.clubName;
                 er.region = global.textResources.eventRequestRegions[er.region];
                 er.userFullName = getUserFullName(er.user[0]);
+                er.club = club;
                 if(!eventRequestsByClubs[club]) {
                     eventRequestsByClubs[club] = [];
                 }

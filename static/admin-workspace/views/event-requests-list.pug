@@ -5,7 +5,7 @@ html(lang='en')
     title Kulpole fest admin page
   body
     each eventRequestsArr in eventRequestsByClubsArray
-      b= 'Клуб: ' + eventRequestsArr[0].clubName || eventRequestsArr[0].club
+      b= 'Клуб: ' + eventRequestsArr[0].club
       table
         tr
           th.name-cell= 'Имя участника'
