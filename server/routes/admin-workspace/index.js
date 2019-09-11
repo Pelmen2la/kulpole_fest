@@ -4,7 +4,6 @@ const commonUtils = require('./../../common/utils');
 const pug = require('pug');
 const path = require('path');
 
-
 module.exports = function(app) {
     require('./auth')(app);
     require('./api')(app);
@@ -48,6 +47,8 @@ module.exports = function(app) {
 
             eventRequestsData.forEach(er => {
                 const club = er.club;
+                er.region = global.textResources.eventRequestRegions[er.region];
+                er.userFullName = getUserFullName(er.user[0]);
                 if(!eventRequestsByClubs[club]) {
                     eventRequestsByClubs[club] = [];
                 }
@@ -60,20 +61,7 @@ module.exports = function(app) {
                 })
             );
 
-            //res.send(eventRequestsData);
-            const csvReportContent = eventRequestsByClubsArray.map(eventRequests => {
-                const requestsContent = eventRequests.map(er => {
-                    const user = er.user[0];
-                    return `;${getUserFullName(user)};${er.role};${global.textResources.eventRequestRegions[er.region]}`;
-                }).join('\n');
-
-                return `Клуб: ${eventRequests[0].clubName}\n;Имя;Роль;Регион;\n` + requestsContent;
-            }).join('\n\n');
-
-            const fileName = `event reuests ${(new Date()).toISOString().split('T')[0]}`;
-            res.setHeader('Content-disposition', `attachment; filename=${fileName}.csv`);
-            res.set('Content-Type', 'text/csv; charset=utf-8');
-            res.status(200).send(csvReportContent);
+            res.send((pug.renderFile(path.join(global.appRoot, '/static/admin-workspace/views/event-requests-list.pug'), {eventRequestsByClubsArray})));
         });
     });
 };

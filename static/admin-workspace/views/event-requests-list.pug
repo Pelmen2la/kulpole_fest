@@ -1,0 +1,20 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    title Kulpole fest admin page
+  body
+    each eventRequestsArr in eventRequestsByClubsArray
+      b= 'Клуб: ' + eventRequestsArr[0].clubName
+      table
+        tr
+          th= 'Имя участника'
+          th= 'Роль'
+          th= 'Регион'
+        each eventRequest in eventRequestsArr
+          tr
+            td= eventRequest.userFullName
+            td= eventRequest.role
+            td= eventRequest.region
+
+      script(src='/dist/js/admin-workspace-event-requests-list-index.js')

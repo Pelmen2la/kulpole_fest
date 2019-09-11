@@ -3,7 +3,7 @@
         <div>
             <md-button class="md-raised" style="float: left" :href="'#' + backUrl">Назад</md-button>
             <md-button class="md-raised md-primary" style="float: right" :href="getDownloadEventRequestsListUrl" target="_blank">
-                Скачать список участников
+                Список допущенных участников
             </md-button>
         </div>
         <md-field>

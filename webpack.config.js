@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         "admin-workspace-index": './admin-workspace/js/index.js',
         "admin-workspace-auth-index": './admin-workspace/js/auth-index.js',
+        "admin-workspace-event-requests-list-index": './admin-workspace/js/event-requests-list-index.js',
         "landing-index":  './landing/js/index.js',
         "landing-registration":  './landing/js/pages/registration.js',
         "landing-auth":  './landing/js/pages/auth.js',

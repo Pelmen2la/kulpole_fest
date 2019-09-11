@@ -1,0 +1,25 @@
+b {
+    display: inline-block;
+    margin-bottom: 5px;
+    font-size: 1.2em;
+}
+
+table {
+    border-collapse: collapse;
+    margin-bottom: 30px;
+
+    th {
+        font-weight: bold;
+    }
+    th, td {
+        text-align: left;
+        padding: 4px 6px;
+        border: 1px solid black;
+        margin: 0;
+        min-width: 100px;
+
+        &:first-child {
+            min-width: 250px;
+        }
+    }
+}
