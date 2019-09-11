@@ -5,16 +5,16 @@ html(lang='en')
     title Kulpole fest admin page
   body
     each eventRequestsArr in eventRequestsByClubsArray
-      b= 'Клуб: ' + eventRequestsArr[0].clubName
+      b= 'Клуб: ' + eventRequestsArr[0].clubName || eventRequestsArr[0].club
       table
         tr
-          th= 'Имя участника'
-          th= 'Роль'
+          th.name-cell= 'Имя участника'
+          th.role-cell= 'Роль'
           th= 'Регион'
         each eventRequest in eventRequestsArr
           tr
-            td= eventRequest.userFullName
-            td= eventRequest.role
+            td.name-cell= eventRequest.userFullName
+            td.role-cell= eventRequest.role
             td= eventRequest.region
 
       script(src='/dist/js/admin-workspace-event-requests-list-index.js')
