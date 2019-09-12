@@ -58,7 +58,7 @@ module.exports = function(app) {
 
             const clubKeys = Object.keys(eventRequestsByClubs).sort((a, b) => a.toLowerCase() > b.toLowerCase() ? 1 : -1);
             const eventRequestsByClubsArray = clubKeys.map(k => eventRequestsByClubs[k].sort((a, b) => {
-                    return er.userFullName.toLowerCase() > er.userFullName.toLowerCase() ? 1 : -1;
+                    return a.userFullName.toLowerCase() > b.userFullName.toLowerCase() ? 1 : -1;
                 })
             );
 
