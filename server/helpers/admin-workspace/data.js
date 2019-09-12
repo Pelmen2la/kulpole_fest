@@ -150,6 +150,9 @@ function getDataModelSpecificFilters(modelName, params) {
         if(params.statusFilter !== undefined) {
             filters.push({status: params.statusFilter});
         }
+        if(params.roleFilter !== undefined) {
+            filters.push({role: params.roleFilter});
+        }
         if(params.clubFilter !== undefined) {
             filters.push({$or: [{club: params.clubFilter}, {clubName: params.clubFilter}]});
         }

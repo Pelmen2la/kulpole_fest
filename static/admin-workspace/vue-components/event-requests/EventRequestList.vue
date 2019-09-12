@@ -12,7 +12,7 @@
                 <label>Поиск</label>
                 <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
-            <div class="event-request-list-top-filters-container">
+            <div class="event-request-list-three-filters-container">
                 <md-field>
                     <label>Фильтр по костюму</label>
                     <md-select v-model="getPageState().isCostumeAcceptedFilter" @md-selected="onComboFilterChange">
@@ -38,12 +38,20 @@
                     </md-select>
                 </md-field>
             </div>
-            <div class="event-request-list-bottom-filters-container">
+            <div class="event-request-list-three-filters-container">
                 <md-field>
                     <label>Фильтр по статусу</label>
                     <md-select v-model="getPageState().statusFilter" @md-selected="onComboFilterChange">
                         <md-option v-for="(statusName, statusId) in statuses" :value="statusId" :key="statusId">
                             {{statusName}}
+                        </md-option>
+                    </md-select>
+                </md-field>
+                <md-field>
+                    <label>Фильтр по роли</label>
+                    <md-select v-model="getPageState().roleFilter" @md-selected="onComboFilterChange">
+                        <md-option v-for="role in roles" :value="role" :key="role">
+                            {{role}}
                         </md-option>
                     </md-select>
                 </md-field>
@@ -98,6 +106,9 @@
                 params.regionFilter = state.regionFilter;
                 if(state.statusFilter && state.statusFilter !== 'all') {
                     params.statusFilter = state.statusFilter;
+                }
+                if(state.roleFilter && state.roleFilter !== 'любая') {
+                    params.roleFilter = state.roleFilter;
                 }
                 if(state.clubFilter && state.clubFilter !== 'Все') {
                     params.clubFilter = state.clubFilter;
@@ -166,6 +177,9 @@
                 return Object.assign({
                     all: 'Все'
                 }, window.kulpoleAppData.textResources.eventRequestStatuses);
+            },
+            roles() {
+                return ['любая'].concat(window.kulpoleAppData.textResources.eventRequestRoles);
             }
         },
         mounted: function() {
@@ -175,7 +189,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .event-request-list-top-filters-container .md-field {
+    .event-request-list-three-filters-container .md-field {
         width: 32%;
         float: left;
 
@@ -183,7 +197,7 @@
             margin-right: 2%;
         }
     }
-    .event-request-list-bottom-filters-container .md-field {
+    .event-request-list-two-filters-container .md-field {
         width: 49%;
         float: left;
 
