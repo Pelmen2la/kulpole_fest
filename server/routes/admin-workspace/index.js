@@ -48,7 +48,7 @@ module.exports = function(app) {
             eventRequestsData.forEach(er => {
                 const club = er.club || er.clubName;
                 er.region = global.textResources.eventRequestRegions[er.region];
-                er.userFullName = getUserFullName(er.user[0]);
+                er.userFullName = er.participantName || getUserFullName(er.user[0]);
                 er.club = club;
                 if(!eventRequestsByClubs[club]) {
                     eventRequestsByClubs[club] = [];
@@ -58,7 +58,7 @@ module.exports = function(app) {
 
             const clubKeys = Object.keys(eventRequestsByClubs).sort((a, b) => a.toLowerCase() > b.toLowerCase() ? 1 : -1);
             const eventRequestsByClubsArray = clubKeys.map(k => eventRequestsByClubs[k].sort((a, b) => {
-                    return getUserFullName(a.user[0]).toLowerCase() > getUserFullName(b.user[0]).toLowerCase() ? 1 : -1;
+                    return er.userFullName.toLowerCase() > er.userFullName.toLowerCase() ? 1 : -1;
                 })
             );
 
