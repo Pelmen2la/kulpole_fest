@@ -15,8 +15,12 @@ block main-content
                 - var participantName = eventRequest.participantName || eventRequest.userData[0].name + ' ' + eventRequest.userData[0].surname
                 strong.user-name= 'Участник: ' + participantName
               img(src=eventRequest.photosProps[0].url)
-              span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
-              span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
+              div.event-request-card-footer
+                if eventRequest.status === 'not_accepted'
+                  b.event-request-not-accepted-text= 'Заявка не допущена'
+                else
+                  span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
+                  span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
 
 
 block after-index-script
