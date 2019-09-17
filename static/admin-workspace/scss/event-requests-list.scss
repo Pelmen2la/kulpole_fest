@@ -16,11 +16,18 @@ table {
         padding: 4px 6px;
         border: 1px solid black;
         margin: 0;
-        min-width: 100px;
 
-        &.name-cell,
+        &.name-cell {
+            width: 200px;
+        }
         &.role-cell {
-            min-width: 200px;
+            width: 100px;
+        }
+        &.region-cell {
+            width: 60px
+        }
+        &.empty-cell {
+            width: 145px;
         }
     }
 }

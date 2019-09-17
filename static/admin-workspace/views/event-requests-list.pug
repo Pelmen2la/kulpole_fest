@@ -10,11 +10,15 @@ html(lang='en')
         tr
           th.name-cell= 'Имя участника'
           th.role-cell= 'Роль'
-          th= 'Регион'
+          th.region-cell= 'Регион'
+          th.empty-cell
+          th.empty-cell
         each eventRequest in eventRequestsArr
           tr
             td.name-cell= eventRequest.userFullName
             td.role-cell= eventRequest.role
             td= eventRequest.region
+            td
+            td
 
       script(src='/dist/js/admin-workspace-event-requests-list-index.js')
