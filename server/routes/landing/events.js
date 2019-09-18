@@ -213,6 +213,7 @@ async function getEventsData(req, eventsYear) {
                     'eventRequests.participantName': 1,
                     'eventRequests.isCostumeAccepted': 1,
                     'eventRequests.isArmorAccepted': 1,
+                    'eventRequests.status': 1,
                     'eventRequests.user': {$arrayElemAt: ['$eventRequests.users', 0]}
                 }, 'event')
             }, {

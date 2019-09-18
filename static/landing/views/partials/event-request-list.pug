@@ -1,7 +1,9 @@
 - eventRequests = (eventRequests || []).filter(function(er) { return !!er._id && !!er.user; });
-- var newEventRequests = eventRequests.filter(function(er) { return !er.isCostumeAccepted && !er.isArmorAccepted;})
-- var inProcessEventRequests = eventRequests.filter(function(er) { return (er.isCostumeAccepted && !er.isArmorAccepted) || (!er.isCostumeAccepted && er.isArmorAccepted);})
-- var confirmedEventRequests = eventRequests.filter(function(er) { return er.isCostumeAccepted && er.isArmorAccepted;})
+- var notAcceptedEventRequests = eventRequests.filter(function(er) { return er.status === 'not_accepted';})
+- var filteredEventRequests = eventRequests.filter(function(er) { return notAcceptedEventRequests.indexOf(er) === -1;})
+- var newEventRequests = filteredEventRequests.filter(function(er) { return !er.isCostumeAccepted && !er.isArmorAccepted;})
+- var inProcessEventRequests = filteredEventRequests.filter(function(er) { return (er.isCostumeAccepted && !er.isArmorAccepted) || (!er.isCostumeAccepted && er.isArmorAccepted);})
+- var confirmedEventRequests = filteredEventRequests.filter(function(er) { return er.isCostumeAccepted && er.isArmorAccepted;})
 - var getEventRequestHtml = function(er) {
 -   var href = '/event_request/' + er.uid;
 -   var fullName = er.participantName || (er.user ? er.user.surname + ' ' + er.user.name : 'Пользователь удален');
@@ -20,6 +22,7 @@ div.event-request-list-container
   if eventRequests.length
     != getEventRequestsListHtml(confirmedEventRequests, 'Принятые заявки')
     != getEventRequestsListHtml(inProcessEventRequests, 'Заявки на рассмотрении')
+    != getEventRequestsListHtml(notAcceptedEventRequests, 'Не допущенные заявки')
     != getEventRequestsListHtml(newEventRequests, 'Новые заявки')
   else
     b= "Список заявок пуст"
