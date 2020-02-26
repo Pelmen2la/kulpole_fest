@@ -14,7 +14,7 @@ sharp.cache(false);
 function tryUploadFiles(relativeTargetPath, req, clb) {
     if(req.file) {
         tryUploadFileCore(relativeTargetPath, req.file, clb);
-    } else if(req.files) {
+    } else if(req.files && req.files.length) {
         var index = 0,
             fileUrls = [],
             uploadFn = function() {

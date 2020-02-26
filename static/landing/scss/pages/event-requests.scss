@@ -3,17 +3,19 @@
 .event-request-list {
     overflow: auto;
 
-    li {
+    .event-request-list-item {
         display: inline-block;
         width: 25%;
-        padding: 0.5em;
+        margin: 0 0.5em 0.5em 0;
         box-sizing: border-box;
+        padding: 0.5em;
+        border: 1px solid $main-light-blue-color;
+        float: left;
 
         a {
             display: block;
             text-align: center;
-            padding: 0.5em;
-            border: 1px solid $main-light-blue-color;
+
             color: black;
 
             strong {
@@ -26,23 +28,41 @@
                     text-overflow: ellipsis;
                 }
             }
+
             img {
                 height: 350px;
             }
+
             span {
                 display: block;
             }
         }
+
         &:hover {
             a {
                 border-color: $main-dark-blue-color;
             }
         }
+
         .event-request-card-footer {
-            height: 40px;
+            height: 60px;
+            text-align: center;
 
             .event-request-not-accepted-text {
                 color: red;
+            }
+
+            .is-costume-accepted,
+            .is-armor-accepted,
+            .event-request-not-accepted-text {
+                display: block;
+            }
+
+            .copy-event-request-link {
+                text-decoration: underline;
+                color: $main-dark-blue-color;
+                font-weight: 500;
+                margin-top: 5px;
             }
         }
     }

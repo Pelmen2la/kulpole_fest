@@ -41,9 +41,9 @@ block main-content
     ul.event-request-photos-container#EventRequestPhotoList
       each photoProps in eventRequestData.photosProps
         li
-          img(src=photoProps.url)
+          img(src=photoProps.url).photo
           if isCanEdit
-            textarea(rows="3" placeholder="Описание фотографии")= photoProps.description || ''
+            textarea(rows="3")= photoProps.description || ''
 
     if isCanEdit
       br

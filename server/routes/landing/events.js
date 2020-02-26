@@ -27,11 +27,15 @@ module.exports = function(app) {
     app.get('/events/:eventUid/request/new', function(req, res) {
         if(utils.checkAuth(req, res)) {
             eventModel.findOne({uid: req.params.eventUid}, (err, eventData) => {
-                clubModel.find({}, (err, clubsData) => {
-                    const params = {eventData: eventData || {}, clubsData: clubsData || []};
+                clubModel.find({}, async (err, clubsData) => {
+                    const eventRequestReference = req.query.event_request_reference;
+                    const eventRequestData = eventRequestReference ? await adminDataHelper.getEventRequest(eventRequestReference) : {};
+                    const params = {eventData: eventData || {}, clubsData: clubsData || [], eventRequestData};
                     utils.getPageHtml('add-event-request', req, params).then((pageHtml) => res.send(pageHtml));
                 });
             });
+        } else {
+            res.redirect('/');
         }
     });
 
@@ -51,7 +55,16 @@ module.exports = function(app) {
                     const link = eventRequestData.socialNetworkLink;
                     const club = eventRequestData.club;
                     const photoDescriptions = req.body.photoDescriptions.split(',');
-                    const photosProps = photoUrls.map((url, i) => ({ url, description: photoDescriptions[i]}));
+                    const photosProps = (photoUrls || []).map((url, i) => ({ url, description: photoDescriptions[i]}));
+
+                    if(eventRequestData.eventRequestReferencePhotoUrls) {
+                        const photoUrls = eventRequestData.eventRequestReferencePhotoUrls.split(',');
+                        const photoDescriptions = eventRequestData.eventRequestReferencePhotoDescriptions.split(',');
+                        photoUrls.forEach((url, i) => {
+                            photosProps.push({url, description: photoDescriptions[i]});
+                        })
+                    }
+
                     clubModel.findOne({name: new RegExp(`^${club}$`, 'i')}, (err, clubData) => {
                         if(!clubData) {
                             (new clubModel({name: club})).save();
@@ -92,6 +105,11 @@ module.exports = function(app) {
         } else {
             res.redirect('/events');
         }
+    });
+
+    app.get('/event_request/:eventRequestUid/copy_event_request', async function(req, res, next) {
+        const events = await getEventsData(req);
+        res.redirect(`/events/${events[0].uid}/request/new?event_request_reference=${req.params.eventRequestUid}`);
     });
 
     app.put('/event_request/:eventRequestUid/set_hide_chat/', async function(req, res, next) {
@@ -282,7 +300,7 @@ function getEventRequestPhotoFolderPath(eventUid, eventRequestUid) {
 };
 
 function getYearFilter(year) {
-    const fromDate = moment(year + '-01-01T00:00:00').toDate();
-    const toDate = moment(year + '-12-31T23:59:59').toDate();
+    const fromDate = moment((year || 1970) + '-01-01T00:00:00').toDate();
+    const toDate = moment((year || (new Date).getFullYear()) + '-12-31T23:59:59').toDate();
     return {$and: [{date: {$gt: fromDate}}, {date: {$lt: toDate}}]};
 };

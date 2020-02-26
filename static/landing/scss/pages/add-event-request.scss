@@ -1,27 +1,39 @@
 @import './../variables.scss';
 
-label + select {
-    display: block;
-    margin: 5px 0;
-}
-
-.documents-container {
-    margin-bottom: 1em;
-
-    a {
-        margin-left: 24px;
-        display: inline-block;
-        vertical-align: middle;
+.add-event-request-page-wrapper {
+    label + select {
+        display: block;
+        margin: 5px 0 12px;
     }
 
-    .document-link-cnt {
-        margin-top: 7px;
-        .download-link {
-            height: 16px;
-            width: 16px;
-            background: url('/resources/icons/download.svg');
-            background-repeat: no-repeat;
-            background-size: 16px 16px;
+    .input-container,
+    .horizontal-radio-buttons-container {
+        margin-bottom: 12px;
+    }
+
+    .event-request-reference-photos-container {
+        margin-bottom: 20px;
+    }
+
+    .documents-container {
+        margin-bottom: 20px;
+
+        a {
+            margin-left: 24px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .document-link-cnt {
+            margin-top: 7px;
+
+            .download-link {
+                height: 16px;
+                width: 16px;
+                background: url('/resources/icons/download.svg');
+                background-repeat: no-repeat;
+                background-size: 16px 16px;
+            }
         }
     }
 }

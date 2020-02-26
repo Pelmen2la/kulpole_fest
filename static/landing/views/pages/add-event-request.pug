@@ -2,53 +2,53 @@ extends ../index
 
 block main-content
   div.add-event-request-page-wrapper
-    form#AuthForm.event-request-form(action='/events/' + eventData.uid + '/request/new' method="POST" enctype="multipart/form-data" autocomplete="off")
+    form#AddEventRequestForm.event-request-form(action='/events/' + eventData.uid + '/request/new' method="POST" enctype="multipart/form-data" autocomplete="off")
       h1= 'Форма создания заявки на ' + eventData.title
 
       label
         | Статус участника
       select(name="role")
         each role in textResources.eventRequestRoles
-          option(value=role)= role
+          option(value=role selected=(role == eventRequestData.role))= role
 
-      div.input-container.with-fly-label
-        input(type="text" id="CityInput" name="city")
+      div.input-container.with-top-label
+        input(type="text" id="CityInput" name="city" value=(eventRequestData.city || ''))
         label(for="CityInput")
           | Город *
 
       div.custom-combo-container
-        div.input-container.with-fly-label
-          input(type="text" id="ClubInput" name="club")
+        div.input-container.with-top-label
+          input(type="text" id="ClubInput" name="club" value=(eventRequestData.club || ''))
           label(for="ClubInput")
             | Клуб *
           ul.combo-list
             for club in clubsData || []
               li(data-value=club.name)= club.name
 
-      div.input-container.with-fly-label
-        input(type="text" id="ParticipantNameInput" name="participantName")
+      div.input-container.with-top-label
+        input(type="text" id="ParticipantNameInput" name="participantName" value=(eventRequestData.participantName || ''))
         label(for="ParticipantNameInput")
           | Имя участника (заполняется только если вы подаете заявку за другого человека)
 
-      div.input-container.with-fly-label
-        input(type="text" id="ClubNameInput" name="clubName")
+      div.input-container.with-top-label
+        input(type="text" id="ClubNameInput" name="clubName" value=(eventRequestData.clubName || ''))
         label(for="ClubNameInput")
           | Клубное имя
 
-      div.input-container.with-fly-label
-        input(type="text" id="SocialNetworkLinkInput" name="socialNetworkLink")
+      div.input-container.with-top-label
+        input(type="text" id="SocialNetworkLinkInput" name="socialNetworkLink" value=(eventRequestData.socialNetworkLink || ''))
         label(for="SocialNetworkLinkInput")
           | Ссылка на социальные сети *
 
       span= "Регион *"
       div.horizontal-radio-buttons-container
         each val, key in textResources.eventRequestRegions
-          input(id=key + 'Radiobutton' type="radio" name="region" value=key)
+          input(id=key + 'Radiobutton' type="radio" name="region" value=key checked=(key === eventRequestData.region))
           label(for=key + 'Radiobutton')= val
 
 
-      div.textarea-container.with-fly-label
-        textarea(rows=5 id="RequestTextTextarea" name="text")
+      div.textarea-container.with-top-label
+        textarea(rows=5 id="RequestTextTextarea" name="text")= eventRequestData.text || ''
         label(for="RequestTextTextarea")
           | Описание костюма*
 
@@ -68,6 +68,19 @@ block main-content
       input(id="HideChatCheckbox" type="checkbox" name="hideChat" value="true" class="like-block")
       if false
         label(for="HideChatCheckbox")= "Спрятать переписку от остальных пользователей"
+
+      if eventRequestData.photosProps && eventRequestData.photosProps.length
+        div#EventRequestReferencePhotoListContainer
+          b
+            | Фотографии из скопированной заявки
+          br
+          ul#EventRequestReferencePhotoList.event-request-photos-container.event-request-reference-photos-container
+            each photoProps in eventRequestData.photosProps
+              li
+                img(src=photoProps.url).photo
+                span.delete-icon-wrapper
+                  img(src="/resources/icons/delete.svg").delete-icon
+                textarea.photo-description= photoProps.description
 
       b
         | Фотографии (необходимо загрузить не менее 2х и не более 10ти фотографий)

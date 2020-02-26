@@ -7,7 +7,7 @@ block main-content
     if eventRequestList && eventRequestList.length
       ul.event-request-list
         for eventRequest in eventRequestList
-          li
+          li.event-request-list-item
             a(href='/event_request/' + eventRequest.uid)
               if showEventName
                 strong.event-name= 'Фестиваль: ' + eventRequest.eventData[0].title
@@ -15,12 +15,14 @@ block main-content
                 - var participantName = eventRequest.participantName || eventRequest.userData[0].name + ' ' + eventRequest.userData[0].surname
                 strong.user-name= 'Участник: ' + participantName
               img(src=eventRequest.photosProps[0].url)
-              div.event-request-card-footer
-                if eventRequest.status === 'not_accepted'
-                  b.event-request-not-accepted-text= 'Заявка не допущена'
-                else
-                  span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
-                  span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
+            div.event-request-card-footer
+              if eventRequest.status === 'not_accepted'
+                b.event-request-not-accepted-text= 'Заявка не допущена'
+              else
+                span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
+                span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
+              a(href='/event_request/' + eventRequest.uid + '/copy_event_request/').copy-event-request-link
+                | Скопировать заявку
 
 
 block after-index-script
