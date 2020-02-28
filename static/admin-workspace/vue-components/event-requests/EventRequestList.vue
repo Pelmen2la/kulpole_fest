@@ -4,6 +4,7 @@
             :pageStateName="pageStateName"
             dataTypeMultipleName="eventRequests"
             dataTypeMultipleText="заявок"
+            :dontLoadDataOnMounted="true"
             :hideAddButton="true"
             :getLoadDataExtraParams="getLoadDataExtraParams"
             :gridColumnsCfg="getGridColumnCfg()">
@@ -182,7 +183,6 @@
                 utils.doRequest('/admin/workspace/events', {}, (data) => {
                     this.eventsData = data.content;
                     this.getPageState().eventFilter = this.eventsData[0]._id;
-                    this.loadData();
                 });
             }
         },

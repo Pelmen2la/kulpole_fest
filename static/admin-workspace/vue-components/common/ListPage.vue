@@ -36,7 +36,7 @@
             MaterialGrid
         },
         props: ['dataTypeMultipleName', 'dataTypeMultipleText', 'getLoadDataExtraParams', 'gridColumnsCfg', 'hideAddButton',
-            'hideGridEditBtn', 'pageStateName', 'getCustomConfirmDeleteRecordText', 'loadDataOnMounted'],
+            'hideGridEditBtn', 'pageStateName', 'getCustomConfirmDeleteRecordText', 'dontLoadDataOnMounted'],
         data() {
             return {
                 confirmDeleteRecordId: null
@@ -125,7 +125,7 @@
             }
         },
         mounted: function() {
-            if(this.loadDataOnMounted) {
+            if(!this.dontLoadDataOnMounted) {
                 this.loadPageByIndex(0);
             }
         }
