@@ -156,12 +156,15 @@ function getDataModelSpecificFilters(modelName, params) {
         if(params.clubFilter !== undefined) {
             filters.push({$or: [{club: params.clubFilter}, {clubName: params.clubFilter}]});
         }
+        if(params.eventFilter !== undefined) {
+            filters.push({eventId: idToObj(params.eventFilter)});
+        }
     }
     return filters.length ? {$and: filters} : {};
 };
 
 function getListDataModelLookupArgs(modelName) {
-    if(modelName == 'eventRequest') {
+    if(modelName === 'eventRequest') {
         return [{
             $lookup: {
                 from: eventModel.collection.collectionName,
@@ -193,6 +196,8 @@ function getListDataModelLookupArgs(modelName) {
                 }
             }, 'event_request')
         }, {$sort: {'dateDiff': 1}}]
+    } else if(modelName === 'event') {
+        return [{$sort: {'date': -1}}]
     }
     return [];
 };

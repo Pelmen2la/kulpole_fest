@@ -12,6 +12,14 @@
                 <label>Поиск</label>
                 <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
+            <md-field>
+                <label>Фильтр по фестивалю</label>
+                <md-select v-model="getPageState().eventFilter" @md-selected="onComboFilterChange">
+                    <md-option v-for="event in eventsData" :value="event._id" :key="event._id">
+                        {{event.title}}
+                    </md-option>
+                </md-select>
+            </md-field>
             <div class="event-request-list-three-filters-container">
                 <md-field>
                     <label>Фильтр по костюму</label>
@@ -86,7 +94,8 @@
                     {id: 'yes', name: 'Допущен'},
                     {id: 'no', name: 'Не допущен'}
                 ],
-                clubsData: []
+                clubsData: [],
+                eventsData: []
             }
         },
         methods: {
@@ -104,6 +113,7 @@
                     }
                 });
                 params.regionFilter = state.regionFilter;
+                params.eventFilter = state.eventFilter;
                 if(state.statusFilter && state.statusFilter !== 'all') {
                     params.statusFilter = state.statusFilter;
                 }
@@ -167,6 +177,13 @@
                     clubs.unshift({id: 'all', name: 'Все'});
                     this.clubsData = data.content;
                 });
+            },
+            loadEvents: function() {
+                utils.doRequest('/admin/workspace/events', {}, (data) => {
+                    this.eventsData = data.content;
+                    this.getPageState().eventFilter = this.eventsData[0]._id;
+                    this.loadData();
+                });
             }
         },
         computed: {
@@ -184,6 +201,7 @@
         },
         mounted: function() {
             this.loadClubs();
+            this.loadEvents();
         }
     }
 </script>
@@ -197,6 +215,7 @@
             margin-right: 2%;
         }
     }
+
     .event-request-list-two-filters-container .md-field {
         width: 49%;
         float: left;
