@@ -155,7 +155,7 @@
                         text: 'Доспех допущен',
                         dataIndex: 'isArmorAccepted',
                         renderer(rec, val) {
-                            if(rec.role !== 'воин') {
+                            if(rec.role !== 'воин' && rec.role !== 'командир отряда') {
                                 return 'Не требуется';
                             }
                             let imageName = val ? 'check-green' : 'cross-red';

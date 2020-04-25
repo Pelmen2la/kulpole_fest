@@ -33,7 +33,7 @@ module.exports = function(app) {
         const body = req.body;
         UserModel.findOne({email: body.email}, (err, userData) => {
             if(userData) {
-                sendRegistrationPage(req, res, { errorText: 'Данный логин\email-адрес уже используется.', registrationUserData: body });
+                sendRegistrationPage(req, res, { errorText: 'Данный логин \\ email-адрес уже используется.', registrationUserData: body });
             } else {
                 var newUser = UserModel(req.body);
                 newUser.save((err, userData) => {

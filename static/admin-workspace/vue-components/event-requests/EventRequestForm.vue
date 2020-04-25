@@ -51,8 +51,8 @@
             Костюм допущен
         </md-checkbox>
         <md-checkbox
-                v-if="eventRequestData.role === 'воин'" v-model="eventRequestData.isArmorAccepted"
-                @change="(val) => onAcceptedCheckboxChange('isArmorAccepted', val)"
+                v-if="eventRequestData.role === 'воин' || eventRequestData.role === 'командир отряда'"
+                v-model="eventRequestData.isArmorAccepted" @change="(val) => onAcceptedCheckboxChange('isArmorAccepted', val)"
         >
             Доспех допущен
         </md-checkbox>
