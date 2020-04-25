@@ -5,10 +5,10 @@ const nodemailer = require('nodemailer');
 const emailsCfg = global.appConfig.notificationEmailCfg;
 const transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: {
+    auth: emailsCfg ? {
         user: emailsCfg.login,
         pass: emailsCfg.password
-    }
+    } : null
 });
 
 module.exports = {
@@ -85,6 +85,10 @@ async function sendEmailForRegionResponsibleSystemUsers(region, title, body) {
 };
 
 function sendEmail(toEmail, title, body) {
+    if(!emailsCfg) {
+        return;
+    }
+
     transporter.sendMail({
         from: emailsCfg.login,
         to: toEmail,
