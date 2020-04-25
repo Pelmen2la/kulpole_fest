@@ -15,7 +15,7 @@ module.exports = function(app) {
                 addAuthUserInfoToSession(req, userData);
                 sendAuthPage(req, res, {});
             } else {
-                sendAuthPage(req, res, { errorText: 'Не верно указан логин\email или пароль.' });
+                sendAuthPage(req, res, { errorText: 'Не верно указан логин \ email или пароль.' });
             }
         });
     });

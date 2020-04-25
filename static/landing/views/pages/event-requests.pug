@@ -20,7 +20,8 @@ block main-content
                 b.event-request-not-accepted-text= 'Заявка не допущена'
               else
                 span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
-                span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
+                if eventRequest.role === 'воин'
+                  span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
               a(href='/event_request/' + eventRequest.uid + '/copy_event_request/').copy-event-request-link
                 | Скопировать заявку
 

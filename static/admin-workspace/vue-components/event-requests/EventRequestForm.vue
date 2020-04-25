@@ -50,7 +50,10 @@
         <md-checkbox v-model="eventRequestData.isCostumeAccepted" @change="(val) => onAcceptedCheckboxChange('isCostumeAccepted', val)">
             Костюм допущен
         </md-checkbox>
-        <md-checkbox v-model="eventRequestData.isArmorAccepted" @change="(val) => onAcceptedCheckboxChange('isArmorAccepted', val)">
+        <md-checkbox
+                v-if="eventRequestData.role === 'воин'" v-model="eventRequestData.isArmorAccepted"
+                @change="(val) => onAcceptedCheckboxChange('isArmorAccepted', val)"
+        >
             Доспех допущен
         </md-checkbox>
         <md-field>

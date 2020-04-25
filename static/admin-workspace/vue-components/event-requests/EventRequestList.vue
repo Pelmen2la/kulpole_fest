@@ -151,7 +151,17 @@
                         renderer: (rec, val) => this.regions[val]
                     },
                     {text: 'Костюм допущен', dataIndex: 'isCostumeAccepted', renderType: 'boolIcon'},
-                    {text: 'Доспех допущен', dataIndex: 'isArmorAccepted', renderType: 'boolIcon'},
+                    {
+                        text: 'Доспех допущен',
+                        dataIndex: 'isArmorAccepted',
+                        renderer(rec, val) {
+                            if(rec.role !== 'воин') {
+                                return 'Не требуется';
+                            }
+                            let imageName = val ? 'check-green' : 'cross-red';
+                            return `<img style="height: 16px;" src="/resources/icons/${imageName}.svg"/>`;
+                        },
+                    },
                     {text: 'Дата', dataIndex: 'date', renderType: 'date'},
                     {
                         text: 'Кто совершил последнее действие',
