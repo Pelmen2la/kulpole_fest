@@ -1,0 +1,9 @@
+extends ./../index.pug
+
+block main-content
+  div.event-requests-list-page-wrapper
+    include ../documents/event-request-manual
+
+
+block after-index-script
+  script(src='/dist/js/landing-event-requests.js?timestamp=' + appStartTime)

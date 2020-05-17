@@ -7,7 +7,9 @@ block main-content
     if eventRequestList && eventRequestList.length
       ul.event-request-list
         for eventRequest in eventRequestList
-          li.event-request-list-item
+          - var isDisabled = eventRequest.isDisabled;
+          - var eventRequestId = eventRequest._id
+          li(class= 'event-request-list-item' + (isDisabled ? ' disabled-item' : ''))
             a(href='/event_request/' + eventRequest.uid)
               if showEventName
                 strong.event-name= 'Фестиваль: ' + eventRequest.eventData[0].title
@@ -16,14 +18,23 @@ block main-content
                 strong.user-name= 'Участник: ' + participantName
               img(src=eventRequest.photosProps[0].url)
             div.event-request-card-footer
-              if eventRequest.status === 'not_accepted'
-                b.event-request-not-accepted-text= 'Заявка не допущена'
-              else
-                span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
-                if eventRequest.role === 'воин' || eventRequest.role === 'командир отряда'
-                  span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
-              a(href='/event_request/' + eventRequest.uid + '/copy_event_request/').copy-event-request-link
-                | Скопировать заявку
+              div.info-container
+                if eventRequest.status === 'not_accepted'
+                  b.event-request-not-accepted-text= 'Заявка не допущена'
+                else
+                  span.is-costume-accepted= 'Костюм: ' + (eventRequest.isCostumeAccepted ? 'допущен' : 'на рассмотрении')
+                  if eventRequest.role === 'воин' || eventRequest.role === 'командир отряда'
+                    span.is-armor-accepted= 'Доспех: ' + (eventRequest.isArmorAccepted ? 'допущен' : 'на рассмотрении')
+              b.disabled-text
+                | Заявка отменена
+              div.event-request-action-buttons-container
+                a(href='/event_request/' + eventRequest.uid + '/copy_event_request/')
+                  | Скопировать заявку
+                span(
+                  onClick=`eventRequestsAppModule.onEventRequestSwitchIsActiveButtonClick('${eventRequestId}')`
+                  data-event-request-id=eventRequestId data-is-disabled=(isDisabled || false).toString()
+                ).link-like-button
+                  = isDisabled ? 'Возобновить заявку' : 'Отменить заявку'
 
 
 block after-index-script

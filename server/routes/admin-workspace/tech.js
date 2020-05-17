@@ -11,4 +11,13 @@ module.exports = function(app) {
             res.send('No update function or record id');
         }
     });
+
+    app.get('/admin/workspace/:capModelName/update_all/', async (req, res, next) => {
+        const updateAllFn = dataHelper['updateAll' + req.params.capModelName];
+        if(updateAllFn) {
+            res.send(await updateAllFn(req.query));
+        } else {
+            res.send('No update function');
+        }
+    });
 };

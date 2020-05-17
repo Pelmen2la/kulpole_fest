@@ -50,6 +50,7 @@ module.exports = {
     addEventRequestMessage,
     updateEventRequestLastActionDate,
     updateEventRequestLastOpenDate,
+    updateEventRequestData,
     idToObj
 };
 
@@ -110,6 +111,14 @@ function createCRUD(dataModelName, model) {
         });
     };
 
+    module.exports[`updateAll${capName}`] = function(data) {
+        return new Promise((resolve) => {
+            model.updateMany({}, data, (err, data) => {
+                resolve(err ? null : data);
+            });
+        });
+    };
+
     module.exports[`delete${capName}`] = function(id) {
         return new Promise((resolve) => {
             model.findOneAndDelete({_id: id}, (err, data) => {
@@ -125,13 +134,13 @@ function getDataModel(name) {
 
 function getDataModelSpecificFilters(modelName, params) {
     var filters = [];
-    if(modelName == 'user') {
+    if(modelName === 'user') {
         filters.push(getSearchFilterConditions(['name', 'surname', 'club', 'email', 'phone'], params.searchText || ''));
-    } else if(modelName == 'news') {
+    } else if(modelName === 'news') {
         filters.push(getSearchFilterConditions(['title', 'html'], params.searchText || ''));
-    } else if(modelName == 'club') {
+    } else if(modelName === 'club') {
         filters.push(getSearchFilterConditions(['name'], params.searchText || ''));
-    } else if(modelName == 'eventRequest') {
+    } else if(modelName === 'eventRequest') {
         const searchFields = ['eventData.title', 'userData.name', 'userData.surname', 'userData.fullName', 'userData.reverseFullName'];
         filters.push(getSearchFilterConditions(searchFields, params.searchText || ''));
         if(params.userId) {
@@ -158,6 +167,9 @@ function getDataModelSpecificFilters(modelName, params) {
         }
         if(params.eventFilter !== undefined) {
             filters.push({eventId: idToObj(params.eventFilter)});
+        }
+        if(params.isDisabled !== undefined) {
+            filters.push({isDisabled: params.isDisabled === 'not-active'});
         }
     }
     return filters.length ? {$and: filters} : {};
@@ -292,9 +304,13 @@ function getUpdateEventRequestDatePromise(eventRequestId, dateType) {
     return new Promise((resolve) => {
         let updateData = {};
         updateData[dateType] = new Date;
-        eventRequestModel.findOneAndUpdate({_id: idToObj(eventRequestId)}, updateData, resolve);
+        updateEventRequestData(eventRequestId, updateData, resolve);
     });
 };
+
+function updateEventRequestData(eventRequestId, updateData, clb) {
+    eventRequestModel.findOneAndUpdate({_id: idToObj(eventRequestId)}, updateData, clb);
+}
 
 function idToObj(id) {
     return id instanceof mongoose.Types.ObjectId ? id : mongoose.Types.ObjectId(id);

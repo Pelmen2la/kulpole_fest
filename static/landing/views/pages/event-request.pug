@@ -44,8 +44,10 @@ block main-content
           img(src=photoProps.url).photo
           if isCanEdit
             textarea(rows="3")= photoProps.description || ''
-
-    if isCanEdit
+    if eventRequestData.isDisabled
+      b.event-request-disabled-text
+        | Заявка отозвана
+    else if isCanEdit
       br
       label.file-input-wrapper.button-like(for="EventRequestPhotoFileInput")
         input(id="EventRequestPhotoFileInput" type="file" name="photo" accept=".jpg, .jpeg, .png")

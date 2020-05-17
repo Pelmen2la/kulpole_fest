@@ -105,7 +105,7 @@ import utils from './../utils'
     };
     function getFileInputInvalidText() {
         const photosCount = photos.length + (eventRequestReferencePhotosList ? eventRequestReferencePhotosList.childNodes.length : 0);
-        return photosCount < 2 || photosCount > 10 ? 'Количество фотографий должно быть больше 2х и меньше 10ти.' : '';
+        return photosCount < 3 || photosCount > 10 ? 'Количество фотографий должно быть не менее 3х и меньше 10ти.' : '';
     };
     function getRequestFieldInvalidText() {
         return requestTextarea.value ? '' : 'Введите описание костюма.';

@@ -44,6 +44,12 @@
             }
         }
 
+        .disabled-text {
+            color: red;
+            display: none;
+            margin-bottom: 16px;
+        }
+
         .event-request-card-footer {
             height: 60px;
             text-align: center;
@@ -58,11 +64,37 @@
                 display: block;
             }
 
-            .copy-event-request-link {
-                text-decoration: underline;
-                color: $main-dark-blue-color;
-                font-weight: 500;
-                margin-top: 5px;
+            .event-request-action-buttons-container {
+                padding: 5px 10px;
+
+                a, span {
+                    display: inline-block;
+                    text-decoration: underline;
+                    color: $main-dark-blue-color;
+                    font-weight: 500;
+                    margin-top: 5px;
+                    cursor: pointer;
+                }
+
+                :first-child {
+                    float: left;
+                }
+
+                :not(:first-child) {
+                    float: right;
+                }
+            }
+        }
+
+        &.disabled-item {
+            .event-request-card-footer {
+                .info-container {
+                    display: none;
+                }
+
+                .disabled-text {
+                    display: block;
+                }
             }
         }
     }

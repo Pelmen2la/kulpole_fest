@@ -20,6 +20,10 @@ module.exports = function(app) {
         sendEventsPageHtml(req, res, (new Date).getFullYear());
     });
 
+    app.get('/event_request_manual', async (req, res, next) => {
+        res.send(await utils.getPageHtml('event-request-manual', req));
+    });
+
     app.get('/events/:year', function(req, res, next) {
         sendEventsPageHtml(req, res, parseInt(req.params.year));
     });
@@ -104,6 +108,19 @@ module.exports = function(app) {
             utils.getPageHtml('event-request', req, params).then((pageHtml) => res.send(pageHtml));
         } else {
             res.redirect('/events');
+        }
+    });
+
+    app.put('/event_request/:eventRequestId', async (req, res) => {
+        const eventRequestId = req.params.eventRequestId;
+        const result = await tryGetEventRequestData(req, res, eventRequestId);
+        const eventRequestData = result.eventRequestData;
+        if(eventRequestData && result.canEdit) {
+            adminDataHelper.updateEventRequestData(eventRequestData._id, req.body, () => {
+                res.send({success: true});
+            });
+        } else {
+            res.json({success: false});
         }
     });
 

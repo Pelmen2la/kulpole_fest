@@ -46,11 +46,14 @@ block main-content
           input(id=key + 'Radiobutton' type="radio" name="region" value=key checked=(key === eventRequestData.region))
           label(for=key + 'Radiobutton')= val
 
-
+      b.armor-and-costume-notification
+        | В ОПИСАНИИ КОСТЮМА необходимо указать век, регион, и этнос.
+        br
+        | ДЛЯ ОПЫТНЫХ РЕКОНСТРУКТОРОВ ЖЕЛАТЕЛЬНО описание каждого предмета костюма со ссылкой на источник
       div.textarea-container.with-top-label
         textarea(rows=5 id="RequestTextTextarea" name="text")= eventRequestData.text || ''
         label(for="RequestTextTextarea")
-          | Описание костюма*
+          | Описание комплекта *
 
       div.documents-container
         input(id="AcceptDocumentsCheckbox" type="checkbox" name="acceptDocuments")
@@ -58,7 +61,7 @@ block main-content
         div.document-link-cnt
           a(href="/#polozhenie_o_festivale" target="_blank")
             | Положение о фестивале
-          a.download-link(href="/documents/Polozhenie_o_festivale19.doc")
+          a.download-link(href="/documents/Polozhenie_o_festivale20.doc")
         div.document-link-cnt
           a(href="/#printsipy_raboty_istorichekoy_komissii" target="_blank")
             | Принципы работы исторической комиссии
@@ -83,7 +86,7 @@ block main-content
                 textarea.photo-description= photoProps.description
 
       b
-        | Фотографии (необходимо загрузить не менее 2х и не более 10ти фотографий)
+        | Фотографии (необходимо загрузить не менее 3х и не более 10ти фотографий)
       br
       label.file-input-wrapper.button-like(for="AddEventRequestPhotoFileInput")
         input(id="AddEventRequestPhotoFileInput" type="file" accept=".jpg, .jpeg, .png" multiple)

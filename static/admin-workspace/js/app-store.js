@@ -22,6 +22,7 @@ export default new Vuex.Store({
         eventRequestsPage: {
             grid: getGridInitialState(),
             searchText: '',
+            isDisabledFilter: 'active',
             isCostumeAcceptedFilter: 'all',
             isArmorAcceptedFilter: 'all',
             regionFilter: Object.keys(window.kulpoleAppData.textResources.eventRequestRegions)

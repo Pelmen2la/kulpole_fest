@@ -13,14 +13,24 @@
                 <label>Поиск</label>
                 <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
             </md-field>
-            <md-field>
-                <label>Фильтр по фестивалю</label>
-                <md-select v-model="getPageState().eventFilter" @md-selected="onComboFilterChange">
-                    <md-option v-for="event in eventsData" :value="event._id" :key="event._id">
-                        {{event.title}}
-                    </md-option>
-                </md-select>
-            </md-field>
+            <div class="event-request-list-two-filters-container">
+                <md-field>
+                    <label>Фильтр по фестивалю</label>
+                    <md-select v-model="getPageState().eventFilter" @md-selected="onComboFilterChange">
+                        <md-option v-for="event in eventsData" :value="event._id" :key="event._id">
+                            {{event.title}}
+                        </md-option>
+                    </md-select>
+                </md-field>
+                <md-field>
+                    <label>Фильтр по активная \ неактивная</label>
+                    <md-select v-model="getPageState().isDisabledFilter" @md-selected="onComboFilterChange">
+                        <md-option v-for="(record, index) in isDisabledComboData" :value="record.id" :key="index">
+                            {{record.name}}
+                        </md-option>
+                    </md-select>
+                </md-field>
+            </div>
             <div class="event-request-list-three-filters-container">
                 <md-field>
                     <label>Фильтр по костюму</label>
@@ -95,6 +105,11 @@
                     {id: 'yes', name: 'Допущен'},
                     {id: 'no', name: 'Не допущен'}
                 ],
+                isDisabledComboData: [
+                    {id: 'all', name: 'Все'},
+                    {id: 'active', name: 'Активные'},
+                    {id: 'not-active', name: 'Неактивные'}
+                ],
                 clubsData: [],
                 eventsData: []
             }
@@ -123,6 +138,9 @@
                 }
                 if(state.clubFilter && state.clubFilter !== 'Все') {
                     params.clubFilter = state.clubFilter;
+                }
+                if(state.isDisabledFilter !== 'all') {
+                    params.isDisabled = state.isDisabledFilter;
                 }
                 return params;
             },

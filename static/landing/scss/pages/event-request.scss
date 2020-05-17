@@ -15,4 +15,11 @@
             display: initial;
         }
     }
+
+    .event-request-disabled-text {
+        font-size: 1.5em;
+        display: block;
+        font-weight: bold;
+        color: red;
+    }
 }

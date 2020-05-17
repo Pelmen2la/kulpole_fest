@@ -22,6 +22,7 @@ const EventRequest = new mongoose.Schema({
     photosProps: {type: [PhotoProps], default: []},
     status: {type: String, default: 'new'},
     hideChat: {type: Boolean, default: false},
+    isDisabled: {type: Boolean, default: false},
     isCostumeAccepted: {type: Boolean, default: false},
     isArmorAccepted: {type: Boolean, default: false},
     date: {type: Date, default: Date.now},

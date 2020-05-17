@@ -75,6 +75,10 @@ body {
 .document-content-container {
     margin-bottom: 2em;
 
+    a {
+        display: inline;
+    }
+
     ol,
     ul {
         counter-reset: item;
@@ -88,10 +92,6 @@ body {
 
     ol {
         li {
-            a {
-                display: inline;
-            }
-
             &:before {
                 content: counters(item, ".") " ";
                 counter-increment: item;
