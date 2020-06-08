@@ -1,8 +1,8 @@
 - eventRequests = (eventRequests || []).filter(function(er) { return !!er._id && !!er.user; });
 - var notAcceptedEventRequests = eventRequests.filter(function(er) { return er.status === 'not_accepted';})
-- var newEventRequests = filteredEventRequests.filter(function(er) { return er.status === 'new';})
-- var inProcessEventRequests = filteredEventRequests.filter(function(er) { return er.status === 'in_process';})
-- var confirmedEventRequests = filteredEventRequests.filter(function(er) { return er.status === 'done';})
+- var newEventRequests = eventRequests.filter(function(er) { return er.status === 'new';})
+- var inProcessEventRequests = eventRequests.filter(function(er) { return er.status === 'in_process';})
+- var confirmedEventRequests = eventRequests.filter(function(er) { return er.status === 'done';})
 - var getEventRequestHtml = function(er) {
 -   var href = '/event_request/' + er.uid;
 -   var fullName = er.participantName || (er.user ? er.user.surname + ' ' + er.user.name : 'Пользователь удален');
