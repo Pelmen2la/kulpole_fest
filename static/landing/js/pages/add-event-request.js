@@ -20,6 +20,7 @@ import utils from './../utils'
         utils.addInputOnChangeListeners(utils.qn('socialNetworkLink'), ensureAuthButtonState);
         utils.qn('region', true).forEach((radio) => radio.addEventListener('change', ensureSubmitRequestBtnStateCore));
         acceptDocumentsCheckbox.addEventListener('change', ensureAuthButtonState);
+        ensureSubmitRequestBtnStateCore();
 
         addEventRequestForm.addEventListener('submit', function(e) {
             const form = e.target;
@@ -106,7 +107,7 @@ import utils from './../utils'
     };
     function getFileInputInvalidText() {
         const photosCount = photos.length + (eventRequestReferencePhotosList ? eventRequestReferencePhotosList.childNodes.length : 0);
-        return photosCount < 3 || photosCount > 10 ? 'Количество фотографий должно быть не менее 3х и меньше 10ти.' : '';
+        return photosCount < 3 || photosCount > 10 ? 'Количество фотографий должно быть не менее 3х и не больше 10ти.' : '';
     };
     function getRequestFieldInvalidText() {
         return requestTextarea.value ? '' : 'Введите описание костюма.';
