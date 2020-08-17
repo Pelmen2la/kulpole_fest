@@ -59,7 +59,7 @@ import utils from './../utils'
                 if(photosList.childNodes.length === 0) {
                     addEventRequestForm.removeChild(document.getElementById('EventRequestReferencePhotoListContainer'));
                 }
-                this.ensureSubmitRequestBtnStateCore();
+                ensureSubmitRequestBtnStateCore();
             });
         });
     };
