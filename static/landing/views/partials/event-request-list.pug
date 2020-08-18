@@ -1,4 +1,4 @@
-- eventRequests = (eventRequests || []).filter(function(er) { return !!er._id && !!er.user; });
+- eventRequests = (eventRequests || []).filter(function(er) { return !!er._id && !!er.user && !er.isDisabled; });
 - var notAcceptedEventRequests = eventRequests.filter(function(er) { return er.status === 'not_accepted';})
 - var newEventRequests = eventRequests.filter(function(er) { return er.status === 'new';})
 - var inProcessEventRequests = eventRequests.filter(function(er) { return er.status === 'in_process';})
