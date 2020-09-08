@@ -141,7 +141,7 @@ function getDataModelSpecificFilters(modelName, params) {
     } else if(modelName === 'club') {
         filters.push(getSearchFilterConditions(['name'], params.searchText || ''));
     } else if(modelName === 'eventRequest') {
-        const searchFields = ['eventData.title', 'userData.name', 'userData.surname', 'userData.fullName', 'userData.reverseFullName'];
+        const searchFields = ['eventData.title', 'userData.name', 'userData.surname', 'userData.fullName', 'userData.reverseFullName', 'participantName'];
         filters.push(getSearchFilterConditions(searchFields, params.searchText || ''));
         if(params.userId) {
             filters.push({userId: idToObj(params.userId)});
