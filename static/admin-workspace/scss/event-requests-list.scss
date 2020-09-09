@@ -17,6 +17,9 @@ table {
         border: 1px solid black;
         margin: 0;
 
+        &.number-cell {
+            width: 20px;
+        }
         &.name-cell {
             width: 200px;
         }

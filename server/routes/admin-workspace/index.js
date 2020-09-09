@@ -25,7 +25,7 @@ module.exports = function(app) {
     app.get('/admin/workspace/events/:eventId/event_requests_list/', function(req, res, next) {
         const eventRequestModel = dataHelper.getDataModel('eventRequest');
         const userModel = dataHelper.getDataModel('user');
-        const matchParams = {eventId: dataHelper.idToObj(req.params.eventId), isArmorAccepted: true, isCostumeAccepted: true};
+        const matchParams = {eventId: dataHelper.idToObj(req.params.eventId), status: 'done'};
         const aggArgs = [
             {$match: matchParams}, {$sort: {clubName: 1}},
             {

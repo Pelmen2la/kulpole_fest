@@ -4,10 +4,12 @@ html(lang='en')
     meta(charset='UTF-8')
     title Kulpole fest admin page
   body
+    - var counter = 1;
     each eventRequestsArr in eventRequestsByClubsArray
       b= 'Клуб: ' + eventRequestsArr[0].club
       table
         tr
+          th.number-cell= '№'
           th.name-cell= 'Имя участника'
           th.role-cell= 'Роль'
           th.region-cell= 'Регион'
@@ -15,10 +17,12 @@ html(lang='en')
           th.empty-cell
         each eventRequest in eventRequestsArr
           tr
+            td.number-cell= counter
             td.name-cell= eventRequest.userFullName
             td.role-cell= eventRequest.role
             td= eventRequest.region
             td
             td
+          -var counter = counter + 1
 
       script(src='/dist/js/admin-workspace-event-requests-list-index.js')
