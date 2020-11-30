@@ -1,6 +1,11 @@
 @import './../variables.scss';
 
 .main-page-wrapper {
+    .video-iframne {
+        display: block;
+        margin: 20px auto 40px;
+    }
+
     .main-page-block {
         margin-top: 1.5em;
     }
