@@ -10,13 +10,46 @@
                 :getLoadDataExtraParams="getLoadDataExtraParams"
                 :gridColumnsCfg="getGridColumnCfg()">
             <template slot="filters_container">
-                <md-field>
-                    <label>Введите название клуба</label>
-                    <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
-                </md-field>
-                <md-button class="md-raised md-primary" :disabled="!getPageState().searchText" @click="onAddClubBtnClick">
-                    Добавить клуб
-                </md-button>
+                <div class="add-club-panel">
+                    <md-field>
+                        <label>Введите название клуба</label>
+                        <md-input @keyup="onSearchTextChange" v-model="getPageState().searchText"/>
+                    </md-field>
+                    <md-button class="md-raised md-primary" :disabled="!getPageState().searchText"
+                               @click="onAddClubBtnClick">
+                        Добавить клуб
+                    </md-button>
+                </div>
+                <div class="join-clubs-panel">
+                    <span class="description-text">
+                        Клуб
+                    </span>
+                    <md-field>
+                        <label>Выберите клуб</label>
+                        <md-select v-model="getPageState().firstClubToJoin">
+                            <md-option v-for="club in allClubs" :value="club.name" :key="club.name">
+                                {{club.name}}
+                            </md-option>
+                        </md-select>
+                    </md-field>
+                    <span class="description-text">
+                        будет влит в клуб
+                    </span>
+                    <md-field>
+                        <label>Выберите клуб</label>
+                        <md-select v-model="getPageState().secondClubToJoin">
+                            <md-option v-for="club in allClubs" :value="club.name" :key="club.name">
+                                {{club.name}}
+                            </md-option>
+                        </md-select>
+                    </md-field>
+                    <md-button
+                            class="md-raised md-primary" :disabled="isJoinClubsButtonDisabled"
+                            @click="onJoinClubsButtonClick"
+                    >
+                        Объединить клубы
+                    </md-button>
+                </div>
             </template>
         </ListPage>
     </div>
@@ -34,7 +67,8 @@
         data() {
             return {
                 pageStateName: 'clubsPage',
-                loadDataTimeoutId: null
+                loadDataTimeoutId: null,
+                allClubs: [],
             }
         },
         methods: {
@@ -61,9 +95,69 @@
                     this.$refs.ListPage.loadPageByIndex(this.getPageState().grid.pageIndex);
                 }.bind(this));
             },
+            onJoinClubsButtonClick: function() {
+                const {firstClubToJoin, secondClubToJoin} = this.getPageState();
+                const data = {firstClubToJoin, secondClubToJoin};
+                utils.doDataRequest('/admin/workspace/clubs/join/', 'POST', data, (data) => {
+                    const clubToDelete = this.allClubs.find(c => c.name === firstClubToJoin);
+                    this.allClubs.splice(this.allClubs.indexOf(clubToDelete), 1);
+                    this.loadData();
+                    this.getPageState().firstClubToJoin = null;
+                });
+            },
             loadData: function() {
                 this.$refs.ListPage.loadPageByIndex(0);
+            },
+            loadAllClubs: function() {
+                utils.doRequest('/admin/workspace/clubs', {}, (data) => {
+                    this.allClubs = data.content;
+                });
             }
+        },
+        computed: {
+            isJoinClubsButtonDisabled() {
+                const {firstClubToJoin, secondClubToJoin} = this.getPageState();
+                return !firstClubToJoin || !secondClubToJoin || firstClubToJoin === secondClubToJoin;
+            }
+        },
+        mounted: function() {
+            this.loadAllClubs();
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .add-club-panel {
+        display: flex;
+        margin-bottom: 10px;
+        align-items: center;
+
+        .md-field {
+            width: 400px;
+            margin-right: 10px;
+        }
+    }
+
+    .join-clubs-panel {
+        display: flex;
+        align-items: center;
+
+        .description-text {
+            white-space: nowrap;
+            margin-right: 10px;
+
+            &:not(:first-child) {
+                margin-left: 10px;
+            }
+        }
+
+        .md-field {
+            max-width: 300px;
+        }
+
+        .md-button {
+            width: 160px;
+            min-width: 160px;
+        }
+    }
+</style>

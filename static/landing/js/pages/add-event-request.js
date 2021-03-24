@@ -10,6 +10,7 @@ import utils from './../utils'
     var photos = [];
 
     function init() {
+        getClubFieldInvalidText();
         if(eventRequestReferencePhotosList) {
             initEventRequestReferencePhotosList(eventRequestReferencePhotosList);
         }
@@ -63,6 +64,7 @@ import utils from './../utils'
             });
         });
     };
+
     function prepareFileInput() {
         const wrapper = document.querySelector('.file-input-wrapper'),
             fileInput = wrapper.querySelector('input[type=file]');
@@ -73,6 +75,7 @@ import utils from './../utils'
             ensureAuthButtonState();
         });
     };
+
     function createImagesPreview(images) {
         const reader = new FileReader();
         var counter = 0;
@@ -89,15 +92,32 @@ import utils from './../utils'
         }
         reader.readAsDataURL(images[0]);
     };
+
     function getCityFieldInvalidText() {
         return utils.getInputValue('city') ? '' : 'Введите город.';
     };
+
     function getClubFieldInvalidText() {
-        return utils.getInputValue('club') ? '' : 'Введите название клуба.';
+        const club = utils.getInputValue('club');
+
+        if(!club) {
+            return 'Выберите клуб из списка.';
+        }
+
+        const clubsCombo = document.getElementById('ClubsCombo');
+        const clubs = Array.prototype.map.call(clubsCombo.querySelectorAll('li'), item => item.dataset.value);
+
+        if(clubs.indexOf(club) === -1) {
+            return 'Клуб нужно выбрать из списка.';
+        }
+
+        return '';
     };
+
     function getSocialNetworkLinkFieldInvalidText() {
         return utils.getInputValue('socialNetworkLink') ? '' : 'Введите адрес в социальных сетях.';
     };
+
     function getRegionRadioButtonsText() {
         const selectedRadio = document.querySelector('input[type=radio][name=region]:checked');
         if(!selectedRadio) {
@@ -105,21 +125,26 @@ import utils from './../utils'
         }
         return '';
     };
+
     function getFileInputInvalidText() {
         const photosCount = photos.length + (eventRequestReferencePhotosList ? eventRequestReferencePhotosList.childNodes.length : 0);
         return photosCount < 3 || photosCount > 10 ? 'Количество фотографий должно быть не менее 3х и не больше 10ти.' : '';
     };
+
     function getRequestFieldInvalidText() {
         return requestTextarea.value ? '' : 'Введите описание костюма.';
     };
+
     function getAcceptDocumentsCheckboxInvalidText() {
         return acceptDocumentsCheckbox.checked ? '' : 'Необходимо ознакомиться с документрами фестиваля.';
     };
     var ensureSubmitRequestBtnStateTimeoutId;
+
     function ensureAuthButtonState() {
         window.clearTimeout(ensureSubmitRequestBtnStateTimeoutId);
         ensureSubmitRequestBtnStateTimeoutId = window.setTimeout(ensureSubmitRequestBtnStateCore, 300);
     };
+
     function ensureSubmitRequestBtnStateCore() {
         const btn = document.getElementById('RequestSubmitButton'),
             disabledText = getCityFieldInvalidText() || getClubFieldInvalidText() || getFileInputInvalidText() ||

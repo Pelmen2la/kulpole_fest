@@ -20,8 +20,8 @@ block main-content
         div.input-container.with-top-label
           input(type="text" id="ClubInput" name="club" value=(eventRequestData.club || ''))
           label(for="ClubInput")
-            | Клуб *
-          ul.combo-list
+            | Клуб (обязательно выбрать из списка, если хотите добавить новый клуб, пожалуйста, напишите организаторам) *
+          ul#ClubsCombo.combo-list
             for club in clubsData || []
               li(data-value=club.name)= club.name
 
