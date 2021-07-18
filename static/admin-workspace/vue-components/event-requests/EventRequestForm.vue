@@ -2,6 +2,10 @@
     <div class="event-form-main-container">
         <md-button class="md-raised" :href="'#' + backUrl">Назад</md-button>
         <md-field>
+            <label>Номер заявки</label>
+            <md-input v-model="eventRequestData.uid" readonly></md-input>
+        </md-field>
+        <md-field>
             <label>Название мероприятия</label>
             <md-input v-model="eventRequestData.eventTitle" readonly></md-input>
         </md-field>
