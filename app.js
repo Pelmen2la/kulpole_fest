@@ -17,9 +17,9 @@ process.on('uncaughtException', function(err) {
 app.use(compression());
 app.use(expressContext);
 
-appConfig().then(() => {
+appConfig().then(async () => {
     require('./server/config/express')(app);
-    require('./server/config/mongoose')(app);
+    await require('./server/config/mongoose')(app);
     require('./server/routes/index')(app);
 
     const server = app.listen(global.appConfig.appPort, 'localhost', function() {
