@@ -45,6 +45,7 @@
                 backUrl: '/main/events',
                 editor: null,
                 htmlEditorCfg: {},
+                dateFieldNames: ['acceptRequestEndDate', 'date'],
                 eventData: {
                     title: '',
                     date: new Date,
@@ -58,14 +59,21 @@
                 var url = '/admin/workspace/events/' + eventId;
                 this.$emit('startLoading', {text: 'Загрузка данных события'});
                 utils.doRequest(url, {}, function(data) {
+                    if(data) {
+                        this.dateFieldNames.forEach(fieldName => {
+                            data[fieldName] = (data[fieldName] || '').split('T')[0]
+                        });
+                    }
                     this.eventData = data;
                     this.$emit('endLoading');
                 }.bind(this));
             },
             onSaveBtnClick: function() {
                 var url = '/admin/workspace/events/' + (this.eventId || '');
+                var requestData = Object.assign({}, this.eventData);
+                requestData.acceptRequestEndDate = requestData.acceptRequestEndDate + 'T23:59:59.000Z';
                 this.isSaveInProgress = true;
-                utils.doDataRequest(url, this.eventId ? 'PUT' : 'POST', this.eventData, function(res) {
+                utils.doDataRequest(url, this.eventId ? 'PUT' : 'POST', requestData, function(res) {
                     this.isSaveInProgress = false;
                     this.$router.push(this.backUrl)
                 }.bind(this));
