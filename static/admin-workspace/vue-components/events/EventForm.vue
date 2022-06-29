@@ -71,7 +71,10 @@
             onSaveBtnClick: function() {
                 var url = '/admin/workspace/events/' + (this.eventId || '');
                 var requestData = Object.assign({}, this.eventData);
-                requestData.acceptRequestEndDate = requestData.acceptRequestEndDate + 'T23:59:59.000Z';
+                requestData.acceptRequestEndDate.setHours(23);
+                requestData.acceptRequestEndDate.setMinutes(59);
+                requestData.acceptRequestEndDate.setSeconds(59);
+                requestData.acceptRequestEndDate.setSeconds(59);
                 this.isSaveInProgress = true;
                 utils.doDataRequest(url, this.eventId ? 'PUT' : 'POST', requestData, function(res) {
                     this.isSaveInProgress = false;
