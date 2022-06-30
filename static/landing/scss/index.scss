@@ -85,7 +85,7 @@ body {
 
         li {
             display: block;
-            margin: 0.4em 0 0.4em 1em;
+            margin: 0.6em 0 0.6em 1em;
             line-height: 1.2em;
         }
     }
@@ -99,6 +99,12 @@ body {
 
             b.list-title {
                 font-weight: bold;
+            }
+        }
+
+        &.no-counter {
+            li:before {
+                display: none;
             }
         }
 

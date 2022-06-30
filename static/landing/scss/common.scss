@@ -10,16 +10,20 @@ b {
     font-weight: bold;
 }
 
-h1 {
+h1,
+h2 {
     font-weight: bold;
     font-size: 1.4em;
     margin-bottom: $standard-header-tag-bottom-margin;
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.4em;
 }
 
 h2 {
-    font-weight: bold;
     font-size: 1.3em;
-    margin-bottom: $standard-header-tag-bottom-margin;
 }
 
 p {
