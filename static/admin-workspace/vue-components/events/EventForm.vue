@@ -71,6 +71,7 @@
             onSaveBtnClick: function() {
                 var url = '/admin/workspace/events/' + (this.eventId || '');
                 var requestData = Object.assign({}, this.eventData);
+                requestData.acceptRequestEndDate = new Date(requestData.acceptRequestEndDate);
                 requestData.acceptRequestEndDate.setHours(23);
                 requestData.acceptRequestEndDate.setMinutes(59);
                 requestData.acceptRequestEndDate.setSeconds(59);
