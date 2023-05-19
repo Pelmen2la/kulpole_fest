@@ -1,5 +1,12 @@
 @import './../variables.scss';
 
+.registration-notification {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 16px 0;
+    text-align: center;
+}
+
 .main-page-wrapper {
     .video-iframne {
         display: block;
