@@ -125,7 +125,7 @@ module.exports = function(app) {
     });
 
     app.get('/event_request/:eventRequestUid/copy_event_request', async function(req, res, next) {
-        const events = await getEventsData(req);
+        const events = await getEventsData(req, (new Date).getFullYear());
         res.redirect(`/events/${events[0].uid}/request/new?event_request_reference=${req.params.eventRequestUid}`);
     });
 
